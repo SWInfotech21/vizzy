@@ -18,7 +18,8 @@
         },
         "meta": [],
         "outputType": "text",
-        "output": true
+        "output": true,
+        "disabled": true
       },
       {
         "name": "query",
@@ -28,13 +29,91 @@
           "connection": "DbConn_Vizzy",
           "sql": {
             "type": "SELECT",
-            "columns": [],
+            "columns": [
+              {
+                "table": "users",
+                "column": "user_id"
+              },
+              {
+                "table": "users",
+                "column": "first_name"
+              },
+              {
+                "table": "users",
+                "column": "last_name"
+              },
+              {
+                "table": "users",
+                "column": "user_email"
+              }
+            ],
             "table": {
               "name": "users"
             },
             "joins": [],
-            "query": "SELECT *\nFROM users",
-            "params": []
+            "query": "SELECT user_id, first_name, last_name, user_email\nFROM users\nWHERE user_id = :P1 /* {{$_SESSION.user_id}} */ AND active = :P2 /* {{1}} */",
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{$_SESSION.user_id}}"
+              },
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P2",
+                "value": "{{1}}"
+              }
+            ],
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "users.user_id",
+                  "field": "users.user_id",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{$_SESSION.user_id}}",
+                  "data": {
+                    "table": "users",
+                    "column": "user_id",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "integer",
+                      "primary": false,
+                      "unique": false,
+                      "nullable": false,
+                      "name": "user_id"
+                    }
+                  },
+                  "operation": "="
+                },
+                {
+                  "id": "users.active",
+                  "field": "users.active",
+                  "type": "string",
+                  "operator": "equal",
+                  "value": "{{1}}",
+                  "data": {
+                    "table": "users",
+                    "column": "active",
+                    "type": "text",
+                    "columnObj": {
+                      "type": "string",
+                      "maxLength": -5,
+                      "primary": false,
+                      "unique": false,
+                      "nullable": true,
+                      "name": "active"
+                    }
+                  },
+                  "operation": "="
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            }
           }
         },
         "output": true,
@@ -53,47 +132,7 @@
           },
           {
             "type": "text",
-            "name": "user_dob"
-          },
-          {
-            "type": "text",
             "name": "user_email"
-          },
-          {
-            "type": "text",
-            "name": "user_password"
-          },
-          {
-            "type": "text",
-            "name": "salt"
-          },
-          {
-            "type": "text",
-            "name": "profile_link"
-          },
-          {
-            "type": "datetime",
-            "name": "created_on"
-          },
-          {
-            "type": "datetime",
-            "name": "updated_on"
-          },
-          {
-            "type": "number",
-            "name": "deleted_by"
-          },
-          {
-            "type": "datetime",
-            "name": "deleted_on"
-          },
-          {
-            "type": "text",
-            "name": "active"
-          },
-          {
-            "type": "text",
-            "name": "ip_address"
           }
         ],
         "outputType": "object"
