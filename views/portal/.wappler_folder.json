@@ -1,0 +1,18 @@
+{
+  "register.ejs": {
+    "layoutPage": "outer-main",
+    "description": ""
+  },
+  "login.ejs": {
+    "layoutPage": "outer-main",
+    "description": ""
+  },
+  "forgot-password.ejs": {
+    "layoutPage": "outer-main",
+    "description": ""
+  },
+  "dashboard.ejs": {
+    "layoutPage": "dashboard",
+    "description": ""
+  }
+}

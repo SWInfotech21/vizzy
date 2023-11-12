@@ -1,0 +1,468 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/portal/register.ejs",
+      "linkedForm": "FormRegister"
+    },
+    "$_POST": [
+      {
+        "type": "text",
+        "fieldName": "first_name",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "first_name"
+      },
+      {
+        "type": "text",
+        "fieldName": "last_name",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "last_name"
+      },
+      {
+        "type": "text",
+        "fieldName": "user_email",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            },
+            "core:email": {
+              "param": ""
+            }
+          }
+        },
+        "name": "user_email"
+      },
+      {
+        "type": "text",
+        "fieldName": "user_password",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "user_password"
+      },
+      {
+        "type": "text",
+        "fieldName": "confirm_pass",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            },
+            "core:equalTo": {
+              "param": "user_password"
+            }
+          }
+        },
+        "name": "confirm_pass"
+      },
+      {
+        "type": "text",
+        "fieldName": "package",
+        "name": "package"
+      },
+      {
+        "type": "text",
+        "fieldName": "destination_country",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "destination_country"
+      },
+      {
+        "type": "text",
+        "fieldName": "from_country",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "from_country"
+      },
+      {
+        "type": "text",
+        "fieldName": "preffered_lang",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "preffered_lang"
+      }
+    ],
+    "$_SERVER": [
+      {
+        "type": "text",
+        "name": "REMOTE_ADDR"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "",
+      "module": "core",
+      "action": "trycatch",
+      "options": {
+        "try": {
+          "steps": [
+            {
+              "name": "validate",
+              "module": "validator",
+              "action": "validate",
+              "options": {
+                "data": [
+                  {
+                    "name": "Resp",
+                    "value": "{{$_POST.user_email}}",
+                    "rules": {
+                      "db:notexists": {
+                        "param": {
+                          "connection": "VizzyDB",
+                          "table": "users",
+                          "column": "user_email"
+                        },
+                        "message": "Email Id already exists in database."
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "",
+              "module": "core",
+              "action": "condition",
+              "options": {
+                "if": "{{($_POST.user_password==$_POST.confirm_pass)}}",
+                "then": {
+                  "steps": [
+                    {
+                      "name": "insertUser",
+                      "module": "dbupdater",
+                      "action": "insert",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "insert",
+                          "values": [
+                            {
+                              "table": "users",
+                              "column": "first_name",
+                              "type": "text",
+                              "value": "{{$_POST.first_name}}"
+                            },
+                            {
+                              "table": "users",
+                              "column": "last_name",
+                              "type": "text",
+                              "value": "{{$_POST.last_name}}"
+                            },
+                            {
+                              "table": "users",
+                              "column": "user_email",
+                              "type": "text",
+                              "value": "{{$_POST.user_email}}"
+                            },
+                            {
+                              "table": "users",
+                              "column": "user_password",
+                              "type": "text",
+                              "value": "{{$_POST.user_password.sha256(NOW_UTC)}}"
+                            },
+                            {
+                              "table": "users",
+                              "column": "salt",
+                              "type": "text",
+                              "value": "{{NOW_UTC}}"
+                            },
+                            {
+                              "table": "users",
+                              "column": "created_on",
+                              "type": "datetime",
+                              "value": "{{NOW_UTC}}"
+                            },
+                            {
+                              "table": "users",
+                              "column": "active",
+                              "type": "text",
+                              "value": "{{1}}"
+                            },
+                            {
+                              "table": "users",
+                              "column": "ip_address",
+                              "type": "text",
+                              "value": "{{$_SERVER.REMOTE_ADDR}}"
+                            }
+                          ],
+                          "table": "users",
+                          "query": "INSERT INTO users\n(first_name, last_name, user_email, user_password, salt, created_on, active, ip_address) VALUES (:P1 /* {{$_POST.first_name}} */, :P2 /* {{$_POST.last_name}} */, :P3 /* {{$_POST.user_email}} */, :P4 /* {{$_POST.user_password.sha256(NOW_UTC)}} */, :P5 /* {{NOW_UTC}} */, :P6 /* {{NOW_UTC}} */, :P7 /* {{1}} */, :P8 /* {{$_SERVER.REMOTE_ADDR}} */)",
+                          "params": [
+                            {
+                              "name": ":P1",
+                              "type": "expression",
+                              "value": "{{$_POST.first_name}}"
+                            },
+                            {
+                              "name": ":P2",
+                              "type": "expression",
+                              "value": "{{$_POST.last_name}}"
+                            },
+                            {
+                              "name": ":P3",
+                              "type": "expression",
+                              "value": "{{$_POST.user_email}}"
+                            },
+                            {
+                              "name": ":P4",
+                              "type": "expression",
+                              "value": "{{$_POST.user_password.sha256(NOW_UTC)}}"
+                            },
+                            {
+                              "name": ":P5",
+                              "type": "expression",
+                              "value": "{{NOW_UTC}}"
+                            },
+                            {
+                              "name": ":P6",
+                              "type": "expression",
+                              "value": "{{NOW_UTC}}"
+                            },
+                            {
+                              "name": ":P7",
+                              "type": "expression",
+                              "value": "{{1}}"
+                            },
+                            {
+                              "name": ":P8",
+                              "type": "expression",
+                              "value": "{{$_SERVER.REMOTE_ADDR}}"
+                            }
+                          ]
+                        }
+                      },
+                      "meta": [
+                        {
+                          "name": "identity",
+                          "type": "text"
+                        },
+                        {
+                          "name": "affected",
+                          "type": "number"
+                        }
+                      ],
+                      "output": false
+                    },
+                    {
+                      "name": "GetUserId",
+                      "module": "dbconnector",
+                      "action": "single",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "SELECT",
+                          "columns": [
+                            {
+                              "table": "users",
+                              "column": "user_id"
+                            }
+                          ],
+                          "table": {
+                            "name": "users"
+                          },
+                          "joins": [],
+                          "wheres": {
+                            "condition": "AND",
+                            "rules": [
+                              {
+                                "id": "users.user_email",
+                                "field": "users.user_email",
+                                "type": "string",
+                                "operator": "equal",
+                                "value": "{{$_POST.user_email}}",
+                                "data": {
+                                  "table": "users",
+                                  "column": "user_email",
+                                  "type": "text",
+                                  "columnObj": {
+                                    "type": "string",
+                                    "maxLength": 150,
+                                    "primary": false,
+                                    "unique": false,
+                                    "nullable": false,
+                                    "name": "user_email"
+                                  }
+                                },
+                                "operation": "="
+                              }
+                            ],
+                            "conditional": null,
+                            "valid": true
+                          },
+                          "query": "SELECT user_id\nFROM users\nWHERE user_email = :P1 /* {{$_POST.user_email}} */",
+                          "params": [
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P1",
+                              "value": "{{$_POST.user_email}}"
+                            }
+                          ]
+                        }
+                      },
+                      "meta": [
+                        {
+                          "type": "number",
+                          "name": "user_id"
+                        }
+                      ],
+                      "outputType": "object"
+                    },
+                    {
+                      "name": "insertVisaInfo",
+                      "module": "dbupdater",
+                      "action": "insert",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "insert",
+                          "values": [
+                            {
+                              "table": "visa_info",
+                              "column": "user_id",
+                              "type": "number",
+                              "value": "{{GetUserId.user_id}}"
+                            },
+                            {
+                              "table": "visa_info",
+                              "column": "destination_country",
+                              "type": "text",
+                              "value": "{{$_POST.destination_country}}"
+                            },
+                            {
+                              "table": "visa_info",
+                              "column": "from_country",
+                              "type": "text",
+                              "value": "{{$_POST.from_country}}"
+                            },
+                            {
+                              "table": "visa_info",
+                              "column": "preffered_lang",
+                              "type": "text",
+                              "value": "{{$_POST.preffered_lang}}"
+                            },
+                            {
+                              "table": "visa_info",
+                              "column": "created_on",
+                              "type": "datetime",
+                              "value": "{{NOW_UTC}}"
+                            },
+                            {
+                              "table": "visa_info",
+                              "column": "package",
+                              "type": "text",
+                              "value": "{{$_POST.package}}"
+                            }
+                          ],
+                          "table": "visa_info",
+                          "query": "INSERT INTO visa_info\n(user_id, destination_country, from_country, preffered_lang, created_on, package) VALUES (:P1 /* {{GetUserId.user_id}} */, :P2 /* {{$_POST.destination_country}} */, :P3 /* {{$_POST.from_country}} */, :P4 /* {{$_POST.preffered_lang}} */, :P5 /* {{NOW_UTC}} */, :P6 /* {{$_POST.package}} */)",
+                          "params": [
+                            {
+                              "name": ":P1",
+                              "type": "expression",
+                              "value": "{{GetUserId.user_id}}"
+                            },
+                            {
+                              "name": ":P2",
+                              "type": "expression",
+                              "value": "{{$_POST.destination_country}}"
+                            },
+                            {
+                              "name": ":P3",
+                              "type": "expression",
+                              "value": "{{$_POST.from_country}}"
+                            },
+                            {
+                              "name": ":P4",
+                              "type": "expression",
+                              "value": "{{$_POST.preffered_lang}}"
+                            },
+                            {
+                              "name": ":P5",
+                              "type": "expression",
+                              "value": "{{NOW_UTC}}"
+                            },
+                            {
+                              "name": ":P6",
+                              "type": "expression",
+                              "value": "{{$_POST.package}}"
+                            }
+                          ]
+                        }
+                      },
+                      "meta": [
+                        {
+                          "name": "identity",
+                          "type": "text"
+                        },
+                        {
+                          "name": "affected",
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "else": {
+                  "steps": {
+                    "name": "Resp",
+                    "module": "core",
+                    "action": "response",
+                    "options": {
+                      "status": 400,
+                      "data": "Password mismatched with confirm password."
+                    }
+                  }
+                }
+              },
+              "outputType": "boolean"
+            }
+          ]
+        },
+        "catch": {
+          "steps": {
+            "name": "Resp",
+            "module": "core",
+            "action": "response",
+            "options": {
+              "status": 400,
+              "data": "An error occurred"
+            }
+          }
+        }
+      }
+    }
+  }
+}

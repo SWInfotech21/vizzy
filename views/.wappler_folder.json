@@ -1,0 +1,26 @@
+{
+  "pricing.ejs": {
+    "layoutPage": "main",
+    "description": ""
+  },
+  "pages-error.ejs": {
+    "layoutPage": "main",
+    "description": ""
+  },
+  "login.ejs": {
+    "layoutPage": "",
+    "description": ""
+  },
+  "register.ejs": {
+    "layoutPage": "",
+    "description": ""
+  },
+  "forgot-password.ejs": {
+    "layoutPage": "",
+    "description": ""
+  },
+  "reset-password.ejs": {
+    "layoutPage": "",
+    "description": ""
+  }
+}

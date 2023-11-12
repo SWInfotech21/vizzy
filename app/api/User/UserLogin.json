@@ -1,0 +1,199 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/portal/login.ejs",
+      "linkedForm": "formAuthentication"
+    },
+    "$_POST": [
+      {
+        "type": "text",
+        "fieldName": "email_username",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "email_username"
+      },
+      {
+        "type": "text",
+        "fieldName": "password",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "password"
+      },
+      {
+        "type": "text",
+        "fieldName": "remember-me",
+        "name": "remember-me"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "",
+      "module": "core",
+      "action": "trycatch",
+      "options": {
+        "try": {
+          "steps": [
+            {
+              "name": "validate",
+              "module": "validator",
+              "action": "validate",
+              "options": {
+                "data": [
+                  {
+                    "name": "Resp",
+                    "value": "{{$_POST.email_username}}",
+                    "rules": {
+                      "db:exists": {
+                        "param": {
+                          "connection": "VizzyDB",
+                          "table": "users",
+                          "column": "user_email"
+                        },
+                        "message": "Email Id does not exist in database."
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "GetSalt",
+              "module": "dbconnector",
+              "action": "single",
+              "options": {
+                "connection": "VizzyDB",
+                "sql": {
+                  "type": "SELECT",
+                  "columns": [
+                    {
+                      "table": "users",
+                      "column": "salt"
+                    }
+                  ],
+                  "table": {
+                    "name": "users"
+                  },
+                  "joins": [],
+                  "wheres": {
+                    "condition": "AND",
+                    "rules": [
+                      {
+                        "id": "users.user_email",
+                        "field": "users.user_email",
+                        "type": "string",
+                        "operator": "equal",
+                        "value": "{{$_POST.email_username}}",
+                        "data": {
+                          "table": "users",
+                          "column": "user_email",
+                          "type": "text",
+                          "columnObj": {
+                            "type": "string",
+                            "maxLength": 150,
+                            "primary": false,
+                            "unique": false,
+                            "nullable": false,
+                            "name": "user_email"
+                          }
+                        },
+                        "operation": "="
+                      },
+                      {
+                        "id": "users.active",
+                        "field": "users.active",
+                        "type": "string",
+                        "operator": "equal",
+                        "value": "{{1}}",
+                        "data": {
+                          "table": "users",
+                          "column": "active",
+                          "type": "text",
+                          "columnObj": {
+                            "type": "string",
+                            "maxLength": -5,
+                            "primary": false,
+                            "unique": false,
+                            "nullable": true,
+                            "name": "active"
+                          }
+                        },
+                        "operation": "="
+                      }
+                    ],
+                    "conditional": null,
+                    "valid": true
+                  },
+                  "query": "SELECT salt\nFROM users\nWHERE user_email = :P1 /* {{$_POST.email_username}} */ AND active = :P2 /* {{1}} */",
+                  "params": [
+                    {
+                      "operator": "equal",
+                      "type": "expression",
+                      "name": ":P1",
+                      "value": "{{$_POST.email_username}}"
+                    },
+                    {
+                      "operator": "equal",
+                      "type": "expression",
+                      "name": ":P2",
+                      "value": "{{1}}"
+                    }
+                  ]
+                }
+              },
+              "meta": [
+                {
+                  "type": "text",
+                  "name": "salt"
+                }
+              ],
+              "outputType": "object"
+            },
+            {
+              "name": "identity",
+              "module": "auth",
+              "action": "login",
+              "options": {
+                "provider": "security",
+                "username": "{{$_POST.email_username}}",
+                "password": "{{$_POST.password.sha256(GetSalt.salt)}}",
+                "remember": "{{$_POST['remember-me']}}"
+              },
+              "output": true,
+              "meta": []
+            },
+            {
+              "name": "user_id",
+              "module": "core",
+              "action": "setsession",
+              "options": {
+                "value": "{{identity}}"
+              }
+            }
+          ]
+        },
+        "catch": {
+          "steps": {
+            "name": "Resp",
+            "module": "core",
+            "action": "response",
+            "options": {
+              "status": 400,
+              "data": "An error occurred"
+            }
+          }
+        }
+      }
+    }
+  }
+}

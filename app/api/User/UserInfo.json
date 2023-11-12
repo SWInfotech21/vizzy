@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "$_SESSION": [
+      {
+        "type": "text",
+        "name": "user_id"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "session",
+        "module": "core",
+        "action": "setvalue",
+        "options": {
+          "value": "{{$_SESSION.user_id}}"
+        },
+        "meta": [],
+        "outputType": "text",
+        "output": true
+      },
+      {
+        "name": "query",
+        "module": "dbconnector",
+        "action": "single",
+        "options": {
+          "connection": "DbConn_Vizzy",
+          "sql": {
+            "type": "SELECT",
+            "columns": [],
+            "table": {
+              "name": "users"
+            },
+            "joins": [],
+            "query": "SELECT *\nFROM users",
+            "params": []
+          }
+        },
+        "output": true,
+        "meta": [
+          {
+            "type": "number",
+            "name": "user_id"
+          },
+          {
+            "type": "text",
+            "name": "first_name"
+          },
+          {
+            "type": "text",
+            "name": "last_name"
+          },
+          {
+            "type": "text",
+            "name": "user_dob"
+          },
+          {
+            "type": "text",
+            "name": "user_email"
+          },
+          {
+            "type": "text",
+            "name": "user_password"
+          },
+          {
+            "type": "text",
+            "name": "salt"
+          },
+          {
+            "type": "text",
+            "name": "profile_link"
+          },
+          {
+            "type": "datetime",
+            "name": "created_on"
+          },
+          {
+            "type": "datetime",
+            "name": "updated_on"
+          },
+          {
+            "type": "number",
+            "name": "deleted_by"
+          },
+          {
+            "type": "datetime",
+            "name": "deleted_on"
+          },
+          {
+            "type": "text",
+            "name": "active"
+          },
+          {
+            "type": "text",
+            "name": "ip_address"
+          }
+        ],
+        "outputType": "object"
+      }
+    ]
+  }
+}

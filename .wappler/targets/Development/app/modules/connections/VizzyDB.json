@@ -1,0 +1,19 @@
+{
+  "name": "VizzyDB",
+  "module": "dbconnector",
+  "action": "connect",
+  "options": {
+    "client": "postgres",
+    "connection": {
+      "host": "dbvizzy-postgresql-lon1-72064-do-user-14765915-0.c.db.ondigitalocean.com",
+      "port": 25060,
+      "user": "doadmin",
+      "password": "AVNS_NpfAJtbyT-uFCMKnCyn",
+      "database": "defaultdb",
+      "ssl": {
+        "rejectUnauthorized": false
+      }
+    }
+  },
+  "fileName": "VizzyDB.json"
+}

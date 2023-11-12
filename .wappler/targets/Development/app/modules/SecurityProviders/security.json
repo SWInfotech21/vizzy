@@ -1,0 +1,35 @@
+{
+  "name": "security",
+  "module": "auth",
+  "action": "provider",
+  "options": {
+    "secret": "er4rDj5rBY4ZByj",
+    "provider": "Database",
+    "connection": "VizzyDB",
+    "users": {
+      "table": "users",
+      "identity": "user_id",
+      "username": "user_email",
+      "password": "user_password"
+    },
+    "permissions": {
+      "write": {
+        "table": "users",
+        "identity": "user_id",
+        "conditions": [
+          {
+            "column": "active",
+            "operator": "=",
+            "value": "1"
+          }
+        ]
+      }
+    }
+  },
+  "meta": [
+    {
+      "name": "identity",
+      "type": "text"
+    }
+  ]
+}

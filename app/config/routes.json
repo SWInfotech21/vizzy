@@ -1,0 +1,44 @@
+{
+  "routes": [
+    {
+      "path": "/",
+      "page": "index",
+      "routeType": "page",
+      "layout": "main"
+    },
+    {
+      "path": "/pricing",
+      "page": "pricing",
+      "layout": "main"
+    },
+    {
+      "path": "/reset-password",
+      "page": "reset-password"
+    },
+    {
+      "path": "/portal/register",
+      "page": "portal/register",
+      "layout": "outer-main"
+    },
+    {
+      "path": "/portal/login",
+      "page": "portal/login",
+      "layout": "outer-main"
+    },
+    {
+      "path": "/portal/forgot-password",
+      "page": "portal/forgot-password",
+      "layout": "outer-main"
+    },
+    {
+      "path": "/portal/dashboard",
+      "page": "portal/dashboard",
+      "layout": "dashboard"
+    },
+    {
+      "path": "/*",
+      "page": "pages-error",
+      "layout": "main"
+    }
+  ]
+}

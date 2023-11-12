@@ -1,0 +1,254 @@
+<!-- Wappler include head-page="layouts/outer-main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="register" appConnect="local" components="{dmxValidator:{}}" -->
+<meta name="ac:route" content="/portal/register">
+<div class="container-fluid">
+    <dmx-value id="varSteps" dmx-bind:value="1"></dmx-value>
+    <div class="row">
+        <!-- Left Text -->
+        <div class="d-none d-lg-flex col-lg-4 align-items-center justify-content-center p-5 signup-img">
+            <img src="/assets/img/front-pages/landing-page/High five-cuate.svg" alt="auth-register-multisteps" class="img-fluid" width="300" />
+        </div>
+        <!-- /Left Text -->
+        <!--  Multi Steps Registration -->
+        <div class="d-flex col-lg-8 align-items-center justify-content-center p-sm-5 p-3">
+            <div class="w-px-700">
+                <div id="FormRegisterInfo" class="bs-stepper shadow-none ">
+                    <div class="bs-stepper-header border-bottom-0">
+                        <div class="step">
+                            <button type="button" class="step-trigger">
+                                <span class="bs-stepper-circle" dmx-class:bg-primary="(varSteps.value==1)" dmx-class:bg-label-hover-secondary="(varSteps.value!=1)"><i class="ti ti-smart-home ti-sm"></i></span>
+                                <span class="bs-stepper-label">
+                                    <span class="bs-stepper-title">Account</span>
+                                    <span class="bs-stepper-subtitle">Account Details</span>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="line">
+                            <i class="ti ti-chevron-right"></i>
+                        </div>
+                        <div class="step">
+                            <button type="button" class="step-trigger">
+                                <span class="bs-stepper-circle" dmx-class:bg-primary="(varSteps.value==2)" dmx-class:bg-label-hover-secondary="(varSteps.value!=2)"><i class="ti ti-e-passport ti-sm"></i></span>
+                                <span class="bs-stepper-label">
+                                    <span class="bs-stepper-title">Visa</span>
+                                    <span class="bs-stepper-subtitle">Enter Information</span>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="line">
+                            <i class="ti ti-chevron-right"></i>
+                        </div>
+                        <div class="step">
+                            <button type="button" class="step-trigger">
+                                <span class="bs-stepper-circle" dmx-class:bg-primary="(varSteps.value==3)" dmx-class:bg-label-hover-secondary="(varSteps.value!=3)"><i class="ti ti-receipt ti-sm"></i></span>
+                                <span class="bs-stepper-label">
+                                    <span class="bs-stepper-title">Billing</span>
+                                    <span class="bs-stepper-subtitle">Payment Details</span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bs-stepper-content">
+                        <form id="FormRegister" method="post" is="dmx-serverconnect-form" action="/api/User/UserReg" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(content.FormRegister.lastError.response.data.Resp)" dmx-on:success="notifies1.success('Registered Successfully');FormRegister.reset(true);varSteps.setValue(1)">
+                            <dmx-value id="varPassShowHide" dmx-bind:value="0"></dmx-value>
+                            <dmx-value id="varConfPassShowHide" dmx-bind:value="0"></dmx-value>
+                            <!-- Account Details -->
+                            <div id="accountDetailsValidation" dmx-show="(varSteps.value==1)">
+                                <div class="content-header mb-4">
+                                    <h3 class="mb-1">Account Information</h3>
+                                    <p>Enter Your Account Details</p>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-sm-6">
+                                        <label class="form-label" for="multiStepsFirstName">First Name</label>
+                                        <input type="text" name="first_name" id="multiStepsFirstName" class="form-control" placeholder="john" required="" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="form-label" for="multiStepsLastName">Last Name</label>
+                                        <input type="text" name="last_name" id="multiStepsLastName" class="form-control" placeholder="doe" required="" />
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label class="form-label" for="multiStepsEmail">Email Id</label>
+                                        <input type="email" name="user_email" id="multiStepsEmail" class="form-control" placeholder="john.doe@email.com" aria-label="john.doe" required="" data-rule-email="" />
+                                    </div>
+                                    <div class="col-sm-6 form-password-toggle">
+                                        <label class="form-label" for="multiStepsPass">Password</label>
+                                        <div class="input-group input-group-merge">
+                                            <input dmx-bind:type="((varPassShowHide.value==0)?'password':'text')" id="multiStepsPass" name="user_password" class="form-control" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="multiStepsPass2" required="" />
+                                            <span class="input-group-text cursor-pointer" id="multiStepsPass2"><i class="ti ti-eye-off" dmx-show="(varPassShowHide.value==0)" dmx-hide="(varPassShowHide.value==1)" dmx-on:click="varPassShowHide.setValue(1)"></i><i class="ti ti-eye" dmx-show="(varPassShowHide.value==1)" dmx-hide="(varPassShowHide.value==0)" dmx-on:click="varPassShowHide.setValue(0)"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 form-password-toggle">
+                                        <label class="form-label" for="multiStepsConfirmPass">Confirm Password</label>
+                                        <div class="input-group input-group-merge">
+                                            <input dmx-bind:type="((varConfPassShowHide.value==0)?'password':'text')" id="multiStepsConfirmPass" name="confirm_pass" class="form-control" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="multiStepsConfirmPass2" data-rule-equalto="user_password" required="" />
+                                            <span class="input-group-text cursor-pointer" id="multiStepsConfirmPass2"><i class="ti ti-eye-off" dmx-show="(varConfPassShowHide.value==0)" dmx-hide="(varConfPassShowHide.value==1)" dmx-on:click="varConfPassShowHide.setValue(1)"></i><i class="ti ti-eye" dmx-show="(varConfPassShowHide.value==1)" dmx-hide="(varConfPassShowHide.value==0)" dmx-on:click="varConfPassShowHide.setValue(0)"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-between mt-4">
+                                        <button class="btn btn-label-secondary btn-prev" disabled>
+                                            <i class="ti ti-arrow-left ti-xs me-sm-1 me-0"></i>
+                                            <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                                        </button>
+                                        <button class="btn btn-primary btn-next" dmx-on:click="run({condition:{if:`((FormRegister.multiStepsFirstName.value!=\'\')&amp;&amp;(FormRegister.multiStepsLastName.value!=\'\')&amp;&amp;(FormRegister.multiStepsEmail.value!=\'\')&amp;&amp;(FormRegister.multiStepsPass.value!=\'\')&amp;&amp;(FormRegister.multiStepsConfirmPass.value!=\'\'))`,then:{steps:{run:{action:`varSteps.setValue(2)`}}},else:{steps:{run:{action:`notifies1.warning(\'Error! All fields are required\')`}}}}})">
+                                            <span class="align-middle d-sm-inline-block d-none me-sm-1 me-0">Next</span>
+                                            <i class="ti ti-arrow-right ti-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Personal Info -->
+                            <div id="personalInfoValidation" dmx-show="(varSteps.value==2)">
+                                <div class="content-header mb-4">
+                                    <h3 class="mb-1">Visa Information</h3>
+                                    <p>Please complete all fields</p>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-sm-12">
+                                        <label class="form-label" for="destination_country">Where do you want to go for the visa (country)</label>
+                                        <select id="destination_country" class="select2 form-select" data-allow-clear="true" name="destination_country" required="">
+                                            <option value="">Select country where you want to go</option>
+                                            <option value="UK">UK</option>
+                                            <option value="Germany">Germany</option>
+                                            <option value="Spain">Spain</option>
+                                            <option value="France">France</option>
+                                            <option value="Portugal">Portugal</option>
+                                            <option value="Switzerland">Switzerland</option>
+                                            <option value="Netherlands">Netherlands</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label class="form-label" for="fromCountry">Where are you travelling from (residency)</label>
+                                        <select id="fromCountry" class="select2 form-select" data-allow-clear="true" name="from_country" required="">
+                                            <option value="">Select</option>
+                                            <option value="UK" dmx-bind:disabled="(destination_country.value=='UK')">UK</option>
+                                            <option value="Germany" dmx-bind:disabled="(destination_country.value=='Germany')">Germany</option>
+                                            <option value="Spain" dmx-bind:disabled="(destination_country.value=='Spain')">Spain</option>
+                                            <option value="France" dmx-bind:disabled="(destination_country.value=='France')">France</option>
+                                            <option value="Portugal" dmx-bind:disabled="(destination_country.value=='Portugal')">Portugal</option>
+                                            <option value="Switzerland" dmx-bind:disabled="(destination_country.value=='Switzerland')">Switzerland</option>
+                                            <option value="Netherlands" dmx-bind:disabled="(destination_country.value=='Netherlands')">Netherlands</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label class="form-label" for="Language">Your preferred communication language</label>
+                                        <select id="Language" class="select2 form-select" data-allow-clear="true" name="preffered_lang" required="">
+                                            <option value="">Select</option>
+                                            <option value="English">English</option>
+                                            <option value="German">German</option>
+                                            <option value="French">French</option>
+                                            <option value="Spanish">Spanish</option>
+                                            <option value="Danish">Danish</option>
+                                            <option value="Russian">Russian</option>
+                                            <option value="Dutch">Dutch</option>
+                                            <option value="Portuguese">Portuguese</option>
+                                            <option value="Hindi">Hindi</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12 d-flex justify-content-between mt-4">
+                                        <button class="btn btn-light btn-prev" dmx-on:click="varSteps.setValue(1)">
+                                            <i class="ti ti-arrow-left ti-xs me-sm-1 me-0"></i>
+                                            <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                                        </button>
+                                        <button class="btn btn-primary btn-next" dmx-on:click="run({condition:{if:`((FormRegister.multiStepsState.value!=\'\')&amp;&amp;(FormRegister.fromCountry.value!=\'\')&amp;&amp;(FormRegister.Language.value!=\'\'))`,then:{steps:{run:{action:`varSteps.setValue(3)`}}},else:{steps:{run:{action:`notifies1.warning(\'Error! All fields are required\')`}}}}})">
+                                            <span class="align-middle d-sm-inline-block d-none me-sm-1 me-0">Next</span>
+                                            <i class="ti ti-arrow-right ti-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Billing Links -->
+                            <div id="billingLinksValidation" dmx-show="(varSteps.value==3)">
+                                <div class="content-header">
+                                    <h3 class="mb-1">Select Plan</h3>
+                                    <p>Select plan as per your requirement</p>
+                                </div>
+                                <!-- Custom plan options -->
+                                <div class="row gap-md-0 gap-3 my-4">
+                                    <div class="col-md">
+                                        <div class="form-check custom-option custom-option-icon">
+                                            <label class="form-check-label custom-option-content" for="basicOption">
+                                                <span class="custom-option-body">
+                                                    <span class="custom-option-title fs-4 mb-1">Basic</span>
+                                                    <small class="fs-6">A simple start for everyone</small>
+                                                    <span class="d-flex justify-content-center">
+                                                        <sup class="text-primary fs-6 lh-1 mt-3">€</sup>
+                                                        <span class="fw-medium fs-2 text-primary">12</span>
+                                                        <sub class="lh-1 fs-6 mt-auto mb-2 text-muted">/month</sub>
+                                                    </span>
+                                                </span>
+                                                <input name="package" class="form-check-input" type="radio" value="Basic" id="basicOption" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-check custom-option custom-option-icon">
+                                            <label class="form-check-label custom-option-content" for="standardOption">
+                                                <span class="custom-option-body">
+                                                    <span class="custom-option-title fs-4 mb-1">Pro</span>
+                                                    <small class="fs-6">For small to medium businesses</small>
+                                                    <span class="d-flex justify-content-center">
+                                                        <sup class="text-primary fs-6 lh-1 mt-3">€</sup>
+                                                        <span class="fw-medium fs-2 text-primary">37</span>
+                                                        <sub class="lh-1 fs-6 mt-auto mb-2 text-muted">/month</sub>
+                                                    </span>
+                                                </span>
+                                                <input name="package" class="form-check-input" type="radio" value="Pro" id="standardOption" checked />
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-check custom-option custom-option-icon">
+                                            <label class="form-check-label custom-option-content" for="enterpriseOption">
+                                                <span class="custom-option-body">
+                                                    <span class="custom-option-title fs-4 mb-1">Enterprise</span>
+                                                    <small class="fs-6">Solution for big organizations</small>
+                                                    <span class="d-flex justify-content-center">
+                                                        <sup class="text-primary fs-6 lh-1 mt-3">€</sup>
+                                                        <span class="fw-medium fs-2 text-primary">16</span>
+                                                        <sub class="lh-1 fs-6 mt-auto mb-2 text-muted">/year</sub>
+                                                    </span>
+                                                </span>
+                                                <input name="package" class="form-check-input" type="radio" value="Enterprise" id="enterpriseOption" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/ Custom plan options -->
+                                <!-- <div class="content-header mb-4">
+                                    <h3 class="mb-1">Payment Information</h3>
+                                    <p>Enter your card information</p>
+                                </div> -->
+                                <!-- Credit Card Details -->
+                                <div class="row g-3">
+                                    <div class="col-12 d-flex justify-content-between mt-4">
+                                        <button class="btn btn-light btn-prev" dmx-on:click="varSteps.setValue(2)">
+                                            <i class="ti ti-arrow-left ti-xs me-sm-1 me-0"></i>
+                                            <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                                        </button>
+                                        <button type="submit" class="btn btn-success" dmx-bind:disabled="state.executing">&emsp;Submit&emsp;<div class="spinner-grow" role="status" dmx-show="state.executing">
+                                            </div></button>
+
+
+                                    </div>
+                                </div>
+                                <!--/ Credit Card Details -->
+                            </div>
+                        </form>
+                    </div>
+                    <p class="text-center mt-3">
+                        <span>Already Registered?</span>
+                        <a href="/portal/login">
+                            <span>Login</span>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- / Multi Steps Registration -->
+
+
+
+
+    </div>
+</div>

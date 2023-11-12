@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en" class="light-style layout-navbar-fixed layout-wide" dir="ltr" data-theme="theme-default" data-assets-path="/assets/" data-template="front-pages">
+
+<head>
+    <base href="/">
+    <script src="/dmxAppConnect/dmxAppConnect.js"></script>
+    <meta charset="UTF-8">
+    <title>Vizzy</title>
+
+    <!-- Custom CSS Starts -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
+
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&ampdisplay=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/assets/vendor/fonts/tabler-icons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <!-- <link rel="stylesheet" href="/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" /> -->
+    <link rel="stylesheet" href="/assets/css/demo.css" />
+    <link rel="stylesheet" href="/assets/vendor/css/pages/front-page.css" />
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="/assets/vendor/libs/node-waves/node-waves.css" />
+
+    <link rel="stylesheet" href="/assets/vendor/libs/nouislider/nouislider.css" />
+    <link rel="stylesheet" href="/assets/vendor/libs/swiper/swiper.css" />
+
+    <!-- Page CSS -->
+
+    <link rel="stylesheet" href="/assets/vendor/css/pages/front-page-landing.css" />
+
+    <!-- Helpers -->
+    <script src="/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="/assets/vendor/js/helpers.js"></script>
+    <script src="/assets/vendor/js/template-customizer.js"></script>
+    <script src="/assets/js/front-config.js"></script>
+
+    <!-- Custom CSS Ends -->
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="/dmxAppConnect/dmxRouting/dmxRouting.js" defer></script>
+    <script src="/dmxAppConnect/dmxBootstrap5Navigation/dmxBootstrap5Navigation.js" defer></script>
+    <script src="/dmxAppConnect/dmxSwiper/dmxSwiper.js" defer></script>
+    <script src="/dmxAppConnect/dmxSwiper/swiper.min.js" defer></script>
+    <link rel="stylesheet" href="/dmxAppConnect/dmxSlideshow/dmxSlideshow.css" />
+    <link rel="stylesheet" href="/dmxAppConnect/dmxSwiper/themes/default.css" />
+
+    <script src="/dmxAppConnect/dmxBootstrap4Navigation/dmxBootstrap4Navigation.js" defer></script>
+
+    <script src="/dmxAppConnect/dmxSlideshow/dmxSlideshow.js" defer></script>
+    <link rel="stylesheet" href="/dmxAppConnect/dmxSlideshow/themes/default.css" />
+</head>
+
+<body is="dmx-app" id="main">
+    <dmx-value id="varLanguage" dmx-bind:value="0"></dmx-value>
+    <script src="/assets/vendor/js/dropdown-hover.js"></script>
+    <script src="/assets/vendor/js/mega-dropdown.js"></script>
+    <!-- Navbar: Start -->
+    <nav class="layout-navbar shadow-none py-0">
+        <div class="container">
+            <div class="navbar navbar-expand-lg landing-navbar px-3 px-md-4">
+                <!-- Menu logo wrapper: Start -->
+                <div class="navbar-brand app-brand demo d-flex py-0 py-lg-2 me-4">
+                    <!-- Mobile menu toggle: Start-->
+                    <button class="navbar-toggler border-0 px-0 me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="ti ti-menu-2 ti-sm align-middle"></i>
+                    </button>
+                    <!-- Mobile menu toggle: End-->
+                    <a href="/" class="app-brand-link">
+                        <span class="app-brand-logo demo">
+                            <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z" fill="#7367F0" />
+                                <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd" d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z" fill="#161616" />
+                                <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd" d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z" fill="#161616" />
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z" fill="#7367F0" />
+                            </svg>
+                        </span>
+                        <span class="app-brand-text demo menu-text fw-bold ms-2 ps-1">Vizzy</span>
+                    </a>
+                </div>
+                <!-- Menu logo wrapper: End -->
+                <!-- Menu wrapper: Start -->
+                <div class="collapse navbar-collapse landing-nav-menu" id="navbarSupportedContent">
+                    <button class="navbar-toggler border-0 text-heading position-absolute end-0 top-0 scaleX-n1-rtl" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="ti ti-x ti-sm"></i>
+                    </button>
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium" aria-current="page" href="#landingHero">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium" href="#landingFeatures">Features</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium" href="#landingTeam">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium" href="pricing">Pricing</a>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <a class="nav-link fw-medium" href="#landingContact">About Us</a>
+                        </li> -->
+                        <!-- <li class="nav-item mega-dropdown">
+                            <a href="javascript:void(0);" class="nav-link dropdown-toggle navbar-ex-14-mega-dropdown mega-dropdown fw-medium" aria-expanded="false" data-bs-toggle="mega-dropdown" data-trigger="hover">
+                                <span data-i18n="Pages">Pages</span>
+                            </a>
+                            <div class="dropdown-menu p-4">
+                                <div class="row gy-4">
+                                    <div class="col-12 col-lg">
+                                        <div class="h6 d-flex align-items-center mb-2 mb-lg-3">
+                                            <div class="avatar avatar-sm flex-shrink-0 me-2">
+                                                <span class="avatar-initial rounded bg-label-primary"><i class="ti ti-layout-grid"></i></span>
+                                            </div>
+                                            <span class="ps-1">Other</span>
+                                        </div>
+                                        <ul class="nav flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="pricing-page.html">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    <span data-i18n="Pricing">Pricing</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="payment-page.html">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    <span data-i18n="Payment">Payment</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="checkout-page.html">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    <span data-i18n="Checkout">Checkout</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="help-center-landing.html">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    <span data-i18n="Help Center">Help Center</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-12 col-lg">
+                                        <div class="h6 d-flex align-items-center mb-2 mb-lg-3">
+                                            <div class="avatar avatar-sm flex-shrink-0 me-2">
+                                                <span class="avatar-initial rounded bg-label-primary"><i class="ti ti-lock-open"></i></span>
+                                            </div>
+                                            <span class="ps-1">Auth Demo</span>
+                                        </div>
+                                        <ul class="nav flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/auth-login-basic.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Login (Basic)
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/auth-login-cover.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Login (Cover)
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/auth-register-basic.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Register (Basic)
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/auth-register-cover.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Register (Cover)
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/auth-register-multisteps.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Register (Multi-steps)
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/auth-forgot-password-basic.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Forgot Password (Basic)
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/auth-forgot-password-cover.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Forgot Password (Cover)
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/auth-reset-password-basic.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Reset Password (Basic)
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/auth-reset-password-cover.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Reset Password (Cover)
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-12 col-lg">
+                                        <div class="h6 d-flex align-items-center mb-2 mb-lg-3">
+                                            <div class="avatar avatar-sm flex-shrink-0 me-2">
+                                                <span class="avatar-initial rounded bg-label-primary"><i class="ti ti-file-analytics"></i></span>
+                                            </div>
+                                            <span class="ps-1">Other</span>
+                                        </div>
+                                        <ul class="nav flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/pages-misc-error.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Error
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/pages-misc-under-maintenance.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Under Maintenance
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/pages-misc-comingsoon.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Coming Soon
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/pages-misc-not-authorized.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Not Authorized
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/auth-verify-email-basic.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Verify Email (Basic)
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/auth-verify-email-cover.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Verify Email (Cover)
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/auth-two-steps-basic.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Two Steps (Basic)
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link mega-dropdown-link" href="../vertical-menu-template/auth-two-steps-cover.html" target="_blank">
+                                                    <i class="ti ti-circle me-1"></i>
+                                                    Two Steps (Cover)
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-4 d-none d-lg-block">
+                                        <div class="bg-body nav-img-col p-2">
+                                            <img src="/assets/img/front-pages/misc/nav-item-col-img.png" alt="nav item col image" class="w-100" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li> -->
+                        <!-- <li class="nav-item">
+                            <a class="nav-link fw-medium" href="#" target="_blank">News</a>
+                        </li> -->
+                    </ul>
+                </div>
+                <div class="landing-menu-overlay d-lg-none"></div>
+                <!-- Menu wrapper: End -->
+                <!-- Toolbar: Start -->
+                <ul class="navbar-nav flex-row align-items-center ms-auto">
+                    <!-- Style Switcher -->
+                    <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-0">
+                        <a class="nav-link dropdown-toggle hide-arrow" href="#" data-bs-toggle="dropdown">
+                            <i class="fa fa-globe"></i> {{(varLanguage.value==0?'ENG':varLanguage.value)}}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-styles">
+                            <li dmx-on:click="varLanguage.setValue('ENG')">
+                                <a class="dropdown-item" href="#" dmx-class:active="(varLanguage.value=='ENG')">
+                                    <span class="align-middle">English</span>
+                                </a>
+                            </li>
+                            <li dmx-on:click="varLanguage.setValue('ESP')">
+                                <a class="dropdown-item" href="#" dmx-class:active="(varLanguage.value=='ESP')">
+                                    <span class="align-middle">French</span>
+                                </a>
+                            </li>
+                            <li dmx-on:click="varLanguage.setValue('DEU')">
+                                <a class="dropdown-item" href="#" dmx-class:active="(varLanguage.value=='DEU')">
+                                    <span class="align-middle">German</span>
+                                </a>
+                            </li>
+                            <li dmx-on:click="varLanguage.setValue('POR')">
+                                <a class="dropdown-item" href="#" dmx-class:active="(varLanguage.value=='POR')">
+                                    <span class="align-middle">Portuguese</span>
+                                </a>
+                            </li>
+                            <li dmx-on:click="varLanguage.setValue('TUR')">
+                                <a class="dropdown-item" href="#" dmx-class:active="(varLanguage.value=='TUR')">
+                                    <span class="align-middle">Turkish</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- / Style Switcher-->
+
+                    <!-- navbar button: Start -->
+                    <li>
+                        <a href="portal/login" class="btn btn-primary"><span class="tf-icons ti ti-login scaleX-n1-rtl me-md-1"></span><span class="d-none d-md-block">Login/Register</span></a>
+                    </li>
+                    <!-- navbar button: End -->
+                </ul>
+                <!-- Toolbar: End -->
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar: End -->
+    <div is="dmx-view" id="content">
+        <%- await include(content, locals); %>
+    </div>
+
+    <!-- Footer: Start -->
+    <footer class="landing-footer bg-body footer-text">
+        <div class="footer-top">
+            <div class="container">
+                <div class="row gx-0 gy-4 g-md-5">
+                    <div class="col-lg-4">
+                        <a href="/" class="app-brand-link mb-4">
+                            <span class="app-brand-logo demo">
+                                <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z" fill="#7367F0" />
+                                    <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd" d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z" fill="#161616" />
+                                    <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd" d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z" fill="#161616" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z" fill="#7367F0" />
+                                </svg>
+                            </span>
+                            <span class="app-brand-text demo footer-link fw-bold ms-2 ps-1">Vizzy</span>
+                        </a>
+                        <p class="footer-text footer-logo-description mb-4">
+                            Your partner for visa success and migration dreams. We are an excited team of visa experts and technology professionals
+                        </p>
+                        <form class="footer-form">
+                            <label for="footer-email" class="small">Subscribe to newsletter</label>
+                            <div class="d-flex mt-1">
+                                <input type="email" class="form-control rounded-0 rounded-start-bottom rounded-start-top" id="footer-email" placeholder="Your email" />
+                                <button type="submit" class="btn btn-primary shadow-none rounded-0 rounded-end-bottom rounded-end-top">
+                                    Subscribe
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6">
+                        <!-- <h6 class="footer-title mb-4">How to..</h6> -->
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <a href="#" target="_blank" class="footer-link">Get expert advice now</a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="#" target="_blank" class="footer-link">Visas we currently provide</a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="#" target="_blank" class="footer-link">Are you a business?</a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="#" target="_blank" class="footer-link">Fast Labour Force visa</a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="#" target="_blank" class="footer-link">Want to speak to a human agent?</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6">
+                        <!-- <h6 class="footer-title mb-4">Pages</h6> -->
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <a href="#" class="footer-link">Apply to Germany</a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="#" class="footer-link">Apply to UK<span class="badge rounded bg-primary ms-2">New</span></a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="#" class="footer-link">Apply to Netherlands</a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="#" target="_blank" class="footer-link">Terms and Conditions</a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="#" target="_blank" class="footer-link">Privacy Policy</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom py-3">
+            <div class="container d-flex flex-wrap justify-content-between flex-md-row flex-column text-center text-md-start">
+                <div class="mb-2 mb-md-0">
+                    <span class="footer-text">©
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                    </span>
+                    <a href="#" target="_blank" class="fw-medium text-white footer-link">Vizzy,</a>
+                    <span class="footer-text"> All rights reserved</span>
+                </div>
+                <div>
+                    <a href="#" class="footer-link me-3" target="_blank">
+                        <img src="/assets/img/front-pages/icons/github-light.png" alt="github icon" data-app-light-img="front-pages/icons/github-light.png" data-app-dark-img="front-pages/icons/github-dark.png" />
+                    </a>
+                    <a href="#" class="footer-link me-3" target="_blank">
+                        <img src="/assets/img/front-pages/icons/facebook-light.png" alt="facebook icon" data-app-light-img="front-pages/icons/facebook-light.png" data-app-dark-img="front-pages/icons/facebook-dark.png" />
+                    </a>
+                    <a href="#" class="footer-link me-3" target="_blank">
+                        <img src="/assets/img/front-pages/icons/twitter-light.png" alt="twitter icon" data-app-light-img="front-pages/icons/twitter-light.png" data-app-dark-img="front-pages/icons/twitter-dark.png" />
+                    </a>
+                    <a href="#" class="footer-link" target="_blank">
+                        <img src="/assets/img/front-pages/icons/instagram-light.png" alt="google icon" data-app-light-img="front-pages/icons/instagram-light.png" data-app-dark-img="front-pages/icons/instagram-dark.png" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer: End -->
+
+    <!-- Custom JS Starts -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="/assets/vendor/libs/popper/popper.js"></script>
+    <script src="/assets/vendor/js/bootstrap.js"></script>
+    <script src="/assets/vendor/libs/node-waves/node-waves.js"></script>
+
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+    <script src="/assets/vendor/libs/nouislider/nouislider.js"></script>
+    <script src="/assets/vendor/libs/swiper/swiper.js"></script>
+
+    <!-- Main JS -->
+    <script src="/assets/js/front-main.js"></script>
+
+    <!-- Page JS -->
+    <script src="/assets/js/front-page-landing.js"></script>
+    <!-- Custom JS Ends -->
+</body>
+
+</html>
