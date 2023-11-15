@@ -57,9 +57,15 @@
     <script src="/dmxAppConnect/dmxRouting/dmxRouting.js" defer></script>
     <!-- Customizer -->
     <script src="/dmxAppConnect/dmxBootstrap5Navigation/dmxBootstrap5Navigation.js" defer></script>
+    <link rel="stylesheet" href="/dmxAppConnect/dmxNotifications/dmxNotifications.css" />
+    <script src="/dmxAppConnect/dmxNotifications/dmxNotifications.js" defer></script>
+    <script src="/dmxAppConnect/dmxBrowser/dmxBrowser.js" defer></script>
 </head>
 
 <body is="dmx-app" id="dashboard">
+    <div is="dmx-browser" id="browser1"></div>
+    <dmx-notifications id="notifies1"></dmx-notifications>
+    <dmx-serverconnect id="scLogOut" url="/api/User/LogOut" noload dmx-on:success="browser1.goto('/portal/login')"></dmx-serverconnect>
     <dmx-serverconnect id="scUserInfo" url="/api/User/UserInfo"></dmx-serverconnect>
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
@@ -1572,7 +1578,7 @@
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <span class="fw-medium d-block">{{scUserInfo.data.query.first_name}} {{scUserInfo.data.query.last_name}}</span>
-                                                    <small class="text-muted">User</small>
+                                                    <small class="text-muted">{{scUserInfo.data.query.user_type}}</small>
                                                 </div>
                                             </div>
                                         </a>
@@ -1620,7 +1626,7 @@
                                         <div class="dropdown-divider"></div>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="auth-login-cover.html" target="_blank">
+                                        <a class="dropdown-item" href="#" dmx-on:click="scLogOut.load(true)">
                                             <i class="ti ti-logout me-2 ti-sm"></i>
                                             <span class="align-middle">Log Out</span>
                                         </a>

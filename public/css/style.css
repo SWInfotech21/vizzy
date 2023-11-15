@@ -44,3 +44,71 @@
 .text-underline{
     text-decoration: underline;
 }
+.social-icons{
+    z-index:1;
+    position: fixed;
+    top:50%;
+	right:0%;
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px 0px 0px 10px;
+    -webkit-transform:translate(170px,0px);
+            transform:translate(170px,0px);
+            -webkit-transition:all 0.8s;
+            transition:all 0.8s;
+}
+.social-icons i{
+    width: 35px;
+    background-color: transparent;
+    color: #fff;
+}
+.social-icons:hover  {
+	color:#FFF;
+	-webkit-transform:translate(0px,0px);
+	        transform:translate(0px,0px);
+}
+.fa-angle-double-left:hover{
+    display: none !important;
+}
+
+
+    #ConfPassError {
+        display: none;
+    }
+
+    #message {
+        display: none;
+        background: #f1f1f1;
+        color: #000;
+        position: relative;
+        padding: 10px;
+        margin-top: 10px;
+    }
+
+    #message p {
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+    /* Add a green text color and a checkmark when the requirements are right */
+    .valid {
+        color: green;
+    }
+
+    .valid:before {
+        position: relative;
+        left: -5px;
+        content: "✔";
+    }
+
+    /* Add a red text color and an "x" when the requirements are wrong */
+    .invalid {
+        color: red;
+    }
+
+    .invalid:before {
+        position: relative;
+        left: -5px;
+        content: "✖";
+    }

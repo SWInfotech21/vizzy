@@ -638,3 +638,4 @@ if (typeof $ !== 'undefined') {
         }
     });
 }
+

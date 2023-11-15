@@ -52,7 +52,7 @@
                 "data": [
                   {
                     "name": "Resp",
-                    "value": "{{$_POST.email_username}}",
+                    "value": "{{$_POST.email_username.lowercase()}}",
                     "rules": {
                       "db:exists": {
                         "param": {
@@ -93,7 +93,7 @@
                         "field": "users.user_email",
                         "type": "string",
                         "operator": "equal",
-                        "value": "{{$_POST.email_username}}",
+                        "value": "{{$_POST.email_username.lowercase()}}",
                         "data": {
                           "table": "users",
                           "column": "user_email",
@@ -134,13 +134,13 @@
                     "conditional": null,
                     "valid": true
                   },
-                  "query": "SELECT salt\nFROM users\nWHERE user_email = :P1 /* {{$_POST.email_username}} */ AND active = :P2 /* {{1}} */",
+                  "query": "SELECT salt\nFROM users\nWHERE user_email = :P1 /* {{$_POST.email_username.lowercase()}} */ AND active = :P2 /* {{1}} */",
                   "params": [
                     {
                       "operator": "equal",
                       "type": "expression",
                       "name": ":P1",
-                      "value": "{{$_POST.email_username}}"
+                      "value": "{{$_POST.email_username.lowercase()}}"
                     },
                     {
                       "operator": "equal",
@@ -165,7 +165,7 @@
               "action": "login",
               "options": {
                 "provider": "security",
-                "username": "{{$_POST.email_username}}",
+                "username": "{{$_POST.email_username.lowercase()}}",
                 "password": "{{$_POST.password.sha256(GetSalt.salt)}}",
                 "remember": "{{$_POST['remember-me']}}"
               },

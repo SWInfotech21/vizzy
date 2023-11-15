@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     <div class="bs-stepper-content">
-                        <form id="FormRegister" method="post" is="dmx-serverconnect-form" action="/api/User/UserReg" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(content.FormRegister.lastError.response.data.Resp)" dmx-on:success="notifies1.success('Registered Successfully');FormRegister.reset(true);varSteps.setValue(1)">
+                        <form id="FormRegister" method="post" is="dmx-serverconnect-form" action="/api/User/UserReg" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(content.FormRegister.lastError.response.data.Resp)" dmx-on:success="notifies1.success('Registered Successfully');FormRegister.reset(true);varSteps.setValue(1);browser1.goto('/portal/dashboard')">
                             <dmx-value id="varPassShowHide" dmx-bind:value="0"></dmx-value>
                             <dmx-value id="varConfPassShowHide" dmx-bind:value="0"></dmx-value>
                             <!-- Account Details -->
@@ -73,8 +73,16 @@
                                     <div class="col-sm-6 form-password-toggle">
                                         <label class="form-label" for="multiStepsPass">Password</label>
                                         <div class="input-group input-group-merge">
-                                            <input dmx-bind:type="((varPassShowHide.value==0)?'password':'text')" id="multiStepsPass" name="user_password" class="form-control" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="multiStepsPass2" required="" />
+                                            <input dmx-bind:type="((varPassShowHide.value==0)?'password':'text')" id="multiStepsPass" name="user_password" class="form-control" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="multiStepsPass2" required="" minlength="4" />
                                             <span class="input-group-text cursor-pointer" id="multiStepsPass2"><i class="ti ti-eye-off" dmx-show="(varPassShowHide.value==0)" dmx-hide="(varPassShowHide.value==1)" dmx-on:click="varPassShowHide.setValue(1)"></i><i class="ti ti-eye" dmx-show="(varPassShowHide.value==1)" dmx-hide="(varPassShowHide.value==0)" dmx-on:click="varPassShowHide.setValue(0)"></i></span>
+                                        </div>
+                                        <div id="message">
+                                            <p class="mb-0">Password must contain the following:</p>
+                                            <p id="letter" class="invalid mb-0">A <b>lowercase</b> letter</p>
+                                            <p id="capital" class="invalid mb-0">A <b>capital (uppercase)</b> letter</p>
+                                            <p id="number" class="invalid mb-0">A <b>number</b></p>
+                                            <p id="length" class="invalid mb-0">Minimum <b>8 characters</b></p>
+                                            <p id="special" class="invalid mb-0">Atleast one of these <b>@$!%*#?</b> special characters</p>
                                         </div>
                                     </div>
                                     <div class="col-sm-6 form-password-toggle">
@@ -82,6 +90,9 @@
                                         <div class="input-group input-group-merge">
                                             <input dmx-bind:type="((varConfPassShowHide.value==0)?'password':'text')" id="multiStepsConfirmPass" name="confirm_pass" class="form-control" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="multiStepsConfirmPass2" data-rule-equalto="user_password" required="" />
                                             <span class="input-group-text cursor-pointer" id="multiStepsConfirmPass2"><i class="ti ti-eye-off" dmx-show="(varConfPassShowHide.value==0)" dmx-hide="(varConfPassShowHide.value==1)" dmx-on:click="varConfPassShowHide.setValue(1)"></i><i class="ti ti-eye" dmx-show="(varConfPassShowHide.value==1)" dmx-hide="(varConfPassShowHide.value==0)" dmx-on:click="varConfPassShowHide.setValue(0)"></i></span>
+                                        </div>
+                                        <div id="ConfPassError" dmx-class:text-danger="(multiStepsPass.value!=multiStepsConfirmPass.value)" dmx-class:text-success="(multiStepsPass.value==multiStepsConfirmPass.value)">
+                                            <p class="mb-0">{{multiStepsConfirmPass.value&&(multiStepsPass.value!=multiStepsConfirmPass.value)?'Password Mismatched!':'Password Matched!'}}</p>
                                         </div>
                                     </div>
                                     <div class="col-12 d-flex justify-content-between mt-4">
@@ -252,3 +263,75 @@
 
     </div>
 </div>
+<script>
+    //Password Validation
+    var myConfInput = document.getElementById("multiStepsConfirmPass");
+    myConfInput.onfocus = function () {
+    document.getElementById("ConfPassError").style.display = "block";
+    }
+    var myInput = document.getElementById("multiStepsPass");
+    var letter = document.getElementById("letter");
+    var capital = document.getElementById("capital");
+    var number = document.getElementById("number");
+    var length = document.getElementById("length");
+    var special = document.getElementById("special");
+    // When the user clicks on the password field, show the message box
+    myInput.onfocus = function () {
+    document.getElementById("message").style.display = "block";
+    }
+    
+    // When the user clicks outside of the password field, hide the message box
+    myInput.onblur = function () {
+    document.getElementById("message").style.display = "none";
+    }
+    // When the user starts to type something inside the password field
+    myInput.onkeyup = function () {
+    var specialChar = /(?=.*[@$!%*#?&])/;
+    if (myInput.value.match(specialChar)) {
+    special.classList.remove("invalid");
+    special.classList.add("valid");
+    } else {
+    special.classList.remove("valid");
+    special.classList.add("invalid");
+    }
+    
+    // Validate lowercase letters
+    var lowerCaseLetters = /[a-z]/g;
+    if (myInput.value.match(lowerCaseLetters)) {
+    letter.classList.remove("invalid");
+    letter.classList.add("valid");
+    } else {
+    letter.classList.remove("valid");
+    letter.classList.add("invalid");
+    }
+    
+    // Validate capital letters
+    var upperCaseLetters = /[A-Z]/g;
+    if (myInput.value.match(upperCaseLetters)) {
+    capital.classList.remove("invalid");
+    capital.classList.add("valid");
+    } else {
+    capital.classList.remove("valid");
+    capital.classList.add("invalid");
+    }
+    
+    // Validate numbers
+    var numbers = /[0-9]/g;
+    if (myInput.value.match(numbers)) {
+    number.classList.remove("invalid");
+    number.classList.add("valid");
+    } else {
+    number.classList.remove("valid");
+    number.classList.add("invalid");
+    }
+    
+    // Validate length
+    if (myInput.value.length >= 8) {
+    length.classList.remove("invalid");
+    length.classList.add("valid");
+    } else {
+    length.classList.remove("valid");
+    length.classList.add("invalid");
+    }
+    }
+</script>

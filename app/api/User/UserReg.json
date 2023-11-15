@@ -136,7 +136,7 @@
                 "data": [
                   {
                     "name": "Resp",
-                    "value": "{{$_POST.user_email}}",
+                    "value": "{{$_POST.user_email.lowercase()}}",
                     "rules": {
                       "db:notexists": {
                         "param": {
@@ -184,7 +184,7 @@
                               "table": "users",
                               "column": "user_email",
                               "type": "text",
-                              "value": "{{$_POST.user_email}}"
+                              "value": "{{$_POST.user_email.lowercase()}}"
                             },
                             {
                               "table": "users",
@@ -215,10 +215,16 @@
                               "column": "ip_address",
                               "type": "text",
                               "value": "{{$_SERVER.REMOTE_ADDR}}"
+                            },
+                            {
+                              "table": "users",
+                              "column": "user_type",
+                              "type": "text",
+                              "value": "{{'User'}}"
                             }
                           ],
                           "table": "users",
-                          "query": "INSERT INTO users\n(first_name, last_name, user_email, user_password, salt, created_on, active, ip_address) VALUES (:P1 /* {{$_POST.first_name}} */, :P2 /* {{$_POST.last_name}} */, :P3 /* {{$_POST.user_email}} */, :P4 /* {{$_POST.user_password.sha256(NOW_UTC)}} */, :P5 /* {{NOW_UTC}} */, :P6 /* {{NOW_UTC}} */, :P7 /* {{1}} */, :P8 /* {{$_SERVER.REMOTE_ADDR}} */)",
+                          "query": "INSERT INTO users\n(first_name, last_name, user_email, user_password, salt, created_on, active, ip_address, user_type) VALUES (:P1 /* {{$_POST.first_name}} */, :P2 /* {{$_POST.last_name}} */, :P3 /* {{$_POST.user_email.lowercase()}} */, :P4 /* {{$_POST.user_password.sha256(NOW_UTC)}} */, :P5 /* {{NOW_UTC}} */, :P6 /* {{NOW_UTC}} */, :P7 /* {{1}} */, :P8 /* {{$_SERVER.REMOTE_ADDR}} */, :P9 /* {{'User'}} */)",
                           "params": [
                             {
                               "name": ":P1",
@@ -233,7 +239,7 @@
                             {
                               "name": ":P3",
                               "type": "expression",
-                              "value": "{{$_POST.user_email}}"
+                              "value": "{{$_POST.user_email.lowercase()}}"
                             },
                             {
                               "name": ":P4",
@@ -259,6 +265,11 @@
                               "name": ":P8",
                               "type": "expression",
                               "value": "{{$_SERVER.REMOTE_ADDR}}"
+                            },
+                            {
+                              "name": ":P9",
+                              "type": "expression",
+                              "value": "{{'User'}}"
                             }
                           ]
                         }
@@ -287,6 +298,10 @@
                             {
                               "table": "users",
                               "column": "user_id"
+                            },
+                            {
+                              "table": "users",
+                              "column": "salt"
                             }
                           ],
                           "table": {
@@ -301,7 +316,7 @@
                                 "field": "users.user_email",
                                 "type": "string",
                                 "operator": "equal",
-                                "value": "{{$_POST.user_email}}",
+                                "value": "{{$_POST.user_email.lowercase()}}",
                                 "data": {
                                   "table": "users",
                                   "column": "user_email",
@@ -321,13 +336,13 @@
                             "conditional": null,
                             "valid": true
                           },
-                          "query": "SELECT user_id\nFROM users\nWHERE user_email = :P1 /* {{$_POST.user_email}} */",
+                          "query": "SELECT user_id, salt\nFROM users\nWHERE user_email = :P1 /* {{$_POST.user_email.lowercase()}} */",
                           "params": [
                             {
                               "operator": "equal",
                               "type": "expression",
                               "name": ":P1",
-                              "value": "{{$_POST.user_email}}"
+                              "value": "{{$_POST.user_email.lowercase()}}"
                             }
                           ]
                         }
@@ -336,9 +351,14 @@
                         {
                           "type": "number",
                           "name": "user_id"
+                        },
+                        {
+                          "type": "text",
+                          "name": "salt"
                         }
                       ],
-                      "outputType": "object"
+                      "outputType": "object",
+                      "output": false
                     },
                     {
                       "name": "insertVisaInfo",
@@ -432,6 +452,26 @@
                           "type": "number"
                         }
                       ]
+                    },
+                    {
+                      "name": "identity",
+                      "module": "auth",
+                      "action": "login",
+                      "options": {
+                        "provider": "security",
+                        "username": "{{$_POST.user_email.lowercase()}}",
+                        "password": "{{$_POST.user_password.sha256(GetUserId.salt)}}"
+                      },
+                      "output": false,
+                      "meta": []
+                    },
+                    {
+                      "name": "user_id",
+                      "module": "core",
+                      "action": "setsession",
+                      "options": {
+                        "value": "{{GetUserId.user_id}}"
+                      }
                     }
                   ]
                 },

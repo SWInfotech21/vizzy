@@ -1,0 +1,41 @@
+{
+  "meta": {
+    "$_SESSION": [
+      {
+        "type": "text",
+        "name": "user_id"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "security",
+          "permissions": [
+            "write"
+          ],
+          "loginUrl": "/portal/login",
+          "forbiddenUrl": "/page-error"
+        }
+      },
+      {
+        "name": "",
+        "module": "auth",
+        "action": "logout",
+        "options": {
+          "provider": "security"
+        }
+      },
+      {
+        "name": "user_id",
+        "module": "core",
+        "action": "removesession",
+        "options": {}
+      }
+    ]
+  }
+}
