@@ -16,6 +16,21 @@
       "public"
     ],
     "tables": {
+      "country_list": {
+        "db": {
+          "schema": "public"
+        }
+      },
+      "currency_list": {
+        "db": {
+          "schema": "public"
+        }
+      },
+      "language_list": {
+        "db": {
+          "schema": "public"
+        }
+      },
       "users": {
         "db": {
           "schema": "public"
@@ -278,6 +293,132 @@
               "primary": false,
               "unique": false,
               "nullable": true
+            }
+          }
+        }
+      },
+      "web_inquiry": {
+        "db": {
+          "schema": "public"
+        },
+        "columns": {
+          "inquiry_id": {
+            "db": {
+              "type": "integer",
+              "primary": false,
+              "unique": false,
+              "nullable": false
+            }
+          },
+          "inquiry_name": {
+            "db": {
+              "type": "string",
+              "maxLength": 100,
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
+          },
+          "inquiry_email": {
+            "db": {
+              "type": "string",
+              "maxLength": 100,
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
+          },
+          "inquiry_mobile": {
+            "db": {
+              "type": "string",
+              "maxLength": 50,
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
+          },
+          "inquiry_subject": {
+            "db": {
+              "type": "string",
+              "maxLength": 200,
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
+          },
+          "inquiry_message": {
+            "db": {
+              "type": "string",
+              "maxLength": 2000,
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
+          },
+          "created_on": {
+            "db": {
+              "type": "timestamp",
+              "default": "now()",
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
+          },
+          "updated_on": {
+            "db": {
+              "type": "timestamp",
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
+          },
+          "inquiry_status": {
+            "db": {
+              "type": "integer",
+              "primary": false,
+              "unique": false,
+              "nullable": false
+            }
+          }
+        }
+      },
+      "web_news_subs": {
+        "db": {
+          "schema": "public"
+        },
+        "columns": {
+          "subs_id": {
+            "db": {
+              "type": "integer",
+              "primary": false,
+              "unique": false,
+              "nullable": false
+            }
+          },
+          "subs_email": {
+            "db": {
+              "type": "string",
+              "maxLength": 100,
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
+          },
+          "created_on": {
+            "db": {
+              "type": "timestamp",
+              "default": "now()",
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
+          },
+          "subs_status": {
+            "db": {
+              "type": "integer",
+              "primary": false,
+              "unique": false,
+              "nullable": false
             }
           }
         }

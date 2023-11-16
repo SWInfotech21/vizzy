@@ -1,0 +1,129 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/layouts/main.ejs",
+      "linkedForm": "scFormSubscription"
+    },
+    "$_POST": [
+      {
+        "type": "text",
+        "fieldName": "subs_email",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            },
+            "core:email": {
+              "param": ""
+            }
+          }
+        },
+        "name": "subs_email"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "",
+      "module": "core",
+      "action": "trycatch",
+      "options": {
+        "try": {
+          "steps": {
+            "name": "",
+            "module": "core",
+            "action": "condition",
+            "options": {
+              "if": "{{($_POST.subs_email!='')}}",
+              "then": {
+                "steps": {
+                  "name": "insertSubs",
+                  "module": "dbupdater",
+                  "action": "insert",
+                  "options": {
+                    "connection": "VizzyDB",
+                    "sql": {
+                      "type": "insert",
+                      "values": [
+                        {
+                          "table": "web_news_subs",
+                          "column": "subs_email",
+                          "type": "text",
+                          "value": "{{$_POST.subs_email}}"
+                        },
+                        {
+                          "table": "web_news_subs",
+                          "column": "created_on",
+                          "type": "datetime",
+                          "value": "{{NOW_UTC}}"
+                        },
+                        {
+                          "table": "web_news_subs",
+                          "column": "subs_status",
+                          "type": "number",
+                          "value": "{{0}}"
+                        }
+                      ],
+                      "table": "web_news_subs",
+                      "query": "INSERT INTO web_news_subs\n(subs_email, created_on, subs_status) VALUES (:P1 /* {{$_POST.subs_email}} */, :P2 /* {{NOW_UTC}} */, :P3 /* {{0}} */)",
+                      "params": [
+                        {
+                          "name": ":P1",
+                          "type": "expression",
+                          "value": "{{$_POST.subs_email}}"
+                        },
+                        {
+                          "name": ":P2",
+                          "type": "expression",
+                          "value": "{{NOW_UTC}}"
+                        },
+                        {
+                          "name": ":P3",
+                          "type": "expression",
+                          "value": "{{0}}"
+                        }
+                      ]
+                    }
+                  },
+                  "meta": [
+                    {
+                      "name": "identity",
+                      "type": "text"
+                    },
+                    {
+                      "name": "affected",
+                      "type": "number"
+                    }
+                  ]
+                }
+              },
+              "else": {
+                "steps": {
+                  "name": "Resp",
+                  "module": "core",
+                  "action": "response",
+                  "options": {
+                    "status": 400,
+                    "data": "Failed! Subscription email is required"
+                  }
+                }
+              }
+            },
+            "outputType": "boolean"
+          }
+        },
+        "catch": {
+          "steps": {
+            "name": "Resp",
+            "module": "core",
+            "action": "response",
+            "options": {
+              "status": 400,
+              "data": "An error occurred"
+            }
+          }
+        }
+      }
+    }
+  }
+}

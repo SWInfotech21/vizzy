@@ -1,0 +1,178 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/contact-us.ejs",
+      "linkedForm": "scFormInquiry"
+    },
+    "$_POST": [
+      {
+        "type": "text",
+        "fieldName": "inquiry_name",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "inquiry_name"
+      },
+      {
+        "type": "text",
+        "fieldName": "inquiry_email",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            },
+            "core:email": {
+              "param": ""
+            }
+          }
+        },
+        "name": "inquiry_email"
+      },
+      {
+        "type": "text",
+        "fieldName": "contact_message",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            },
+            "core:minlength": {
+              "param": "5"
+            }
+          }
+        },
+        "name": "contact_message"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "",
+      "module": "core",
+      "action": "trycatch",
+      "options": {
+        "try": {
+          "steps": {
+            "name": "",
+            "module": "core",
+            "action": "condition",
+            "options": {
+              "if": "{{(($_POST.inquiry_name!='')&&($_POST.inquiry_emai!='')&&($_POST.contact_message!=''))}}",
+              "then": {
+                "steps": {
+                  "name": "insertInquiry",
+                  "module": "dbupdater",
+                  "action": "insert",
+                  "options": {
+                    "connection": "VizzyDB",
+                    "sql": {
+                      "type": "insert",
+                      "values": [
+                        {
+                          "table": "web_inquiry",
+                          "column": "inquiry_name",
+                          "type": "text",
+                          "value": "{{$_POST.inquiry_name}}"
+                        },
+                        {
+                          "table": "web_inquiry",
+                          "column": "inquiry_email",
+                          "type": "text",
+                          "value": "{{$_POST.inquiry_email}}"
+                        },
+                        {
+                          "table": "web_inquiry",
+                          "column": "inquiry_message",
+                          "type": "text",
+                          "value": "{{$_POST.contact_message}}"
+                        },
+                        {
+                          "table": "web_inquiry",
+                          "column": "created_on",
+                          "type": "datetime",
+                          "value": "{{NOW_UTC}}"
+                        },
+                        {
+                          "table": "web_inquiry",
+                          "column": "inquiry_status",
+                          "type": "number",
+                          "value": "{{0}}"
+                        }
+                      ],
+                      "table": "web_inquiry",
+                      "query": "INSERT INTO web_inquiry\n(inquiry_name, inquiry_email, inquiry_message, created_on, inquiry_status) VALUES (:P1 /* {{$_POST.inquiry_name}} */, :P2 /* {{$_POST.inquiry_email}} */, :P3 /* {{$_POST.contact_message}} */, :P4 /* {{NOW_UTC}} */, :P5 /* {{0}} */)",
+                      "params": [
+                        {
+                          "name": ":P1",
+                          "type": "expression",
+                          "value": "{{$_POST.inquiry_name}}"
+                        },
+                        {
+                          "name": ":P2",
+                          "type": "expression",
+                          "value": "{{$_POST.inquiry_email}}"
+                        },
+                        {
+                          "name": ":P3",
+                          "type": "expression",
+                          "value": "{{$_POST.contact_message}}"
+                        },
+                        {
+                          "name": ":P4",
+                          "type": "expression",
+                          "value": "{{NOW_UTC}}"
+                        },
+                        {
+                          "name": ":P5",
+                          "type": "expression",
+                          "value": "{{0}}"
+                        }
+                      ]
+                    }
+                  },
+                  "meta": [
+                    {
+                      "name": "identity",
+                      "type": "text"
+                    },
+                    {
+                      "name": "affected",
+                      "type": "number"
+                    }
+                  ]
+                }
+              },
+              "else": {
+                "steps": {
+                  "name": "Resp",
+                  "module": "core",
+                  "action": "response",
+                  "options": {
+                    "status": 400,
+                    "data": "Failed! All fields are compulsory"
+                  }
+                }
+              }
+            },
+            "outputType": "boolean"
+          }
+        },
+        "catch": {
+          "steps": {
+            "name": "Resp",
+            "module": "core",
+            "action": "response",
+            "options": {
+              "status": 400,
+              "data": "An error occurred"
+            }
+          }
+        }
+      }
+    }
+  }
+}

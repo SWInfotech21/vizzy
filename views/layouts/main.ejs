@@ -62,10 +62,15 @@
     <script src="/dmxAppConnect/dmxSlideshow/dmxSlideshow.js" defer></script>
     <link rel="stylesheet" href="/dmxAppConnect/dmxSlideshow/themes/default.css" />
     <script src="/dmxAppConnect/dmxStateManagement/dmxStateManagement.js" defer></script>
+    <link rel="stylesheet" href="/dmxAppConnect/dmxValidator/dmxValidator.css" />
+    <script src="/dmxAppConnect/dmxValidator/dmxValidator.js" defer></script>
+    <link rel="stylesheet" href="/dmxAppConnect/dmxNotifications/dmxNotifications.css" />
+    <script src="/dmxAppConnect/dmxNotifications/dmxNotifications.js" defer></script>
 </head>
 
 <body is="dmx-app" id="main">
     <dmx-cookie-manager id="cookies1"></dmx-cookie-manager>
+    <dmx-notifications id="notifies1"></dmx-notifications>
     <dmx-value id="varLanguage" dmx-bind:value="0"></dmx-value>
     <script src="/assets/vendor/js/dropdown-hover.js"></script>
     <script src="/assets/vendor/js/mega-dropdown.js"></script>
@@ -100,20 +105,20 @@
                     </button>
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link fw-medium" aria-current="page" href="#landingHero">Home</a>
+                            <a class="nav-link fw-medium" aria-current="page" href="/#landingHero">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link fw-medium" href="#landingFeatures">Features</a>
+                            <a class="nav-link fw-medium" href="/#landingFeatures">Features</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link fw-medium" href="#landingTeam">Services</a>
+                            <a class="nav-link fw-medium" href="/#landingTeam">Services</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link fw-medium" href="pricing">Pricing</a>
                         </li>
-                        <!-- <li class="nav-item">
-                            <a class="nav-link fw-medium" href="#landingContact">About Us</a>
-                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium" href="contact-us">Contact Us</a>
+                        </li>
                         <!-- <li class="nav-item mega-dropdown">
                             <a href="javascript:void(0);" class="nav-link dropdown-toggle navbar-ex-14-mega-dropdown mega-dropdown fw-medium" aria-expanded="false" data-bs-toggle="mega-dropdown" data-trigger="hover">
                                 <span data-i18n="Pages">Pages</span>
@@ -363,13 +368,13 @@
                         <p class="footer-text footer-logo-description mb-4">
                             Your partner for visa success and migration dreams. We are an excited team of visa experts and technology professionals
                         </p>
-                        <form class="footer-form">
+                        <form class="footer-form" id="scFormSubscription" is="dmx-serverconnect-form" method="post" action="/api/Website/NewsSubscription" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(content.scFormSubscription.lastError.response)" dmx-on:success="notifies1.success('Success! Vizzy Newsletter subscription done');scFormSubscription.reset(true)">
                             <label for="footer-email" class="small">Subscribe to newsletter</label>
                             <div class="d-flex mt-1">
-                                <input type="email" class="form-control rounded-0 rounded-start-bottom rounded-start-top" id="footer-email" placeholder="Your email" />
-                                <button type="submit" class="btn btn-primary shadow-none rounded-0 rounded-end-bottom rounded-end-top">
+                                <input type="email" class="form-control rounded-0 rounded-start-bottom rounded-start-top" id="footer-email" placeholder="Your email" required="" data-rule-email="" name="subs_email" />
+                                <button type="submit" class="btn btn-primary shadow-none rounded-0 rounded-end-bottom rounded-end-top" dmx-bind:disabled="">
                                     Subscribe
-                                </button>
+                                </button><br />
                             </div>
                         </form>
                     </div>
@@ -403,7 +408,7 @@
                                 <a href="#" class="footer-link">Apply to UK<span class="badge rounded bg-primary ms-2">New</span></a>
                             </li>
                             <li class="mb-3">
-                                <a href="#" class="footer-link">Apply to Netherlands</a>
+                                <a href="#" class="footer-link">About Us</a>
                             </li>
                             <li class="mb-3">
                                 <a href="#" target="_blank" class="footer-link">Terms and Conditions</a>

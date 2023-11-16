@@ -16,6 +16,21 @@
       "public"
     ],
     "tables": {
+      "country_list": {
+        "db": {
+          "schema": "public"
+        }
+      },
+      "currency_list": {
+        "db": {
+          "schema": "public"
+        }
+      },
+      "language_list": {
+        "db": {
+          "schema": "public"
+        }
+      },
       "users": {
         "db": {
           "schema": "public"
@@ -271,6 +286,16 @@
               "nullable": true
             }
           }
+        }
+      },
+      "web_inquiry": {
+        "db": {
+          "schema": "public"
+        }
+      },
+      "web_news_subs": {
+        "db": {
+          "schema": "public"
         }
       }
     },

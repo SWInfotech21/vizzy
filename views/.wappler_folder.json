@@ -22,5 +22,9 @@
   "reset-password.ejs": {
     "layoutPage": "",
     "description": ""
+  },
+  "contact-us.ejs": {
+    "layoutPage": "main",
+    "description": ""
   }
 }

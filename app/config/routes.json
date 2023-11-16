@@ -12,6 +12,11 @@
       "layout": "main"
     },
     {
+      "path": "/contact-us",
+      "page": "contact-us",
+      "layout": "main"
+    },
+    {
       "path": "/reset-password",
       "page": "reset-password"
     },

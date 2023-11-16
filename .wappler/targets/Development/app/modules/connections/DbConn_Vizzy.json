@@ -13,7 +13,10 @@
       "ssl": {
         "rejectUnauthorized": false
       }
-    }
+    },
+    "meta": {}
   },
-  "fileName": "DbConn_Vizzy.json"
+  "fileName": "DbConn_Vizzy.json",
+  "actionFilePath": "file:///E:/CurrentProjects/UK%20Forwardthinkers%20VisaProcessing/NewVizzy/vizzy/app/modules/connections/DbConn_Vizzy.json",
+  "serverType": "node"
 }
