@@ -123,7 +123,7 @@
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-                    <form class="add-new-user pt-0" id="TaskForm" method="post" is="dmx-serverconnect-form" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:success="ddTaskList.select(task_list_id.value);notifies1.success('Task Info. Added Successfully');scTaskList.load({});TaskForm.reset(true)" dmx-on:invalid="notifies1.warning(content.TaskForm.lastError.response.data.Resp)" dmx-on:error="notifies1.warning(lastError.response)" action="/api/Tasks/AddEditTasks">
+                    <form class="add-new-user pt-0" id="TaskForm" method="post" is="dmx-serverconnect-form" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:success="ddTaskList.select(task_list_id.value);notifies1.success('Task Info. Added Successfully');scTaskList.load({});TaskForm.reset(true);scUserInfo.load()" dmx-on:invalid="notifies1.warning(content.TaskForm.lastError.response.data.Resp)" dmx-on:error="notifies1.warning(lastError.response)" action="/api/Tasks/AddEditTasks">
                         <input type="hidden" dmx-bind:value="ddTaskList.data.task_list_id" name="task_list_id" id="task_list_id">
                         <div class="mb-3">
                             <label class="form-label" for="add-task-name">Task Name <strong class="compulsory">*</strong></label>
