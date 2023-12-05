@@ -1,0 +1,331 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/portal/tasks.ejs",
+      "linkedForm": "TaskForm"
+    },
+    "$_POST": [
+      {
+        "type": "text",
+        "fieldName": "task_list_id",
+        "name": "task_list_id"
+      },
+      {
+        "type": "text",
+        "fieldName": "task_name",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "task_name"
+      },
+      {
+        "type": "text",
+        "fieldName": "status",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "status"
+      },
+      {
+        "type": "text",
+        "fieldName": "required",
+        "name": "required"
+      },
+      {
+        "type": "text",
+        "fieldName": "description",
+        "name": "description"
+      },
+      {
+        "type": "text",
+        "fieldName": "your_notes",
+        "name": "your_notes"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "security",
+          "permissions": [
+            "write"
+          ],
+          "loginUrl": "/portal/login",
+          "forbiddenUrl": "/402"
+        }
+      },
+      {
+        "name": "identity",
+        "module": "auth",
+        "action": "identify",
+        "options": {
+          "provider": "security"
+        },
+        "output": false,
+        "meta": []
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "trycatch",
+        "options": {
+          "try": {
+            "steps": {
+              "name": "",
+              "module": "core",
+              "action": "condition",
+              "options": {
+                "if": "{{$_POST.task_list_id}}",
+                "then": {
+                  "steps": {
+                    "name": "updateTasks",
+                    "module": "dbupdater",
+                    "action": "update",
+                    "options": {
+                      "connection": "VizzyDB",
+                      "sql": {
+                        "type": "update",
+                        "values": [
+                          {
+                            "table": "task_list",
+                            "column": "task_name",
+                            "type": "text",
+                            "value": "{{$_POST.task_name}}"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "required",
+                            "type": "text",
+                            "value": "{{$_POST.required}}"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "description",
+                            "type": "text",
+                            "value": "{{$_POST.description}}"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "your_notes",
+                            "type": "text",
+                            "value": "{{$_POST.your_notes}}"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "status",
+                            "type": "text",
+                            "value": "{{$_POST.status}}"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "updated_on",
+                            "type": "datetime",
+                            "value": "{{NOW_UTC}}"
+                          }
+                        ],
+                        "table": "task_list",
+                        "wheres": {
+                          "condition": "AND",
+                          "rules": [
+                            {
+                              "id": "task_list_id",
+                              "field": "task_list_id",
+                              "type": "double",
+                              "operator": "equal",
+                              "value": "{{$_POST.task_list_id}}",
+                              "data": {
+                                "column": "task_list_id"
+                              },
+                              "operation": "="
+                            }
+                          ],
+                          "conditional": null,
+                          "valid": true
+                        },
+                        "query": "UPDATE task_list\nSET task_name = :P1 /* {{$_POST.task_name}} */, required = :P2 /* {{$_POST.required}} */, description = :P3 /* {{$_POST.description}} */, your_notes = :P4 /* {{$_POST.your_notes}} */, status = :P5 /* {{$_POST.status}} */, updated_on = :P6 /* {{NOW_UTC}} */\nWHERE task_list_id = :P7 /* {{$_POST.task_list_id}} */",
+                        "params": [
+                          {
+                            "name": ":P1",
+                            "type": "expression",
+                            "value": "{{$_POST.task_name}}"
+                          },
+                          {
+                            "name": ":P2",
+                            "type": "expression",
+                            "value": "{{$_POST.required}}"
+                          },
+                          {
+                            "name": ":P3",
+                            "type": "expression",
+                            "value": "{{$_POST.description}}"
+                          },
+                          {
+                            "name": ":P4",
+                            "type": "expression",
+                            "value": "{{$_POST.your_notes}}"
+                          },
+                          {
+                            "name": ":P5",
+                            "type": "expression",
+                            "value": "{{$_POST.status}}"
+                          },
+                          {
+                            "name": ":P6",
+                            "type": "expression",
+                            "value": "{{NOW_UTC}}"
+                          },
+                          {
+                            "operator": "equal",
+                            "type": "expression",
+                            "name": ":P7",
+                            "value": "{{$_POST.task_list_id}}"
+                          }
+                        ]
+                      }
+                    },
+                    "meta": [
+                      {
+                        "name": "affected",
+                        "type": "number"
+                      }
+                    ]
+                  }
+                },
+                "else": {
+                  "steps": {
+                    "name": "insertTasks",
+                    "module": "dbupdater",
+                    "action": "insert",
+                    "options": {
+                      "connection": "VizzyDB",
+                      "sql": {
+                        "type": "insert",
+                        "values": [
+                          {
+                            "table": "task_list",
+                            "column": "user_id",
+                            "type": "number",
+                            "value": "{{identity}}"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "task_name",
+                            "type": "text",
+                            "value": "{{$_POST.task_name}}"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "required",
+                            "type": "text",
+                            "value": "{{$_POST.required}}"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "description",
+                            "type": "text",
+                            "value": "{{$_POST.description}}"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "your_notes",
+                            "type": "text",
+                            "value": "{{$_POST.your_notes}}"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "status",
+                            "type": "text",
+                            "value": "{{$_POST.status}}"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "created_on",
+                            "type": "datetime",
+                            "value": "{{NOW_UTC}}"
+                          }
+                        ],
+                        "table": "task_list",
+                        "query": "INSERT INTO task_list\n(user_id, task_name, required, description, your_notes, status, created_on) VALUES (:P1 /* {{identity}} */, :P2 /* {{$_POST.task_name}} */, :P3 /* {{$_POST.required}} */, :P4 /* {{$_POST.description}} */, :P5 /* {{$_POST.your_notes}} */, :P6 /* {{$_POST.status}} */, :P7 /* {{NOW_UTC}} */)",
+                        "params": [
+                          {
+                            "name": ":P1",
+                            "type": "expression",
+                            "value": "{{identity}}"
+                          },
+                          {
+                            "name": ":P2",
+                            "type": "expression",
+                            "value": "{{$_POST.task_name}}"
+                          },
+                          {
+                            "name": ":P3",
+                            "type": "expression",
+                            "value": "{{$_POST.required}}"
+                          },
+                          {
+                            "name": ":P4",
+                            "type": "expression",
+                            "value": "{{$_POST.description}}"
+                          },
+                          {
+                            "name": ":P5",
+                            "type": "expression",
+                            "value": "{{$_POST.your_notes}}"
+                          },
+                          {
+                            "name": ":P6",
+                            "type": "expression",
+                            "value": "{{$_POST.status}}"
+                          },
+                          {
+                            "name": ":P7",
+                            "type": "expression",
+                            "value": "{{NOW_UTC}}"
+                          }
+                        ]
+                      }
+                    },
+                    "meta": [
+                      {
+                        "name": "identity",
+                        "type": "text"
+                      },
+                      {
+                        "name": "affected",
+                        "type": "number"
+                      }
+                    ]
+                  }
+                }
+              },
+              "outputType": "boolean"
+            }
+          },
+          "catch": {
+            "steps": {
+              "name": "Resp",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 403,
+                "data": "An error occurred"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

@@ -14,5 +14,13 @@
   "dashboard.ejs": {
     "layoutPage": "dashboard",
     "description": ""
+  },
+  "my-profile.ejs": {
+    "layoutPage": "dashboard",
+    "description": ""
+  },
+  "tasks.ejs": {
+    "layoutPage": "dashboard",
+    "description": ""
   }
 }

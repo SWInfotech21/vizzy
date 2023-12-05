@@ -1,0 +1,63 @@
+{
+  "meta": {
+    "$_SESSION": [
+      {
+        "type": "text",
+        "name": "user_id"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "",
+      "module": "core",
+      "action": "trycatch",
+      "options": {
+        "try": {
+          "steps": {
+            "name": "",
+            "module": "core",
+            "action": "condition",
+            "options": {
+              "if": "{{$_SESSION.user_id}}",
+              "then": {
+                "steps": {
+                  "name": "Resp",
+                  "module": "core",
+                  "action": "setvalue",
+                  "options": {
+                    "value": 200
+                  },
+                  "meta": [],
+                  "outputType": "text"
+                }
+              },
+              "else": {
+                "steps": {
+                  "name": "Resp",
+                  "module": "core",
+                  "action": "redirect",
+                  "options": {
+                    "url": "/portal/login"
+                  }
+                }
+              }
+            },
+            "outputType": "boolean"
+          }
+        },
+        "catch": {
+          "steps": {
+            "name": "Resp",
+            "module": "core",
+            "action": "response",
+            "options": {
+              "status": 403,
+              "data": "An error occurred"
+            }
+          }
+        }
+      }
+    }
+  }
+}

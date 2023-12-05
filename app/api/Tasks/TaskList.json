@@ -1,0 +1,470 @@
+{
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "offset"
+      },
+      {
+        "type": "text",
+        "name": "limit"
+      },
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      },
+      {
+        "type": "text",
+        "name": "status"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "security",
+          "permissions": [
+            "write"
+          ],
+          "loginUrl": "/portal/login",
+          "forbiddenUrl": "/404"
+        }
+      },
+      {
+        "name": "identity",
+        "module": "auth",
+        "action": "identify",
+        "options": {
+          "provider": "security"
+        },
+        "output": false,
+        "meta": []
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "trycatch",
+        "options": {
+          "try": {
+            "steps": {
+              "name": "",
+              "module": "core",
+              "action": "condition",
+              "options": {
+                "if": "{{$_GET.status}}",
+                "then": {
+                  "steps": {
+                    "name": "query",
+                    "module": "dbconnector",
+                    "action": "paged",
+                    "options": {
+                      "connection": "VizzyDB",
+                      "sql": {
+                        "type": "SELECT",
+                        "columns": [
+                          {
+                            "table": "task_list",
+                            "column": "task_list_id"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "user_id"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "task_name"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "required"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "description"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "your_notes"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "status"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "created_on"
+                          }
+                        ],
+                        "table": {
+                          "name": "task_list"
+                        },
+                        "joins": [],
+                        "query": "SELECT task_list_id, user_id, task_name, required, description, your_notes, status, created_on\nFROM task_list\nWHERE user_id = :P1 /* {{identity}} */ AND status = :P2 /* {{$_GET.status}} */",
+                        "params": [
+                          {
+                            "operator": "equal",
+                            "type": "expression",
+                            "name": ":P1",
+                            "value": "{{identity}}"
+                          },
+                          {
+                            "operator": "equal",
+                            "type": "expression",
+                            "name": ":P2",
+                            "value": "{{$_GET.status}}"
+                          }
+                        ],
+                        "wheres": {
+                          "condition": "AND",
+                          "rules": [
+                            {
+                              "id": "task_list.user_id",
+                              "field": "task_list.user_id",
+                              "type": "double",
+                              "operator": "equal",
+                              "value": "{{identity}}",
+                              "data": {
+                                "table": "task_list",
+                                "column": "user_id",
+                                "type": "number",
+                                "columnObj": {
+                                  "type": "integer",
+                                  "primary": false,
+                                  "unique": false,
+                                  "nullable": false,
+                                  "name": "user_id"
+                                }
+                              },
+                              "operation": "="
+                            },
+                            {
+                              "id": "task_list.status",
+                              "field": "task_list.status",
+                              "type": "string",
+                              "operator": "equal",
+                              "value": "{{$_GET.status}}",
+                              "data": {
+                                "table": "task_list",
+                                "column": "status",
+                                "type": "text",
+                                "columnObj": {
+                                  "type": "string",
+                                  "maxLength": 100,
+                                  "primary": false,
+                                  "unique": false,
+                                  "nullable": true,
+                                  "name": "status"
+                                }
+                              },
+                              "operation": "="
+                            }
+                          ],
+                          "conditional": null,
+                          "valid": true
+                        }
+                      }
+                    },
+                    "output": true,
+                    "meta": [
+                      {
+                        "name": "offset",
+                        "type": "number"
+                      },
+                      {
+                        "name": "limit",
+                        "type": "number"
+                      },
+                      {
+                        "name": "total",
+                        "type": "number"
+                      },
+                      {
+                        "name": "page",
+                        "type": "object",
+                        "sub": [
+                          {
+                            "name": "offset",
+                            "type": "object",
+                            "sub": [
+                              {
+                                "name": "first",
+                                "type": "number"
+                              },
+                              {
+                                "name": "prev",
+                                "type": "number"
+                              },
+                              {
+                                "name": "next",
+                                "type": "number"
+                              },
+                              {
+                                "name": "last",
+                                "type": "number"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "current",
+                            "type": "number"
+                          },
+                          {
+                            "name": "total",
+                            "type": "number"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "data",
+                        "type": "array",
+                        "sub": [
+                          {
+                            "type": "number",
+                            "name": "task_list_id"
+                          },
+                          {
+                            "type": "number",
+                            "name": "user_id"
+                          },
+                          {
+                            "type": "text",
+                            "name": "task_name"
+                          },
+                          {
+                            "type": "text",
+                            "name": "required"
+                          },
+                          {
+                            "type": "text",
+                            "name": "description"
+                          },
+                          {
+                            "type": "text",
+                            "name": "your_notes"
+                          },
+                          {
+                            "type": "text",
+                            "name": "status"
+                          },
+                          {
+                            "type": "datetime",
+                            "name": "created_on"
+                          }
+                        ]
+                      }
+                    ],
+                    "outputType": "object"
+                  }
+                },
+                "else": {
+                  "steps": {
+                    "name": "query",
+                    "module": "dbconnector",
+                    "action": "paged",
+                    "options": {
+                      "connection": "VizzyDB",
+                      "sql": {
+                        "type": "SELECT",
+                        "columns": [
+                          {
+                            "table": "task_list",
+                            "column": "task_list_id"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "user_id"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "task_name"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "required"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "description"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "your_notes"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "status"
+                          },
+                          {
+                            "table": "task_list",
+                            "column": "created_on"
+                          }
+                        ],
+                        "table": {
+                          "name": "task_list"
+                        },
+                        "joins": [],
+                        "query": "SELECT task_list_id, user_id, task_name, required, description, your_notes, status, created_on\nFROM task_list\nWHERE user_id = :P1 /* {{identity}} */\nORDER BY status DESC",
+                        "params": [
+                          {
+                            "operator": "equal",
+                            "type": "expression",
+                            "name": ":P1",
+                            "value": "{{identity}}"
+                          }
+                        ],
+                        "wheres": {
+                          "condition": "AND",
+                          "rules": [
+                            {
+                              "id": "task_list.user_id",
+                              "field": "task_list.user_id",
+                              "type": "double",
+                              "operator": "equal",
+                              "value": "{{identity}}",
+                              "data": {
+                                "table": "task_list",
+                                "column": "user_id",
+                                "type": "number",
+                                "columnObj": {
+                                  "type": "integer",
+                                  "primary": false,
+                                  "unique": false,
+                                  "nullable": false,
+                                  "name": "user_id"
+                                }
+                              },
+                              "operation": "="
+                            }
+                          ],
+                          "conditional": null,
+                          "valid": true
+                        },
+                        "orders": [
+                          {
+                            "table": "task_list",
+                            "column": "status",
+                            "direction": "DESC"
+                          }
+                        ]
+                      }
+                    },
+                    "output": true,
+                    "meta": [
+                      {
+                        "name": "offset",
+                        "type": "number"
+                      },
+                      {
+                        "name": "limit",
+                        "type": "number"
+                      },
+                      {
+                        "name": "total",
+                        "type": "number"
+                      },
+                      {
+                        "name": "page",
+                        "type": "object",
+                        "sub": [
+                          {
+                            "name": "offset",
+                            "type": "object",
+                            "sub": [
+                              {
+                                "name": "first",
+                                "type": "number"
+                              },
+                              {
+                                "name": "prev",
+                                "type": "number"
+                              },
+                              {
+                                "name": "next",
+                                "type": "number"
+                              },
+                              {
+                                "name": "last",
+                                "type": "number"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "current",
+                            "type": "number"
+                          },
+                          {
+                            "name": "total",
+                            "type": "number"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "data",
+                        "type": "array",
+                        "sub": [
+                          {
+                            "type": "number",
+                            "name": "task_list_id"
+                          },
+                          {
+                            "type": "number",
+                            "name": "user_id"
+                          },
+                          {
+                            "type": "text",
+                            "name": "task_name"
+                          },
+                          {
+                            "type": "text",
+                            "name": "required"
+                          },
+                          {
+                            "type": "text",
+                            "name": "description"
+                          },
+                          {
+                            "type": "text",
+                            "name": "your_notes"
+                          },
+                          {
+                            "type": "text",
+                            "name": "status"
+                          },
+                          {
+                            "type": "datetime",
+                            "name": "created_on"
+                          }
+                        ]
+                      }
+                    ],
+                    "outputType": "object"
+                  }
+                }
+              },
+              "outputType": "boolean"
+            }
+          },
+          "catch": {
+            "steps": {
+              "name": "Resp",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 403,
+                "data": "An error occurred"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

@@ -112,3 +112,12 @@
         left: -5px;
         content: "✖";
     }
+
+    .spinner-grow{
+        width: 20px !important;
+        height: 20px !important;
+        color: rgb(133, 37, 223) !important;
+    }
+    .compulsory{
+        color: rgb(245, 8, 8);
+    }

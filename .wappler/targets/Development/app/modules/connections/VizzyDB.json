@@ -13,7 +13,10 @@
       "ssl": {
         "rejectUnauthorized": false
       }
-    }
+    },
+    "meta": {}
   },
-  "fileName": "VizzyDB.json"
+  "fileName": "VizzyDB.json",
+  "actionFilePath": "file:///E:/CurrentProjects/UK%20Forwardthinkers%20VisaProcessing/NewVizzy/vizzy/app/modules/connections/VizzyDB.json",
+  "serverType": "node"
 }

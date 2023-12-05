@@ -41,9 +41,24 @@
       "layout": "dashboard"
     },
     {
+      "path": "/portal/my-profile",
+      "page": "portal/my-profile",
+      "layout": "dashboard"
+    },
+    {
+      "path": "/portal/tasks",
+      "page": "portal/tasks",
+      "layout": "dashboard"
+    },
+    {
       "path": "/*",
       "page": "pages-error",
       "layout": "main"
     }
-  ]
+  ],
+  "layouts": {
+    "dashboard": {
+      "exec": "/api/PageAccess/UserAccess"
+    }
+  }
 }

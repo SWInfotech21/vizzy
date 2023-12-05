@@ -23,6 +23,16 @@
         }
       },
       {
+        "name": "identity",
+        "module": "auth",
+        "action": "identify",
+        "options": {
+          "provider": "security"
+        },
+        "output": false,
+        "meta": []
+      },
+      {
         "name": "query",
         "module": "dbconnector",
         "action": "single",
@@ -142,6 +152,101 @@
           {
             "type": "text",
             "name": "user_type"
+          }
+        ],
+        "outputType": "object"
+      },
+      {
+        "name": "CountTasks",
+        "module": "dbconnector",
+        "action": "single",
+        "options": {
+          "connection": "VizzyDB",
+          "sql": {
+            "type": "SELECT",
+            "columns": [
+              {
+                "table": "task_list",
+                "column": "task_list_id",
+                "alias": "CountTasks",
+                "aggregate": "COUNT"
+              }
+            ],
+            "table": {
+              "name": "task_list"
+            },
+            "joins": [],
+            "query": "SELECT COUNT(task_list_id) AS CountTasks\nFROM task_list\nWHERE status = :P1 /* {{'Waiting'}} */ AND user_id = :P2 /* {{identity}} */",
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{'Waiting'}}"
+              },
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P2",
+                "value": "{{identity}}"
+              }
+            ],
+            "groupBy": [],
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "task_list.status",
+                  "field": "task_list.status",
+                  "type": "string",
+                  "operator": "equal",
+                  "value": "{{'Waiting'}}",
+                  "data": {
+                    "table": "task_list",
+                    "column": "status",
+                    "type": "text",
+                    "columnObj": {
+                      "type": "string",
+                      "maxLength": 100,
+                      "primary": false,
+                      "unique": false,
+                      "nullable": true,
+                      "name": "status"
+                    }
+                  },
+                  "operation": "="
+                },
+                {
+                  "id": "task_list.user_id",
+                  "field": "task_list.user_id",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{identity}}",
+                  "data": {
+                    "table": "task_list",
+                    "column": "user_id",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "integer",
+                      "primary": false,
+                      "unique": false,
+                      "nullable": false,
+                      "name": "user_id"
+                    }
+                  },
+                  "operation": "="
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            }
+          }
+        },
+        "output": true,
+        "meta": [
+          {
+            "type": "number",
+            "name": "CountTasks"
           }
         ],
         "outputType": "object"
