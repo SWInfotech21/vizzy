@@ -111,6 +111,10 @@
           }
         },
         "name": "preffered_lang"
+      },
+      {
+        "type": "text",
+        "name": "visa_application_type"
       }
     ],
     "$_SERVER": [
@@ -404,10 +408,16 @@
                               "column": "package",
                               "type": "text",
                               "value": "{{$_POST.package}}"
+                            },
+                            {
+                              "table": "visa_info",
+                              "column": "visa_application_type",
+                              "type": "text",
+                              "value": "{{$_POST.visa_application_type}}"
                             }
                           ],
                           "table": "visa_info",
-                          "query": "INSERT INTO visa_info\n(user_id, destination_country, from_country, preffered_lang, created_on, package) VALUES (:P1 /* {{GetUserId.user_id}} */, :P2 /* {{$_POST.destination_country}} */, :P3 /* {{$_POST.from_country}} */, :P4 /* {{$_POST.preffered_lang}} */, :P5 /* {{NOW_UTC}} */, :P6 /* {{$_POST.package}} */)",
+                          "query": "INSERT INTO visa_info\n(user_id, destination_country, from_country, preffered_lang, created_on, package, visa_application_type) VALUES (:P1 /* {{GetUserId.user_id}} */, :P2 /* {{$_POST.destination_country}} */, :P3 /* {{$_POST.from_country}} */, :P4 /* {{$_POST.preffered_lang}} */, :P5 /* {{NOW_UTC}} */, :P6 /* {{$_POST.package}} */, :P7 /* {{$_POST.visa_application_type}} */)",
                           "params": [
                             {
                               "name": ":P1",
@@ -438,6 +448,11 @@
                               "name": ":P6",
                               "type": "expression",
                               "value": "{{$_POST.package}}"
+                            },
+                            {
+                              "name": ":P7",
+                              "type": "expression",
+                              "value": "{{$_POST.visa_application_type}}"
                             }
                           ]
                         }

@@ -3,6 +3,7 @@
 <dmx-serverconnect id="scTaskList" url="/api/Tasks/TaskList" dmx-on:success="varPageName.setValue('Tasks')"></dmx-serverconnect>
 <dmx-data-view id="dvTaskList" dmx-bind:data="scTaskList.data.query.data" filter="((task_name.lowercase().contains(SearchItems.value.lowercase())) || (description.lowercase().contains(SearchItems.value.lowercase())) || (your_notes.lowercase().contains(SearchItems.value.lowercase())))"></dmx-data-view>
 <dmx-data-detail id="ddTaskList" dmx-bind:data="dvTaskList.data" key="task_list_id"></dmx-data-detail>
+<dmx-value id="varStatus" dmx-bind:value="'All'"></dmx-value>
 
 <!-- <dmx-serverconnect id="scDelTask" url="/api/Tasks/DeleteTasks" noload dmx-on:success="scTaskList.load()"></dmx-serverconnect> -->
 
@@ -56,16 +57,18 @@
             <div class="card-header border-bottom">
                 <div class="d-flex align-items-center gap-3">
                     <div class="flex-grow-1">
-                        <h5 class="card-header">Application Tasks <div class="spinner-grow" role="status" dmx-show="scTaskList.state.executing">
+                        <h5 class="card-header">Application Tasks: {{varStatus.value}}<div class="spinner-grow" role="status" dmx-show="scTaskList.state.executing">
                             </div>
                         </h5>
                     </div>
                     <div class="d-flex align-items-center flex-grow-0">
-                        <button class="btn btn-label-primary mx-1" id="TaskWaiting" dmx-on:click="scTaskList.load({status: 'Waiting'})">Waiting
+                        <button class="btn btn-label-secondary mx-1" id="TaskAll" dmx-on:click="scTaskList.load({status: ''});varStatus.setValue('All')">All
                         </button>
-                        <button class="btn btn-label-warning mx-1" id="TaskInProgress" dmx-on:click="scTaskList.load({status: 'In-Progress'})">In-Progress
+                        <button class="btn btn-label-primary mx-1" id="TaskWaiting" dmx-on:click="scTaskList.load({status: 'Waiting'});varStatus.setValue('Waiting')">Waiting
                         </button>
-                        <button class="btn btn-label-success mx-1" id="TaskCompleted" dmx-on:click="scTaskList.load({status: 'Completed'})">Completed
+                        <button class="btn btn-label-warning mx-1" id="TaskInProgress" dmx-on:click="scTaskList.load({status: 'In-Progress'});varStatus.setValue('In-Progress')">In-Progress
+                        </button>
+                        <button class="btn btn-label-success mx-1" id="TaskCompleted" dmx-on:click="scTaskList.load({status: 'Completed'});varStatus.setValue('Completed')">Completed
                         </button>
                         <button class="btn add-new btn-primary mx-2" tabindex="0" aria-controls="DataTables_Table_0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser" dmx-on:click="TaskForm.reset();ddTaskList.select(0)"><span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i><span class="d-none d-sm-inline-block">New Task</span></span></button>
                     </div>
@@ -170,7 +173,6 @@
 
 <!-- Core JS -->
 <script src="/assets/vendor/libs/popper/popper.js"></script>
-<script src="/assets/vendor/js/bootstrap.js"></script>
 <script src="/assets/vendor/libs/node-waves/node-waves.js"></script>
 <script src="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 <script src="/assets/vendor/libs/hammer/hammer.js"></script>
