@@ -11,36 +11,48 @@ dmx.config({
     "dvTaskList": {
       "meta": [
         {
-          "type": "number",
-          "name": "task_list_id"
+          "name": "task_assigned_id",
+          "type": "number"
         },
         {
-          "type": "number",
-          "name": "user_id"
+          "name": "user_id",
+          "type": "number"
         },
         {
-          "type": "text",
-          "name": "task_name"
+          "name": "country",
+          "type": "text"
         },
         {
-          "type": "text",
-          "name": "required"
+          "name": "visa_type",
+          "type": "text"
         },
         {
-          "type": "text",
-          "name": "description"
+          "name": "task_type",
+          "type": "text"
         },
         {
-          "type": "text",
-          "name": "your_notes"
+          "name": "your_notes",
+          "type": "text"
         },
         {
-          "type": "text",
-          "name": "status"
+          "name": "status",
+          "type": "text"
         },
         {
-          "type": "datetime",
-          "name": "created_on"
+          "name": "task_id",
+          "type": "number"
+        },
+        {
+          "name": "task_names",
+          "type": "text"
+        },
+        {
+          "name": "required",
+          "type": "text"
+        },
+        {
+          "name": "description",
+          "type": "text"
         }
       ],
       "outputType": "array"
@@ -97,36 +109,48 @@ dmx.config({
           "type": "object"
         },
         {
-          "type": "number",
-          "name": "task_list_id"
+          "name": "task_assigned_id",
+          "type": "number"
         },
         {
-          "type": "number",
-          "name": "user_id"
+          "name": "user_id",
+          "type": "number"
         },
         {
-          "type": "text",
-          "name": "task_name"
+          "name": "country",
+          "type": "text"
         },
         {
-          "type": "text",
-          "name": "required"
+          "name": "visa_type",
+          "type": "text"
         },
         {
-          "type": "text",
-          "name": "description"
+          "name": "task_type",
+          "type": "text"
         },
         {
-          "type": "text",
-          "name": "your_notes"
+          "name": "your_notes",
+          "type": "text"
         },
         {
-          "type": "text",
-          "name": "status"
+          "name": "status",
+          "type": "text"
         },
         {
-          "type": "datetime",
-          "name": "created_on"
+          "name": "task_id",
+          "type": "number"
+        },
+        {
+          "name": "task_names",
+          "type": "text"
+        },
+        {
+          "name": "required",
+          "type": "text"
+        },
+        {
+          "name": "description",
+          "type": "text"
         }
       ],
       "outputType": "array"

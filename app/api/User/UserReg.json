@@ -4,6 +4,16 @@
       "linkedFile": "/views/portal/register.ejs",
       "linkedForm": "FormRegister"
     },
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      }
+    ],
     "$_POST": [
       {
         "type": "text",
@@ -115,6 +125,52 @@
       {
         "type": "text",
         "name": "visa_application_type"
+      },
+      {
+        "type": "array",
+        "name": "record",
+        "sub": [
+          {
+            "type": "number",
+            "name": "user_id"
+          },
+          {
+            "type": "text",
+            "name": "$_POST"
+          },
+          {
+            "type": "number",
+            "name": "GetTasks[$index]"
+          },
+          {
+            "type": "text",
+            "name": "'Default'"
+          },
+          {
+            "type": "text",
+            "name": "'Waiting'"
+          },
+          {
+            "type": "datetime",
+            "name": "NOW"
+          },
+          {
+            "type": "number",
+            "name": "insertUser"
+          },
+          {
+            "type": "number",
+            "name": "GetUserId"
+          },
+          {
+            "type": "number",
+            "name": "insertVisaInfo"
+          },
+          {
+            "type": "number",
+            "name": "GetVisaInfo"
+          }
+        ]
       }
     ],
     "$_SERVER": [
@@ -401,7 +457,7 @@
                               "table": "visa_info",
                               "column": "created_on",
                               "type": "datetime",
-                              "value": "{{NOW_UTC}}"
+                              "value": "{{NOW}}"
                             },
                             {
                               "table": "visa_info",
@@ -417,7 +473,7 @@
                             }
                           ],
                           "table": "visa_info",
-                          "query": "INSERT INTO visa_info\n(user_id, destination_country, from_country, preffered_lang, created_on, package, visa_application_type) VALUES (:P1 /* {{GetUserId.user_id}} */, :P2 /* {{$_POST.destination_country}} */, :P3 /* {{$_POST.from_country}} */, :P4 /* {{$_POST.preffered_lang}} */, :P5 /* {{NOW_UTC}} */, :P6 /* {{$_POST.package}} */, :P7 /* {{$_POST.visa_application_type}} */)",
+                          "query": "INSERT INTO visa_info\n(user_id, destination_country, from_country, preffered_lang, created_on, package, visa_application_type) VALUES (:P1 /* {{GetUserId.user_id}} */, :P2 /* {{$_POST.destination_country}} */, :P3 /* {{$_POST.from_country}} */, :P4 /* {{$_POST.preffered_lang}} */, :P5 /* {{NOW}} */, :P6 /* {{$_POST.package}} */, :P7 /* {{$_POST.visa_application_type}} */)",
                           "params": [
                             {
                               "name": ":P1",
@@ -442,7 +498,7 @@
                             {
                               "name": ":P5",
                               "type": "expression",
-                              "value": "{{NOW_UTC}}"
+                              "value": "{{NOW}}"
                             },
                             {
                               "name": ":P6",
@@ -467,6 +523,462 @@
                           "type": "number"
                         }
                       ]
+                    },
+                    {
+                      "name": "GetVisaInfo",
+                      "module": "dbconnector",
+                      "action": "single",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "SELECT",
+                          "columns": [
+                            {
+                              "table": "visa_info",
+                              "column": "visa_info_id"
+                            }
+                          ],
+                          "table": {
+                            "name": "visa_info"
+                          },
+                          "joins": [],
+                          "query": "SELECT visa_info_id\nFROM visa_info\nWHERE user_id = :P1 /* {{GetUserId.user_id}} */",
+                          "params": [
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P1",
+                              "value": "{{GetUserId.user_id}}"
+                            }
+                          ],
+                          "wheres": {
+                            "condition": "AND",
+                            "rules": [
+                              {
+                                "id": "visa_info.user_id",
+                                "field": "visa_info.user_id",
+                                "type": "double",
+                                "operator": "equal",
+                                "value": "{{GetUserId.user_id}}",
+                                "data": {
+                                  "table": "visa_info",
+                                  "column": "user_id",
+                                  "type": "number",
+                                  "columnObj": {
+                                    "type": "integer",
+                                    "primary": false,
+                                    "unique": false,
+                                    "nullable": false,
+                                    "name": "user_id"
+                                  }
+                                },
+                                "operation": "="
+                              }
+                            ],
+                            "conditional": null,
+                            "valid": true
+                          }
+                        }
+                      },
+                      "meta": [
+                        {
+                          "type": "number",
+                          "name": "visa_info_id"
+                        }
+                      ],
+                      "outputType": "object",
+                      "output": false
+                    },
+                    {
+                      "name": "GetTasks",
+                      "module": "dbconnector",
+                      "action": "select",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "SELECT",
+                          "columns": [
+                            {
+                              "table": "default_task",
+                              "column": "default_task_id"
+                            },
+                            {
+                              "table": "default_task",
+                              "column": "visa_type"
+                            },
+                            {
+                              "table": "default_task",
+                              "column": "country"
+                            },
+                            {
+                              "table": "default_task",
+                              "column": "task_name"
+                            },
+                            {
+                              "table": "default_task",
+                              "column": "required"
+                            },
+                            {
+                              "table": "default_task",
+                              "column": "description"
+                            }
+                          ],
+                          "table": {
+                            "name": "default_task"
+                          },
+                          "joins": [],
+                          "wheres": {
+                            "condition": "AND",
+                            "rules": [
+                              {
+                                "id": "default_task.active",
+                                "field": "default_task.active",
+                                "type": "string",
+                                "operator": "equal",
+                                "value": "1",
+                                "data": {
+                                  "table": "default_task",
+                                  "column": "active",
+                                  "type": "text",
+                                  "columnObj": {
+                                    "type": "string",
+                                    "maxLength": 100,
+                                    "primary": false,
+                                    "unique": false,
+                                    "nullable": true,
+                                    "name": "active"
+                                  }
+                                },
+                                "operation": "="
+                              },
+                              {
+                                "condition": "OR",
+                                "rules": [
+                                  {
+                                    "id": "default_task.visa_type",
+                                    "field": "default_task.visa_type",
+                                    "type": "string",
+                                    "operator": "equal",
+                                    "value": "{{$_POST.visa_application_type}}",
+                                    "data": {
+                                      "table": "default_task",
+                                      "column": "visa_type",
+                                      "type": "text",
+                                      "columnObj": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "primary": false,
+                                        "unique": false,
+                                        "nullable": true,
+                                        "name": "visa_type"
+                                      }
+                                    },
+                                    "operation": "="
+                                  },
+                                  {
+                                    "id": "default_task.visa_type",
+                                    "field": "default_task.visa_type",
+                                    "type": "string",
+                                    "operator": "equal",
+                                    "value": "{{'All'}}",
+                                    "data": {
+                                      "table": "default_task",
+                                      "column": "visa_type",
+                                      "type": "text",
+                                      "columnObj": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "primary": false,
+                                        "unique": false,
+                                        "nullable": true,
+                                        "name": "visa_type"
+                                      }
+                                    },
+                                    "operation": "="
+                                  }
+                                ],
+                                "conditional": null
+                              },
+                              {
+                                "condition": "OR",
+                                "rules": [
+                                  {
+                                    "id": "default_task.country",
+                                    "field": "default_task.country",
+                                    "type": "string",
+                                    "operator": "equal",
+                                    "value": "{{$_POST.destination_country}}",
+                                    "data": {
+                                      "table": "default_task",
+                                      "column": "country",
+                                      "type": "text",
+                                      "columnObj": {
+                                        "type": "string",
+                                        "maxLength": -5,
+                                        "primary": false,
+                                        "unique": false,
+                                        "nullable": false,
+                                        "name": "country"
+                                      }
+                                    },
+                                    "operation": "="
+                                  },
+                                  {
+                                    "id": "default_task.country",
+                                    "field": "default_task.country",
+                                    "type": "string",
+                                    "operator": "equal",
+                                    "value": "{{'All'}}",
+                                    "data": {
+                                      "table": "default_task",
+                                      "column": "country",
+                                      "type": "text",
+                                      "columnObj": {
+                                        "type": "string",
+                                        "maxLength": -5,
+                                        "primary": false,
+                                        "unique": false,
+                                        "nullable": false,
+                                        "name": "country"
+                                      }
+                                    },
+                                    "operation": "="
+                                  }
+                                ],
+                                "conditional": null
+                              }
+                            ],
+                            "conditional": null,
+                            "valid": true
+                          },
+                          "orders": [],
+                          "query": "SELECT default_task_id, visa_type, country, task_name, required, description\nFROM default_task\nWHERE active = '1' AND (visa_type = :P1 /* {{$_POST.visa_application_type}} */ OR visa_type = :P2 /* {{'All'}} */) AND (country = :P3 /* {{$_POST.destination_country}} */ OR country = :P4 /* {{'All'}} */)",
+                          "params": [
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P1",
+                              "value": "{{$_POST.visa_application_type}}"
+                            },
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P2",
+                              "value": "{{'All'}}"
+                            },
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P3",
+                              "value": "{{$_POST.destination_country}}"
+                            },
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P4",
+                              "value": "{{'All'}}"
+                            }
+                          ]
+                        }
+                      },
+                      "output": false,
+                      "meta": [
+                        {
+                          "type": "number",
+                          "name": "default_task_id"
+                        },
+                        {
+                          "type": "text",
+                          "name": "visa_type"
+                        },
+                        {
+                          "type": "text",
+                          "name": "country"
+                        },
+                        {
+                          "type": "text",
+                          "name": "task_name"
+                        },
+                        {
+                          "type": "text",
+                          "name": "required"
+                        },
+                        {
+                          "type": "text",
+                          "name": "description"
+                        }
+                      ],
+                      "outputType": "array"
+                    },
+                    {
+                      "name": "repeat",
+                      "module": "core",
+                      "action": "repeat",
+                      "options": {
+                        "repeat": "{{GetTasks}}",
+                        "outputFields": [],
+                        "exec": {
+                          "steps": {
+                            "name": "insertAssignTasks",
+                            "module": "dbupdater",
+                            "action": "insert",
+                            "options": {
+                              "connection": "VizzyDB",
+                              "sql": {
+                                "type": "insert",
+                                "values": [
+                                  {
+                                    "table": "task_assigned",
+                                    "column": "user_id",
+                                    "type": "number",
+                                    "value": "{{GetUserId.user_id}}"
+                                  },
+                                  {
+                                    "table": "task_assigned",
+                                    "column": "country",
+                                    "type": "text",
+                                    "value": "{{$_POST.destination_country}}"
+                                  },
+                                  {
+                                    "table": "task_assigned",
+                                    "column": "visa_type",
+                                    "type": "text",
+                                    "value": "{{$_POST.visa_application_type}}"
+                                  },
+                                  {
+                                    "table": "task_assigned",
+                                    "column": "task_id",
+                                    "type": "number",
+                                    "value": "{{GetTasks[$index].default_task_id}}"
+                                  },
+                                  {
+                                    "table": "task_assigned",
+                                    "column": "task_type",
+                                    "type": "text",
+                                    "value": "{{'Default'}}"
+                                  },
+                                  {
+                                    "table": "task_assigned",
+                                    "column": "status",
+                                    "type": "text",
+                                    "value": "{{'Waiting'}}"
+                                  },
+                                  {
+                                    "table": "task_assigned",
+                                    "column": "created_on",
+                                    "type": "datetime",
+                                    "value": "{{NOW}}"
+                                  },
+                                  {
+                                    "table": "task_assigned",
+                                    "column": "visa_info_id",
+                                    "type": "number",
+                                    "value": "{{GetVisaInfo.visa_info_id}}"
+                                  }
+                                ],
+                                "table": "task_assigned",
+                                "query": "INSERT INTO task_assigned\n(user_id, country, visa_type, task_id, task_type, status, created_on, visa_info_id) VALUES (:P1 /* {{GetUserId.user_id}} */, :P2 /* {{$_POST.destination_country}} */, :P3 /* {{$_POST.visa_application_type}} */, :P4 /* {{GetTasks[$index].default_task_id}} */, :P5 /* {{'Default'}} */, :P6 /* {{'Waiting'}} */, :P7 /* {{NOW}} */, :P8 /* {{GetVisaInfo.visa_info_id}} */)",
+                                "params": [
+                                  {
+                                    "name": ":P1",
+                                    "type": "expression",
+                                    "value": "{{GetUserId.user_id}}"
+                                  },
+                                  {
+                                    "name": ":P2",
+                                    "type": "expression",
+                                    "value": "{{$_POST.destination_country}}"
+                                  },
+                                  {
+                                    "name": ":P3",
+                                    "type": "expression",
+                                    "value": "{{$_POST.visa_application_type}}"
+                                  },
+                                  {
+                                    "name": ":P4",
+                                    "type": "expression",
+                                    "value": "{{GetTasks[$index].default_task_id}}"
+                                  },
+                                  {
+                                    "name": ":P5",
+                                    "type": "expression",
+                                    "value": "{{'Default'}}"
+                                  },
+                                  {
+                                    "name": ":P6",
+                                    "type": "expression",
+                                    "value": "{{'Waiting'}}"
+                                  },
+                                  {
+                                    "name": ":P7",
+                                    "type": "expression",
+                                    "value": "{{NOW}}"
+                                  },
+                                  {
+                                    "name": ":P8",
+                                    "type": "expression",
+                                    "value": "{{GetVisaInfo.visa_info_id}}"
+                                  }
+                                ]
+                              }
+                            },
+                            "meta": [
+                              {
+                                "name": "identity",
+                                "type": "text"
+                              },
+                              {
+                                "name": "affected",
+                                "type": "number"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "output": true,
+                      "meta": [
+                        {
+                          "name": "$index",
+                          "type": "number"
+                        },
+                        {
+                          "name": "$number",
+                          "type": "number"
+                        },
+                        {
+                          "name": "$name",
+                          "type": "text"
+                        },
+                        {
+                          "name": "$value",
+                          "type": "object"
+                        },
+                        {
+                          "name": "default_task_id",
+                          "type": "number"
+                        },
+                        {
+                          "name": "visa_type",
+                          "type": "text"
+                        },
+                        {
+                          "name": "country",
+                          "type": "text"
+                        },
+                        {
+                          "name": "task_name",
+                          "type": "text"
+                        },
+                        {
+                          "name": "required",
+                          "type": "text"
+                        },
+                        {
+                          "name": "description",
+                          "type": "text"
+                        }
+                      ],
+                      "outputType": "array"
                     },
                     {
                       "name": "identity",

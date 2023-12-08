@@ -7,20 +7,21 @@
     "$_POST": [
       {
         "type": "text",
-        "fieldName": "task_list_id",
-        "name": "task_list_id"
+        "fieldName": "task_assigned_id",
+        "name": "task_assigned_id"
       },
       {
         "type": "text",
         "fieldName": "task_name",
         "options": {
-          "rules": {
-            "core:required": {
-              "param": ""
-            }
-          }
+          "rules": {}
         },
         "name": "task_name"
+      },
+      {
+        "type": "text",
+        "fieldName": "visa_info_id",
+        "name": "visa_info_id"
       },
       {
         "type": "text",
@@ -87,227 +88,854 @@
               "module": "core",
               "action": "condition",
               "options": {
-                "if": "{{$_POST.task_list_id}}",
+                "if": "{{$_POST.task_assigned_id}}",
                 "then": {
-                  "steps": {
-                    "name": "updateTasks",
-                    "module": "dbupdater",
-                    "action": "update",
-                    "options": {
-                      "connection": "VizzyDB",
-                      "sql": {
-                        "type": "update",
-                        "values": [
-                          {
-                            "table": "task_list",
-                            "column": "task_name",
-                            "type": "text",
-                            "value": "{{$_POST.task_name}}"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "required",
-                            "type": "text",
-                            "value": "{{$_POST.required}}"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "description",
-                            "type": "text",
-                            "value": "{{$_POST.description}}"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "your_notes",
-                            "type": "text",
-                            "value": "{{$_POST.your_notes}}"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "status",
-                            "type": "text",
-                            "value": "{{$_POST.status}}"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "updated_on",
-                            "type": "datetime",
-                            "value": "{{NOW_UTC}}"
-                          }
-                        ],
-                        "table": "task_list",
-                        "wheres": {
-                          "condition": "AND",
-                          "rules": [
+                  "steps": [
+                    {
+                      "name": "GetTaskDetails",
+                      "module": "dbconnector",
+                      "action": "single",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "SELECT",
+                          "columns": [
                             {
-                              "id": "task_list_id",
-                              "field": "task_list_id",
-                              "type": "double",
-                              "operator": "equal",
-                              "value": "{{$_POST.task_list_id}}",
-                              "data": {
-                                "column": "task_list_id"
-                              },
-                              "operation": "="
+                              "table": "task_assigned",
+                              "column": "task_type"
+                            },
+                            {
+                              "table": "task_assigned",
+                              "column": "task_id"
                             }
                           ],
-                          "conditional": null,
-                          "valid": true
+                          "table": {
+                            "name": "task_assigned"
+                          },
+                          "joins": [],
+                          "wheres": {
+                            "condition": "AND",
+                            "rules": [
+                              {
+                                "id": "task_assigned.task_assigned_id",
+                                "field": "task_assigned.task_assigned_id",
+                                "type": "double",
+                                "operator": "equal",
+                                "value": "{{$_POST.task_assigned_id}}",
+                                "data": {
+                                  "table": "task_assigned",
+                                  "column": "task_assigned_id",
+                                  "type": "number",
+                                  "columnObj": {
+                                    "type": "integer",
+                                    "primary": false,
+                                    "unique": false,
+                                    "nullable": false,
+                                    "name": "task_assigned_id"
+                                  }
+                                },
+                                "operation": "="
+                              }
+                            ],
+                            "conditional": null,
+                            "valid": true
+                          },
+                          "query": "SELECT task_type, task_id\nFROM task_assigned\nWHERE task_assigned_id = :P1 /* {{$_POST.task_assigned_id}} */",
+                          "params": [
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P1",
+                              "value": "{{$_POST.task_assigned_id}}"
+                            }
+                          ]
+                        }
+                      },
+                      "output": false,
+                      "meta": [
+                        {
+                          "type": "text",
+                          "name": "task_type"
                         },
-                        "query": "UPDATE task_list\nSET task_name = :P1 /* {{$_POST.task_name}} */, required = :P2 /* {{$_POST.required}} */, description = :P3 /* {{$_POST.description}} */, your_notes = :P4 /* {{$_POST.your_notes}} */, status = :P5 /* {{$_POST.status}} */, updated_on = :P6 /* {{NOW_UTC}} */\nWHERE task_list_id = :P7 /* {{$_POST.task_list_id}} */",
-                        "params": [
-                          {
-                            "name": ":P1",
-                            "type": "expression",
-                            "value": "{{$_POST.task_name}}"
-                          },
-                          {
-                            "name": ":P2",
-                            "type": "expression",
-                            "value": "{{$_POST.required}}"
-                          },
-                          {
-                            "name": ":P3",
-                            "type": "expression",
-                            "value": "{{$_POST.description}}"
-                          },
-                          {
-                            "name": ":P4",
-                            "type": "expression",
-                            "value": "{{$_POST.your_notes}}"
-                          },
-                          {
-                            "name": ":P5",
-                            "type": "expression",
-                            "value": "{{$_POST.status}}"
-                          },
-                          {
-                            "name": ":P6",
-                            "type": "expression",
-                            "value": "{{NOW_UTC}}"
-                          },
-                          {
-                            "operator": "equal",
-                            "type": "expression",
-                            "name": ":P7",
-                            "value": "{{$_POST.task_list_id}}"
-                          }
-                        ]
-                      }
+                        {
+                          "type": "number",
+                          "name": "task_id"
+                        }
+                      ],
+                      "outputType": "object"
                     },
-                    "meta": [
-                      {
-                        "name": "affected",
-                        "type": "number"
-                      }
-                    ]
-                  }
+                    {
+                      "name": "",
+                      "module": "core",
+                      "action": "condition",
+                      "options": {
+                        "if": "{{(GetTaskDetails.task_type=='Default')}}",
+                        "then": {
+                          "steps": {
+                            "name": "updateDefaultTasks",
+                            "module": "dbupdater",
+                            "action": "update",
+                            "options": {
+                              "connection": "VizzyDB",
+                              "sql": {
+                                "type": "update",
+                                "values": [
+                                  {
+                                    "table": "task_assigned",
+                                    "column": "your_notes",
+                                    "type": "text",
+                                    "value": "{{$_POST.your_notes}}"
+                                  },
+                                  {
+                                    "table": "task_assigned",
+                                    "column": "status",
+                                    "type": "text",
+                                    "value": "{{$_POST.status}}"
+                                  },
+                                  {
+                                    "table": "task_assigned",
+                                    "column": "updated_on",
+                                    "type": "datetime",
+                                    "value": "{{NOW}}"
+                                  }
+                                ],
+                                "table": "task_assigned",
+                                "wheres": {
+                                  "condition": "AND",
+                                  "rules": [
+                                    {
+                                      "id": "task_assigned_id",
+                                      "field": "task_assigned_id",
+                                      "type": "double",
+                                      "operator": "equal",
+                                      "value": "{{$_POST.task_assigned_id}}",
+                                      "data": {
+                                        "column": "task_assigned_id"
+                                      },
+                                      "operation": "="
+                                    }
+                                  ],
+                                  "conditional": null,
+                                  "valid": true
+                                },
+                                "query": "UPDATE task_assigned\nSET your_notes = :P1 /* {{$_POST.your_notes}} */, status = :P2 /* {{$_POST.status}} */, updated_on = :P3 /* {{NOW}} */\nWHERE task_assigned_id = :P4 /* {{$_POST.task_assigned_id}} */",
+                                "params": [
+                                  {
+                                    "name": ":P1",
+                                    "type": "expression",
+                                    "value": "{{$_POST.your_notes}}"
+                                  },
+                                  {
+                                    "name": ":P2",
+                                    "type": "expression",
+                                    "value": "{{$_POST.status}}"
+                                  },
+                                  {
+                                    "name": ":P3",
+                                    "type": "expression",
+                                    "value": "{{NOW}}"
+                                  },
+                                  {
+                                    "operator": "equal",
+                                    "type": "expression",
+                                    "name": ":P4",
+                                    "value": "{{$_POST.task_assigned_id}}"
+                                  }
+                                ]
+                              }
+                            },
+                            "meta": [
+                              {
+                                "name": "affected",
+                                "type": "number"
+                              }
+                            ]
+                          }
+                        },
+                        "else": {
+                          "steps": [
+                            {
+                              "name": "GetCustomDetails",
+                              "module": "dbconnector",
+                              "action": "single",
+                              "options": {
+                                "connection": "VizzyDB",
+                                "sql": {
+                                  "type": "SELECT",
+                                  "columns": [
+                                    {
+                                      "table": "custom_task",
+                                      "column": "country"
+                                    },
+                                    {
+                                      "table": "custom_task",
+                                      "column": "visa_type"
+                                    }
+                                  ],
+                                  "table": {
+                                    "name": "custom_task"
+                                  },
+                                  "joins": [],
+                                  "query": "SELECT country, visa_type\nFROM custom_task\nWHERE custom_task_id = :P1 /* {{GetTaskDetails.task_id}} */",
+                                  "params": [
+                                    {
+                                      "operator": "equal",
+                                      "type": "expression",
+                                      "name": ":P1",
+                                      "value": "{{GetTaskDetails.task_id}}"
+                                    }
+                                  ],
+                                  "wheres": {
+                                    "condition": "AND",
+                                    "rules": [
+                                      {
+                                        "id": "custom_task.custom_task_id",
+                                        "field": "custom_task.custom_task_id",
+                                        "type": "double",
+                                        "operator": "equal",
+                                        "value": "{{GetTaskDetails.task_id}}",
+                                        "data": {
+                                          "table": "custom_task",
+                                          "column": "custom_task_id",
+                                          "type": "number",
+                                          "columnObj": {
+                                            "type": "integer",
+                                            "primary": false,
+                                            "unique": false,
+                                            "nullable": false,
+                                            "name": "custom_task_id"
+                                          }
+                                        },
+                                        "operation": "="
+                                      }
+                                    ],
+                                    "conditional": null,
+                                    "valid": true
+                                  }
+                                }
+                              },
+                              "output": false,
+                              "meta": [
+                                {
+                                  "type": "text",
+                                  "name": "country"
+                                },
+                                {
+                                  "type": "text",
+                                  "name": "visa_type"
+                                }
+                              ],
+                              "outputType": "object"
+                            },
+                            {
+                              "name": "updateCustomTasks",
+                              "module": "dbupdater",
+                              "action": "update",
+                              "options": {
+                                "connection": "VizzyDB",
+                                "sql": {
+                                  "type": "update",
+                                  "values": [
+                                    {
+                                      "table": "custom_task",
+                                      "column": "country",
+                                      "type": "text",
+                                      "value": "{{GetCustomDetails.country}}"
+                                    },
+                                    {
+                                      "table": "custom_task",
+                                      "column": "visa_type",
+                                      "type": "text",
+                                      "value": "{{GetCustomDetails.visa_type}}"
+                                    },
+                                    {
+                                      "table": "custom_task",
+                                      "column": "task_name",
+                                      "type": "text",
+                                      "value": "{{$_POST.task_name}}"
+                                    },
+                                    {
+                                      "table": "custom_task",
+                                      "column": "required",
+                                      "type": "text",
+                                      "value": "{{$_POST.required}}"
+                                    },
+                                    {
+                                      "table": "custom_task",
+                                      "column": "description",
+                                      "type": "text",
+                                      "value": "{{$_POST.description}}"
+                                    },
+                                    {
+                                      "table": "custom_task",
+                                      "column": "updated_on",
+                                      "type": "datetime",
+                                      "value": "{{NOW}}"
+                                    }
+                                  ],
+                                  "table": "custom_task",
+                                  "wheres": {
+                                    "condition": "AND",
+                                    "rules": [
+                                      {
+                                        "id": "custom_task_id",
+                                        "field": "custom_task_id",
+                                        "type": "double",
+                                        "operator": "equal",
+                                        "value": "{{GetTaskDetails.task_id}}",
+                                        "data": {
+                                          "column": "custom_task_id"
+                                        },
+                                        "operation": "="
+                                      }
+                                    ],
+                                    "conditional": null,
+                                    "valid": true
+                                  },
+                                  "query": "UPDATE custom_task\nSET country = :P1 /* {{GetCustomDetails.country}} */, visa_type = :P2 /* {{GetCustomDetails.visa_type}} */, task_name = :P3 /* {{$_POST.task_name}} */, required = :P4 /* {{$_POST.required}} */, description = :P5 /* {{$_POST.description}} */, updated_on = :P6 /* {{NOW}} */\nWHERE custom_task_id = :P7 /* {{GetTaskDetails.task_id}} */",
+                                  "params": [
+                                    {
+                                      "name": ":P1",
+                                      "type": "expression",
+                                      "value": "{{GetCustomDetails.country}}"
+                                    },
+                                    {
+                                      "name": ":P2",
+                                      "type": "expression",
+                                      "value": "{{GetCustomDetails.visa_type}}"
+                                    },
+                                    {
+                                      "name": ":P3",
+                                      "type": "expression",
+                                      "value": "{{$_POST.task_name}}"
+                                    },
+                                    {
+                                      "name": ":P4",
+                                      "type": "expression",
+                                      "value": "{{$_POST.required}}"
+                                    },
+                                    {
+                                      "name": ":P5",
+                                      "type": "expression",
+                                      "value": "{{$_POST.description}}"
+                                    },
+                                    {
+                                      "name": ":P6",
+                                      "type": "expression",
+                                      "value": "{{NOW}}"
+                                    },
+                                    {
+                                      "operator": "equal",
+                                      "type": "expression",
+                                      "name": ":P7",
+                                      "value": "{{GetTaskDetails.task_id}}"
+                                    }
+                                  ]
+                                }
+                              },
+                              "meta": [
+                                {
+                                  "name": "affected",
+                                  "type": "number"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "updateCustomAssignedTasks",
+                              "module": "dbupdater",
+                              "action": "update",
+                              "options": {
+                                "connection": "VizzyDB",
+                                "sql": {
+                                  "type": "update",
+                                  "values": [
+                                    {
+                                      "table": "task_assigned",
+                                      "column": "your_notes",
+                                      "type": "text",
+                                      "value": "{{$_POST.your_notes}}"
+                                    },
+                                    {
+                                      "table": "task_assigned",
+                                      "column": "status",
+                                      "type": "text",
+                                      "value": "{{$_POST.status}}"
+                                    },
+                                    {
+                                      "table": "task_assigned",
+                                      "column": "updated_on",
+                                      "type": "datetime",
+                                      "value": "{{NOW}}"
+                                    },
+                                    {
+                                      "table": "task_assigned",
+                                      "column": "country",
+                                      "type": "text",
+                                      "value": "{{GetCustomDetails.country}}"
+                                    },
+                                    {
+                                      "table": "task_assigned",
+                                      "column": "visa_type",
+                                      "type": "text",
+                                      "value": "{{GetCustomDetails.visa_type}}"
+                                    }
+                                  ],
+                                  "table": "task_assigned",
+                                  "wheres": {
+                                    "condition": "AND",
+                                    "rules": [
+                                      {
+                                        "id": "task_assigned_id",
+                                        "field": "task_assigned_id",
+                                        "type": "double",
+                                        "operator": "equal",
+                                        "value": "{{$_POST.task_assigned_id}}",
+                                        "data": {
+                                          "column": "task_assigned_id"
+                                        },
+                                        "operation": "="
+                                      }
+                                    ],
+                                    "conditional": null,
+                                    "valid": true
+                                  },
+                                  "query": "UPDATE task_assigned\nSET your_notes = :P1 /* {{$_POST.your_notes}} */, status = :P2 /* {{$_POST.status}} */, updated_on = :P3 /* {{NOW}} */, country = :P4 /* {{GetCustomDetails.country}} */, visa_type = :P5 /* {{GetCustomDetails.visa_type}} */\nWHERE task_assigned_id = :P6 /* {{$_POST.task_assigned_id}} */",
+                                  "params": [
+                                    {
+                                      "name": ":P1",
+                                      "type": "expression",
+                                      "value": "{{$_POST.your_notes}}"
+                                    },
+                                    {
+                                      "name": ":P2",
+                                      "type": "expression",
+                                      "value": "{{$_POST.status}}"
+                                    },
+                                    {
+                                      "name": ":P3",
+                                      "type": "expression",
+                                      "value": "{{NOW}}"
+                                    },
+                                    {
+                                      "name": ":P4",
+                                      "type": "expression",
+                                      "value": "{{GetCustomDetails.country}}"
+                                    },
+                                    {
+                                      "name": ":P5",
+                                      "type": "expression",
+                                      "value": "{{GetCustomDetails.visa_type}}"
+                                    },
+                                    {
+                                      "operator": "equal",
+                                      "type": "expression",
+                                      "name": ":P6",
+                                      "value": "{{$_POST.task_assigned_id}}"
+                                    }
+                                  ]
+                                }
+                              },
+                              "meta": [
+                                {
+                                  "name": "affected",
+                                  "type": "number"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "outputType": "boolean"
+                    }
+                  ]
                 },
                 "else": {
-                  "steps": {
-                    "name": "insertTasks",
-                    "module": "dbupdater",
-                    "action": "insert",
-                    "options": {
-                      "connection": "VizzyDB",
-                      "sql": {
-                        "type": "insert",
-                        "values": [
-                          {
-                            "table": "task_list",
-                            "column": "user_id",
-                            "type": "number",
-                            "value": "{{identity}}"
+                  "steps": [
+                    {
+                      "name": "GetVisaInfo",
+                      "module": "dbconnector",
+                      "action": "single",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "SELECT",
+                          "columns": [
+                            {
+                              "table": "visa_info",
+                              "column": "visa_info_id"
+                            },
+                            {
+                              "table": "visa_info",
+                              "column": "destination_country"
+                            },
+                            {
+                              "table": "visa_info",
+                              "column": "visa_application_type"
+                            }
+                          ],
+                          "table": {
+                            "name": "visa_info"
                           },
-                          {
-                            "table": "task_list",
-                            "column": "task_name",
-                            "type": "text",
-                            "value": "{{$_POST.task_name}}"
+                          "joins": [],
+                          "wheres": {
+                            "condition": "AND",
+                            "rules": [
+                              {
+                                "id": "visa_info.visa_info_id",
+                                "field": "visa_info.visa_info_id",
+                                "type": "double",
+                                "operator": "equal",
+                                "value": "{{$_POST.visa_info_id}}",
+                                "data": {
+                                  "table": "visa_info",
+                                  "column": "visa_info_id",
+                                  "type": "number",
+                                  "columnObj": {
+                                    "type": "integer",
+                                    "primary": false,
+                                    "unique": false,
+                                    "nullable": false,
+                                    "name": "visa_info_id"
+                                  }
+                                },
+                                "operation": "="
+                              }
+                            ],
+                            "conditional": null,
+                            "valid": true
                           },
-                          {
-                            "table": "task_list",
-                            "column": "required",
-                            "type": "text",
-                            "value": "{{$_POST.required}}"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "description",
-                            "type": "text",
-                            "value": "{{$_POST.description}}"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "your_notes",
-                            "type": "text",
-                            "value": "{{$_POST.your_notes}}"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "status",
-                            "type": "text",
-                            "value": "{{$_POST.status}}"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "created_on",
-                            "type": "datetime",
-                            "value": "{{NOW_UTC}}"
-                          }
-                        ],
-                        "table": "task_list",
-                        "query": "INSERT INTO task_list\n(user_id, task_name, required, description, your_notes, status, created_on) VALUES (:P1 /* {{identity}} */, :P2 /* {{$_POST.task_name}} */, :P3 /* {{$_POST.required}} */, :P4 /* {{$_POST.description}} */, :P5 /* {{$_POST.your_notes}} */, :P6 /* {{$_POST.status}} */, :P7 /* {{NOW_UTC}} */)",
-                        "params": [
-                          {
-                            "name": ":P1",
-                            "type": "expression",
-                            "value": "{{identity}}"
-                          },
-                          {
-                            "name": ":P2",
-                            "type": "expression",
-                            "value": "{{$_POST.task_name}}"
-                          },
-                          {
-                            "name": ":P3",
-                            "type": "expression",
-                            "value": "{{$_POST.required}}"
-                          },
-                          {
-                            "name": ":P4",
-                            "type": "expression",
-                            "value": "{{$_POST.description}}"
-                          },
-                          {
-                            "name": ":P5",
-                            "type": "expression",
-                            "value": "{{$_POST.your_notes}}"
-                          },
-                          {
-                            "name": ":P6",
-                            "type": "expression",
-                            "value": "{{$_POST.status}}"
-                          },
-                          {
-                            "name": ":P7",
-                            "type": "expression",
-                            "value": "{{NOW_UTC}}"
-                          }
-                        ]
-                      }
-                    },
-                    "meta": [
-                      {
-                        "name": "identity",
-                        "type": "text"
+                          "query": "SELECT visa_info_id, destination_country, visa_application_type\nFROM visa_info\nWHERE visa_info_id = :P1 /* {{$_POST.visa_info_id}} */",
+                          "params": [
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P1",
+                              "value": "{{$_POST.visa_info_id}}"
+                            }
+                          ]
+                        }
                       },
-                      {
-                        "name": "affected",
-                        "type": "number"
-                      }
-                    ]
-                  }
+                      "output": false,
+                      "meta": [
+                        {
+                          "type": "number",
+                          "name": "visa_info_id"
+                        },
+                        {
+                          "type": "text",
+                          "name": "destination_country"
+                        },
+                        {
+                          "type": "text",
+                          "name": "visa_application_type"
+                        }
+                      ],
+                      "outputType": "object"
+                    },
+                    {
+                      "name": "insertCustomTask",
+                      "module": "dbupdater",
+                      "action": "insert",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "insert",
+                          "values": [
+                            {
+                              "table": "custom_task",
+                              "column": "user_id",
+                              "type": "number",
+                              "value": "{{identity}}"
+                            },
+                            {
+                              "table": "custom_task",
+                              "column": "country",
+                              "type": "text",
+                              "value": "{{GetVisaInfo.destination_country}}"
+                            },
+                            {
+                              "table": "custom_task",
+                              "column": "visa_type",
+                              "type": "text",
+                              "value": "{{GetVisaInfo.visa_application_type}}"
+                            },
+                            {
+                              "table": "custom_task",
+                              "column": "task_name",
+                              "type": "text",
+                              "value": "{{$_POST.task_name}}"
+                            },
+                            {
+                              "table": "custom_task",
+                              "column": "required",
+                              "type": "text",
+                              "value": "{{$_POST.required}}"
+                            },
+                            {
+                              "table": "custom_task",
+                              "column": "description",
+                              "type": "text",
+                              "value": "{{$_POST.description}}"
+                            },
+                            {
+                              "table": "custom_task",
+                              "column": "created_on",
+                              "type": "datetime",
+                              "value": "{{NOW}}"
+                            }
+                          ],
+                          "table": "custom_task",
+                          "query": "INSERT INTO custom_task\n(user_id, country, visa_type, task_name, required, description, created_on) VALUES (:P1 /* {{identity}} */, :P2 /* {{GetVisaInfo.destination_country}} */, :P3 /* {{GetVisaInfo.visa_application_type}} */, :P4 /* {{$_POST.task_name}} */, :P5 /* {{$_POST.required}} */, :P6 /* {{$_POST.description}} */, :P7 /* {{NOW}} */)",
+                          "params": [
+                            {
+                              "name": ":P1",
+                              "type": "expression",
+                              "value": "{{identity}}"
+                            },
+                            {
+                              "name": ":P2",
+                              "type": "expression",
+                              "value": "{{GetVisaInfo.destination_country}}"
+                            },
+                            {
+                              "name": ":P3",
+                              "type": "expression",
+                              "value": "{{GetVisaInfo.visa_application_type}}"
+                            },
+                            {
+                              "name": ":P4",
+                              "type": "expression",
+                              "value": "{{$_POST.task_name}}"
+                            },
+                            {
+                              "name": ":P5",
+                              "type": "expression",
+                              "value": "{{$_POST.required}}"
+                            },
+                            {
+                              "name": ":P6",
+                              "type": "expression",
+                              "value": "{{$_POST.description}}"
+                            },
+                            {
+                              "name": ":P7",
+                              "type": "expression",
+                              "value": "{{NOW}}"
+                            }
+                          ]
+                        }
+                      },
+                      "meta": [
+                        {
+                          "name": "identity",
+                          "type": "text"
+                        },
+                        {
+                          "name": "affected",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "GetCustomId",
+                      "module": "dbconnector",
+                      "action": "single",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "SELECT",
+                          "columns": [
+                            {
+                              "table": "custom_task",
+                              "column": "custom_task_id"
+                            }
+                          ],
+                          "table": {
+                            "name": "custom_task"
+                          },
+                          "joins": [],
+                          "wheres": {
+                            "condition": "AND",
+                            "rules": [
+                              {
+                                "id": "custom_task.user_id",
+                                "field": "custom_task.user_id",
+                                "type": "double",
+                                "operator": "equal",
+                                "value": "{{identity}}",
+                                "data": {
+                                  "table": "custom_task",
+                                  "column": "user_id",
+                                  "type": "number",
+                                  "columnObj": {
+                                    "type": "integer",
+                                    "primary": false,
+                                    "unique": false,
+                                    "nullable": false,
+                                    "name": "user_id"
+                                  }
+                                },
+                                "operation": "="
+                              }
+                            ],
+                            "conditional": null,
+                            "valid": true
+                          },
+                          "orders": [
+                            {
+                              "table": "custom_task",
+                              "column": "custom_task_id",
+                              "direction": "DESC",
+                              "recid": 1
+                            }
+                          ],
+                          "query": "SELECT custom_task_id\nFROM custom_task\nWHERE user_id = :P1 /* {{identity}} */\nORDER BY custom_task_id DESC",
+                          "params": [
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P1",
+                              "value": "{{identity}}"
+                            }
+                          ]
+                        }
+                      },
+                      "output": false,
+                      "meta": [
+                        {
+                          "type": "number",
+                          "name": "custom_task_id"
+                        }
+                      ],
+                      "outputType": "object"
+                    },
+                    {
+                      "name": "insertAssignTasks",
+                      "module": "dbupdater",
+                      "action": "insert",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "insert",
+                          "values": [
+                            {
+                              "table": "task_assigned",
+                              "column": "user_id",
+                              "type": "number",
+                              "value": "{{identity}}"
+                            },
+                            {
+                              "table": "task_assigned",
+                              "column": "country",
+                              "type": "text",
+                              "value": "{{GetVisaInfo.destination_country}}"
+                            },
+                            {
+                              "table": "task_assigned",
+                              "column": "visa_type",
+                              "type": "text",
+                              "value": "{{GetVisaInfo.visa_application_type}}"
+                            },
+                            {
+                              "table": "task_assigned",
+                              "column": "task_id",
+                              "type": "number",
+                              "value": "{{GetCustomId.custom_task_id}}"
+                            },
+                            {
+                              "table": "task_assigned",
+                              "column": "task_type",
+                              "type": "text",
+                              "value": "{{'Custom'}}"
+                            },
+                            {
+                              "table": "task_assigned",
+                              "column": "your_notes",
+                              "type": "text",
+                              "value": "{{$_POST.your_notes}}"
+                            },
+                            {
+                              "table": "task_assigned",
+                              "column": "status",
+                              "type": "text",
+                              "value": "{{$_POST.status}}"
+                            },
+                            {
+                              "table": "task_assigned",
+                              "column": "created_on",
+                              "type": "datetime",
+                              "value": "{{NOW}}"
+                            },
+                            {
+                              "table": "task_assigned",
+                              "column": "visa_info_id",
+                              "type": "number",
+                              "value": "{{$_POST.visa_info_id}}"
+                            }
+                          ],
+                          "table": "task_assigned",
+                          "query": "INSERT INTO task_assigned\n(user_id, country, visa_type, task_id, task_type, your_notes, status, created_on, visa_info_id) VALUES (:P1 /* {{identity}} */, :P2 /* {{GetVisaInfo.destination_country}} */, :P3 /* {{GetVisaInfo.visa_application_type}} */, :P4 /* {{GetCustomId.custom_task_id}} */, :P5 /* {{'Custom'}} */, :P6 /* {{$_POST.your_notes}} */, :P7 /* {{$_POST.status}} */, :P8 /* {{NOW}} */, :P9 /* {{$_POST.visa_info_id}} */)",
+                          "params": [
+                            {
+                              "name": ":P1",
+                              "type": "expression",
+                              "value": "{{identity}}"
+                            },
+                            {
+                              "name": ":P2",
+                              "type": "expression",
+                              "value": "{{GetVisaInfo.destination_country}}"
+                            },
+                            {
+                              "name": ":P3",
+                              "type": "expression",
+                              "value": "{{GetVisaInfo.visa_application_type}}"
+                            },
+                            {
+                              "name": ":P4",
+                              "type": "expression",
+                              "value": "{{GetCustomId.custom_task_id}}"
+                            },
+                            {
+                              "name": ":P5",
+                              "type": "expression",
+                              "value": "{{'Custom'}}"
+                            },
+                            {
+                              "name": ":P6",
+                              "type": "expression",
+                              "value": "{{$_POST.your_notes}}"
+                            },
+                            {
+                              "name": ":P7",
+                              "type": "expression",
+                              "value": "{{$_POST.status}}"
+                            },
+                            {
+                              "name": ":P8",
+                              "type": "expression",
+                              "value": "{{NOW}}"
+                            },
+                            {
+                              "name": ":P9",
+                              "type": "expression",
+                              "value": "{{$_POST.visa_info_id}}"
+                            }
+                          ]
+                        }
+                      },
+                      "meta": [
+                        {
+                          "name": "identity",
+                          "type": "text"
+                        },
+                        {
+                          "name": "affected",
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  ]
                 }
               },
               "outputType": "boolean"

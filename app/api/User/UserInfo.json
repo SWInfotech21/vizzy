@@ -1,5 +1,15 @@
 {
   "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      }
+    ],
     "$_SESSION": [
       {
         "type": "text",
@@ -157,6 +167,119 @@
         "outputType": "object"
       },
       {
+        "name": "VisaApplicationInfo",
+        "module": "dbconnector",
+        "action": "select",
+        "options": {
+          "connection": "VizzyDB",
+          "sql": {
+            "type": "SELECT",
+            "columns": [
+              {
+                "table": "visa_info",
+                "column": "visa_info_id"
+              },
+              {
+                "table": "visa_info",
+                "column": "destination_country"
+              },
+              {
+                "table": "visa_info",
+                "column": "from_country"
+              },
+              {
+                "table": "visa_info",
+                "column": "visa_application_type"
+              },
+              {
+                "table": "visa_info",
+                "column": "preffered_lang"
+              },
+              {
+                "table": "visa_info",
+                "column": "package"
+              }
+            ],
+            "table": {
+              "name": "visa_info"
+            },
+            "joins": [],
+            "distinct": false,
+            "orders": [
+              {
+                "table": "visa_info",
+                "column": "destination_country",
+                "direction": "ASC"
+              }
+            ],
+            "query": "SELECT visa_info_id, destination_country, from_country, visa_application_type, preffered_lang, package\nFROM visa_info\nWHERE user_id = :P1 /* {{identity}} */\nORDER BY destination_country ASC",
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{identity}}"
+              }
+            ],
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "visa_info.user_id",
+                  "field": "visa_info.user_id",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{identity}}",
+                  "data": {
+                    "table": "visa_info",
+                    "column": "user_id",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "integer",
+                      "primary": false,
+                      "unique": false,
+                      "nullable": false,
+                      "name": "user_id"
+                    }
+                  },
+                  "operation": "="
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            }
+          }
+        },
+        "output": true,
+        "meta": [
+          {
+            "type": "number",
+            "name": "visa_info_id"
+          },
+          {
+            "type": "text",
+            "name": "destination_country"
+          },
+          {
+            "type": "text",
+            "name": "from_country"
+          },
+          {
+            "type": "text",
+            "name": "visa_application_type"
+          },
+          {
+            "type": "text",
+            "name": "preffered_lang"
+          },
+          {
+            "type": "text",
+            "name": "package"
+          }
+        ],
+        "outputType": "array"
+      },
+      {
         "name": "CountTasks",
         "module": "dbconnector",
         "action": "single",
@@ -166,29 +289,35 @@
             "type": "SELECT",
             "columns": [
               {
-                "table": "task_list",
-                "column": "task_list_id",
+                "table": "task_assigned",
+                "column": "task_assigned_id",
                 "alias": "CountTasks",
                 "aggregate": "COUNT"
               }
             ],
             "table": {
-              "name": "task_list"
+              "name": "task_assigned"
             },
             "joins": [],
-            "query": "SELECT COUNT(task_list_id) AS CountTasks\nFROM task_list\nWHERE status = :P1 /* {{'Waiting'}} */ AND user_id = :P2 /* {{identity}} */",
+            "query": "SELECT COUNT(task_assigned_id) AS CountTasks\nFROM task_assigned\nWHERE user_id = :P1 /* {{identity}} */ AND status = :P2 /* {{'Waiting'}} */ AND visa_info_id = :P3 /* {{VisaApplicationInfo[0].visa_info_id}} */",
             "params": [
               {
                 "operator": "equal",
                 "type": "expression",
                 "name": ":P1",
-                "value": "{{'Waiting'}}"
+                "value": "{{identity}}"
               },
               {
                 "operator": "equal",
                 "type": "expression",
                 "name": ":P2",
-                "value": "{{identity}}"
+                "value": "{{'Waiting'}}"
+              },
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P3",
+                "value": "{{VisaApplicationInfo[0].visa_info_id}}"
               }
             ],
             "groupBy": [],
@@ -196,13 +325,33 @@
               "condition": "AND",
               "rules": [
                 {
-                  "id": "task_list.status",
-                  "field": "task_list.status",
+                  "id": "task_assigned.user_id",
+                  "field": "task_assigned.user_id",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{identity}}",
+                  "data": {
+                    "table": "task_assigned",
+                    "column": "user_id",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "integer",
+                      "primary": false,
+                      "unique": false,
+                      "nullable": false,
+                      "name": "user_id"
+                    }
+                  },
+                  "operation": "="
+                },
+                {
+                  "id": "task_assigned.status",
+                  "field": "task_assigned.status",
                   "type": "string",
                   "operator": "equal",
                   "value": "{{'Waiting'}}",
                   "data": {
-                    "table": "task_list",
+                    "table": "task_assigned",
                     "column": "status",
                     "type": "text",
                     "columnObj": {
@@ -217,21 +366,21 @@
                   "operation": "="
                 },
                 {
-                  "id": "task_list.user_id",
-                  "field": "task_list.user_id",
+                  "id": "task_assigned.visa_info_id",
+                  "field": "task_assigned.visa_info_id",
                   "type": "double",
                   "operator": "equal",
-                  "value": "{{identity}}",
+                  "value": "{{VisaApplicationInfo[0].visa_info_id}}",
                   "data": {
-                    "table": "task_list",
-                    "column": "user_id",
+                    "table": "task_assigned",
+                    "column": "visa_info_id",
                     "type": "number",
                     "columnObj": {
                       "type": "integer",
                       "primary": false,
                       "unique": false,
-                      "nullable": false,
-                      "name": "user_id"
+                      "nullable": true,
+                      "name": "visa_info_id"
                     }
                   },
                   "operation": "="

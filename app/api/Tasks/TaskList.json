@@ -20,6 +20,10 @@
       {
         "type": "text",
         "name": "status"
+      },
+      {
+        "type": "text",
+        "name": "visa_application_id"
       }
     ]
   },
@@ -54,403 +58,251 @@
         "action": "trycatch",
         "options": {
           "try": {
-            "steps": {
-              "name": "",
-              "module": "core",
-              "action": "condition",
-              "options": {
-                "if": "{{$_GET.status}}",
-                "then": {
-                  "steps": {
-                    "name": "query",
-                    "module": "dbconnector",
-                    "action": "paged",
-                    "options": {
-                      "connection": "VizzyDB",
-                      "sql": {
-                        "type": "SELECT",
-                        "columns": [
-                          {
-                            "table": "task_list",
-                            "column": "task_list_id"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "user_id"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "task_name"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "required"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "description"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "your_notes"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "status"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "created_on"
-                          }
-                        ],
-                        "table": {
-                          "name": "task_list"
-                        },
-                        "joins": [],
-                        "query": "SELECT task_list_id, user_id, task_name, required, description, your_notes, status, created_on\nFROM task_list\nWHERE user_id = :P1 /* {{identity}} */ AND status = :P2 /* {{$_GET.status}} */",
-                        "params": [
-                          {
-                            "operator": "equal",
-                            "type": "expression",
-                            "name": ":P1",
-                            "value": "{{identity}}"
-                          },
-                          {
-                            "operator": "equal",
-                            "type": "expression",
-                            "name": ":P2",
-                            "value": "{{$_GET.status}}"
-                          }
-                        ],
-                        "wheres": {
-                          "condition": "AND",
-                          "rules": [
-                            {
-                              "id": "task_list.user_id",
-                              "field": "task_list.user_id",
-                              "type": "double",
-                              "operator": "equal",
-                              "value": "{{identity}}",
-                              "data": {
-                                "table": "task_list",
-                                "column": "user_id",
-                                "type": "number",
-                                "columnObj": {
-                                  "type": "integer",
-                                  "primary": false,
-                                  "unique": false,
-                                  "nullable": false,
-                                  "name": "user_id"
-                                }
-                              },
-                              "operation": "="
-                            },
-                            {
-                              "id": "task_list.status",
-                              "field": "task_list.status",
-                              "type": "string",
-                              "operator": "equal",
-                              "value": "{{$_GET.status}}",
-                              "data": {
-                                "table": "task_list",
-                                "column": "status",
-                                "type": "text",
-                                "columnObj": {
-                                  "type": "string",
-                                  "maxLength": 100,
-                                  "primary": false,
-                                  "unique": false,
-                                  "nullable": true,
-                                  "name": "status"
-                                }
-                              },
-                              "operation": "="
-                            }
-                          ],
-                          "conditional": null,
-                          "valid": true
-                        }
-                      }
-                    },
-                    "output": true,
-                    "meta": [
+            "steps": [
+              {
+                "name": "GetVisaInfo",
+                "module": "dbconnector",
+                "action": "single",
+                "options": {
+                  "connection": "VizzyDB",
+                  "sql": {
+                    "type": "SELECT",
+                    "columns": [
                       {
-                        "name": "offset",
-                        "type": "number"
+                        "table": "visa_info",
+                        "column": "destination_country"
                       },
                       {
-                        "name": "limit",
-                        "type": "number"
-                      },
-                      {
-                        "name": "total",
-                        "type": "number"
-                      },
-                      {
-                        "name": "page",
-                        "type": "object",
-                        "sub": [
-                          {
-                            "name": "offset",
-                            "type": "object",
-                            "sub": [
-                              {
-                                "name": "first",
-                                "type": "number"
-                              },
-                              {
-                                "name": "prev",
-                                "type": "number"
-                              },
-                              {
-                                "name": "next",
-                                "type": "number"
-                              },
-                              {
-                                "name": "last",
-                                "type": "number"
-                              }
-                            ]
-                          },
-                          {
-                            "name": "current",
-                            "type": "number"
-                          },
-                          {
-                            "name": "total",
-                            "type": "number"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "data",
-                        "type": "array",
-                        "sub": [
-                          {
-                            "type": "number",
-                            "name": "task_list_id"
-                          },
-                          {
-                            "type": "number",
-                            "name": "user_id"
-                          },
-                          {
-                            "type": "text",
-                            "name": "task_name"
-                          },
-                          {
-                            "type": "text",
-                            "name": "required"
-                          },
-                          {
-                            "type": "text",
-                            "name": "description"
-                          },
-                          {
-                            "type": "text",
-                            "name": "your_notes"
-                          },
-                          {
-                            "type": "text",
-                            "name": "status"
-                          },
-                          {
-                            "type": "datetime",
-                            "name": "created_on"
-                          }
-                        ]
+                        "table": "visa_info",
+                        "column": "visa_application_type"
                       }
                     ],
-                    "outputType": "object"
+                    "table": {
+                      "name": "visa_info"
+                    },
+                    "joins": [],
+                    "wheres": {
+                      "condition": "AND",
+                      "rules": [
+                        {
+                          "id": "visa_info.visa_info_id",
+                          "field": "visa_info.visa_info_id",
+                          "type": "double",
+                          "operator": "equal",
+                          "value": "{{$_GET.visa_application_id}}",
+                          "data": {
+                            "table": "visa_info",
+                            "column": "visa_info_id",
+                            "type": "number",
+                            "columnObj": {
+                              "type": "integer",
+                              "primary": false,
+                              "unique": false,
+                              "nullable": false,
+                              "name": "visa_info_id"
+                            }
+                          },
+                          "operation": "="
+                        }
+                      ],
+                      "conditional": null,
+                      "valid": true
+                    },
+                    "query": "SELECT destination_country, visa_application_type\nFROM visa_info\nWHERE visa_info_id = :P1 /* {{$_GET.visa_application_id}} */",
+                    "params": [
+                      {
+                        "operator": "equal",
+                        "type": "expression",
+                        "name": ":P1",
+                        "value": "{{$_GET.visa_application_id}}"
+                      }
+                    ]
                   }
                 },
-                "else": {
-                  "steps": {
-                    "name": "query",
-                    "module": "dbconnector",
-                    "action": "paged",
-                    "options": {
-                      "connection": "VizzyDB",
-                      "sql": {
-                        "type": "SELECT",
-                        "columns": [
-                          {
-                            "table": "task_list",
-                            "column": "task_list_id"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "user_id"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "task_name"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "required"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "description"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "your_notes"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "status"
-                          },
-                          {
-                            "table": "task_list",
-                            "column": "created_on"
-                          }
-                        ],
-                        "table": {
-                          "name": "task_list"
-                        },
-                        "joins": [],
-                        "query": "SELECT task_list_id, user_id, task_name, required, description, your_notes, status, created_on\nFROM task_list\nWHERE user_id = :P1 /* {{identity}} */\nORDER BY status DESC",
-                        "params": [
-                          {
-                            "operator": "equal",
-                            "type": "expression",
-                            "name": ":P1",
-                            "value": "{{identity}}"
-                          }
-                        ],
-                        "wheres": {
-                          "condition": "AND",
-                          "rules": [
-                            {
-                              "id": "task_list.user_id",
-                              "field": "task_list.user_id",
-                              "type": "double",
-                              "operator": "equal",
-                              "value": "{{identity}}",
-                              "data": {
-                                "table": "task_list",
-                                "column": "user_id",
-                                "type": "number",
-                                "columnObj": {
-                                  "type": "integer",
-                                  "primary": false,
-                                  "unique": false,
-                                  "nullable": false,
-                                  "name": "user_id"
-                                }
-                              },
-                              "operation": "="
-                            }
-                          ],
-                          "conditional": null,
-                          "valid": true
-                        },
-                        "orders": [
-                          {
-                            "table": "task_list",
-                            "column": "status",
-                            "direction": "DESC"
-                          }
-                        ]
-                      }
-                    },
-                    "output": true,
-                    "meta": [
-                      {
-                        "name": "offset",
-                        "type": "number"
-                      },
-                      {
-                        "name": "limit",
-                        "type": "number"
-                      },
-                      {
-                        "name": "total",
-                        "type": "number"
-                      },
-                      {
-                        "name": "page",
-                        "type": "object",
-                        "sub": [
-                          {
-                            "name": "offset",
-                            "type": "object",
-                            "sub": [
-                              {
-                                "name": "first",
-                                "type": "number"
-                              },
-                              {
-                                "name": "prev",
-                                "type": "number"
-                              },
-                              {
-                                "name": "next",
-                                "type": "number"
-                              },
-                              {
-                                "name": "last",
-                                "type": "number"
-                              }
-                            ]
-                          },
-                          {
-                            "name": "current",
-                            "type": "number"
-                          },
-                          {
-                            "name": "total",
-                            "type": "number"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "data",
-                        "type": "array",
-                        "sub": [
-                          {
-                            "type": "number",
-                            "name": "task_list_id"
-                          },
-                          {
-                            "type": "number",
-                            "name": "user_id"
-                          },
-                          {
-                            "type": "text",
-                            "name": "task_name"
-                          },
-                          {
-                            "type": "text",
-                            "name": "required"
-                          },
-                          {
-                            "type": "text",
-                            "name": "description"
-                          },
-                          {
-                            "type": "text",
-                            "name": "your_notes"
-                          },
-                          {
-                            "type": "text",
-                            "name": "status"
-                          },
-                          {
-                            "type": "datetime",
-                            "name": "created_on"
-                          }
-                        ]
-                      }
-                    ],
-                    "outputType": "object"
+                "output": false,
+                "meta": [
+                  {
+                    "type": "text",
+                    "name": "destination_country"
+                  },
+                  {
+                    "type": "text",
+                    "name": "visa_application_type"
                   }
-                }
+                ],
+                "outputType": "object"
               },
-              "outputType": "boolean"
-            }
+              {
+                "name": "",
+                "module": "core",
+                "action": "condition",
+                "options": {
+                  "if": "{{$_GET.status}}",
+                  "then": {
+                    "steps": {
+                      "name": "custom",
+                      "module": "dbupdater",
+                      "action": "custom",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "query": "SELECT ta.task_assigned_id, ta.user_id, ta.country, ta.visa_type, ta.task_type, ta.your_notes, ta.status,  \n       CASE WHEN ta.task_type = 'Default' THEN dt.default_task_id ELSE ct.custom_task_id END AS task_id,\n       CASE WHEN ta.task_type = 'Default' THEN dt.task_name ELSE ct.task_name END AS task_name,\n       CASE WHEN ta.task_type = 'Default' THEN dt.required ELSE ct.required END AS required,\n       CASE WHEN ta.task_type = 'Default' THEN dt.description ELSE ct.description END AS description\nFROM task_assigned ta \nLEFT JOIN default_task dt ON ta.task_id = dt.default_task_id AND ta.task_type = 'Default'\nLEFT JOIN custom_task ct ON ta.task_id = ct.custom_task_id AND ta.task_type = 'Custom' \nwhere (ta.country=@Country or ta.country='All') and (ta.visa_type='All' or ta.visa_type=@VisaType) AND ta.user_id=@identity and ta.status=@status ORDER BY ta.task_assigned_id ASC;",
+                          "params": [
+                            {
+                              "name": "@Country",
+                              "value": "{{GetVisaInfo.destination_country}}",
+                              "test": "GERMANY"
+                            },
+                            {
+                              "name": "@VisaType",
+                              "value": "{{GetVisaInfo.visa_application_type}}",
+                              "test": "Self"
+                            },
+                            {
+                              "name": "@identity",
+                              "value": "{{identity}}",
+                              "test": "7"
+                            },
+                            {
+                              "name": "@status",
+                              "value": "{{$_GET.status}}",
+                              "test": "Completed"
+                            }
+                          ]
+                        }
+                      },
+                      "output": true,
+                      "meta": [
+                        {
+                          "name": "task_assigned_id",
+                          "type": "number"
+                        },
+                        {
+                          "name": "user_id",
+                          "type": "number"
+                        },
+                        {
+                          "name": "country",
+                          "type": "text"
+                        },
+                        {
+                          "name": "visa_type",
+                          "type": "text"
+                        },
+                        {
+                          "name": "task_type",
+                          "type": "text"
+                        },
+                        {
+                          "name": "your_notes",
+                          "type": "text"
+                        },
+                        {
+                          "name": "status",
+                          "type": "text"
+                        },
+                        {
+                          "name": "task_id",
+                          "type": "number"
+                        },
+                        {
+                          "name": "task_name",
+                          "type": "text"
+                        },
+                        {
+                          "name": "required",
+                          "type": "text"
+                        },
+                        {
+                          "name": "description",
+                          "type": "text"
+                        }
+                      ],
+                      "outputType": "array"
+                    }
+                  },
+                  "else": {
+                    "steps": {
+                      "name": "custom",
+                      "module": "dbupdater",
+                      "action": "custom",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "query": "SELECT ta.task_assigned_id, ta.user_id, ta.country, ta.visa_type, ta.task_type, ta.your_notes, ta.status,  \n       CASE WHEN ta.task_type = 'Default' THEN dt.default_task_id ELSE ct.custom_task_id END AS task_id,\n       CASE WHEN ta.task_type = 'Default' THEN dt.task_name ELSE ct.task_name END AS task_name,\n       CASE WHEN ta.task_type = 'Default' THEN dt.required ELSE ct.required END AS required,\n       CASE WHEN ta.task_type = 'Default' THEN dt.description ELSE ct.description END AS description\nFROM task_assigned ta \nLEFT JOIN default_task dt ON ta.task_id = dt.default_task_id AND ta.task_type = 'Default'\nLEFT JOIN custom_task ct ON ta.task_id = ct.custom_task_id AND ta.task_type = 'Custom' \nwhere (ta.country=@Country or ta.country='') and (ta.visa_type='' or ta.visa_type=@VisaType) AND ta.user_id=@identity ORDER BY ta.task_assigned_id ASC;",
+                          "params": [
+                            {
+                              "name": "@Country",
+                              "value": "{{GetVisaInfo.destination_country}}",
+                              "test": "All"
+                            },
+                            {
+                              "name": "@VisaType",
+                              "value": "{{GetVisaInfo.visa_application_type}}",
+                              "test": "All"
+                            },
+                            {
+                              "name": "@identity",
+                              "value": "{{identity}}",
+                              "test": "24"
+                            }
+                          ]
+                        }
+                      },
+                      "output": true,
+                      "meta": [
+                        {
+                          "name": "task_assigned_id",
+                          "type": "number"
+                        },
+                        {
+                          "name": "user_id",
+                          "type": "number"
+                        },
+                        {
+                          "name": "country",
+                          "type": "text"
+                        },
+                        {
+                          "name": "visa_type",
+                          "type": "text"
+                        },
+                        {
+                          "name": "task_type",
+                          "type": "text"
+                        },
+                        {
+                          "name": "your_notes",
+                          "type": "text"
+                        },
+                        {
+                          "name": "status",
+                          "type": "text"
+                        },
+                        {
+                          "name": "task_id",
+                          "type": "number"
+                        },
+                        {
+                          "name": "task_name",
+                          "type": "text"
+                        },
+                        {
+                          "name": "required",
+                          "type": "text"
+                        },
+                        {
+                          "name": "description",
+                          "type": "text"
+                        }
+                      ],
+                      "outputType": "array"
+                    }
+                  }
+                },
+                "outputType": "boolean"
+              }
+            ]
           },
           "catch": {
             "steps": {
