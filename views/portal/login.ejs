@@ -35,8 +35,8 @@
 
                 <form id="formAuthentication" class="mb-3" action="/api/User/UserLogin" method="post" is="dmx-serverconnect-form" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp)" dmx-on:success="notifies1.success('Login Successful');formAuthentication.reset(true);browser1.goto('/portal/dashboard')">
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email or Username</label>
-                        <input type="text" class="form-control" id="email" name="email_username" placeholder="Enter your email or username" autofocus required="" />
+                        <label for="email" class="form-label">Email</label>
+                        <input type="text" class="form-control" id="email" name="email_username" placeholder="Enter your email" autofocus required="" />
                     </div>
                     <div class="mb-3 form-password-toggle">
                         <div class="d-flex justify-content-between">
@@ -70,7 +70,7 @@
                     </a>
                 </p>
 
-                <div class="divider my-4">
+                <!-- <div class="divider my-4">
                     <div class="divider-text">or</div>
                 </div>
 
@@ -86,7 +86,7 @@
                     <a href="javascript:;" class="btn btn-icon btn-label-twitter">
                         <i class="tf-icons fa-brands fa-twitter fs-5"></i>
                     </a>
-                </div>
+                </div> -->
             </div>
         </div>
         <!-- /Login -->
