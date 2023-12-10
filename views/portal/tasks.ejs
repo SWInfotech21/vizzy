@@ -65,7 +65,7 @@
                     <div class="d-flex align-items-center flex-grow-0 flex-wrap">
                         <button type="button" class="btn btn-label-secondary text-nowrap d-inline-block me-1 mb-3 mb-md-0" id="TaskAll" dmx-on:click="scTaskList.load({status: '', visa_application_id: SelectVisaApplication.value});varStatus.setValue('All')">
                             All
-                            <span class="badge bg-gradient-gray text-white badge-notifications w-px-18">{{scTaskList.data.customCount[0].total_count?scTaskList.data.customCount[0].total_count:0}}</span>
+                            <span class="badge bg-gray text-white badge-notifications w-px-18">{{scTaskList.data.customCount[0].total_count?scTaskList.data.customCount[0].total_count:0}}</span>
                         </button>
                         <button type="button" class="btn btn-label-primary text-nowrap d-inline-block mx-1 mb-3 mb-md-0" id="TaskWaiting" dmx-on:click="scTaskList.load({status: 'Waiting', visa_application_id: SelectVisaApplication.value});varStatus.setValue('Waiting')">
                             Waiting
