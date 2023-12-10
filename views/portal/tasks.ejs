@@ -1,4 +1,4 @@
-<!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="tasks" appconnect="local" dmx-on:ready="varPageName.setValue('Tasks')" components="{dmxDataTraversal:{},dmxValidator:{},dmxFormatter:{},dmxBootbox5:{}}" -->
+<!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="tasks" appconnect="local" dmx-on:ready="varPageName.setValue('Tasks')" components="{dmxDataTraversal:{},dmxValidator:{},dmxFormatter:{},dmxBootbox5:{},dmxBootstrap5Modal:{},dmxBootstrap5Offcanvas:{}}" -->
 <meta name="ac:route" content="/portal/tasks">
 <dmx-serverconnect id="scTaskList" url="/api/Tasks/TaskList" dmx-on:success="varPageName.setValue('Tasks')" dmx-param:visa_application_id="SelectVisaApplication.value"></dmx-serverconnect>
 <dmx-data-view id="dvTaskList" dmx-bind:data="scTaskList.data.custom" filter="((task_name.lowercase().contains(SearchItems.value.lowercase())) || (description.lowercase().contains(SearchItems.value.lowercase())) || (your_notes.lowercase().contains(SearchItems.value.lowercase())))"></dmx-data-view>
@@ -130,15 +130,15 @@
                 </table>
             </div>
             <!-- add new Task -->
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddUser" aria-labelledby="offcanvasAddUserLabel">
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddUser" aria-labelledby="offcanvasAddUserLabel" is="dmx-bs5-offcanvas">
                 <div class="offcanvas-header">
-                    <h5 id="offcanvasAddUserLabel" class="offcanvas-title">{{ddTaskList.data.task_assigned_id?'Update Task':'Add A Custom Task'}} <div class="spinner-border spinner-border-sm" role="status" dmx-show="TaskForm.state.executing"></div>
+                    <h5 id="offcanvasAddUserLabel" class="offcanvas-title">{{ddTaskList.data.task_assigned_id?'Update Task':'Add A Custom Task'}} <div class="spinner-grow spinner-border-sm" role="status" dmx-show="TaskForm.state.executing"></div>
                     </h5>
 
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-                    <form class="add-new-user pt-0" id="TaskForm" method="post" is="dmx-serverconnect-form" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:success="ddTaskList.select(task_assigned_id.value);notifies1.success('Task Info. Added Successfully');scTaskList.load({visa_application_id: SelectVisaApplication.value});TaskForm.reset(true);scUserInfo.load()" dmx-on:invalid="notifies1.warning(content.TaskForm.lastError.response.data.Resp)" dmx-on:error="notifies1.warning(lastError.response)" action="/api/Tasks/AddEditTasks">
+                    <form class="add-new-user pt-0" id="TaskForm" method="post" is="dmx-serverconnect-form" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:success="ddTaskList.select(task_assigned_id.value);notifies1.success('Task Info. Added Successfully');scTaskList.load({visa_application_id: SelectVisaApplication.value});TaskForm.reset(true);scUserInfo.load();offcanvasAddUser.hide()" dmx-on:invalid="notifies1.warning(content.TaskForm.lastError.response.data.Resp)" dmx-on:error="notifies1.warning(lastError.response)" action="/api/Tasks/AddEditTasks">
                         <input type="hidden" dmx-bind:value="ddTaskList.data.task_assigned_id" name="task_assigned_id" id="task_assigned_id">
                         <div class="mb-3" dmx-show="ddTaskList.data.task_type!='Default'">
                             <label class="form-label" for="add-task-name">Task Name <strong class="compulsory">*</strong></label>
@@ -183,6 +183,23 @@
                 </div>
             </div>
 
+        </div>
+        <div class="modal fade" id="modal1" is="dmx-bs5-modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </section>
