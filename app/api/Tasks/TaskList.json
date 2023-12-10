@@ -139,165 +139,253 @@
                 "options": {
                   "if": "{{$_GET.status}}",
                   "then": {
-                    "steps": {
-                      "name": "custom",
-                      "module": "dbupdater",
-                      "action": "custom",
-                      "options": {
-                        "connection": "VizzyDB",
-                        "sql": {
-                          "query": "SELECT ta.task_assigned_id, ta.user_id, ta.country, ta.visa_type, ta.task_type, ta.your_notes, ta.status,  \n       CASE WHEN ta.task_type = 'Default' THEN dt.default_task_id ELSE ct.custom_task_id END AS task_id,\n       CASE WHEN ta.task_type = 'Default' THEN dt.task_name ELSE ct.task_name END AS task_name,\n       CASE WHEN ta.task_type = 'Default' THEN dt.required ELSE ct.required END AS required,\n       CASE WHEN ta.task_type = 'Default' THEN dt.description ELSE ct.description END AS description\nFROM task_assigned ta \nLEFT JOIN default_task dt ON ta.task_id = dt.default_task_id AND ta.task_type = 'Default'\nLEFT JOIN custom_task ct ON ta.task_id = ct.custom_task_id AND ta.task_type = 'Custom' \nwhere (ta.country=@Country or ta.country='All') and (ta.visa_type='All' or ta.visa_type=@VisaType) AND ta.user_id=@identity and ta.status=@status ORDER BY ta.task_assigned_id ASC;",
-                          "params": [
-                            {
-                              "name": "@Country",
-                              "value": "{{GetVisaInfo.destination_country}}",
-                              "test": "GERMANY"
-                            },
-                            {
-                              "name": "@VisaType",
-                              "value": "{{GetVisaInfo.visa_application_type}}",
-                              "test": "Self"
-                            },
-                            {
-                              "name": "@identity",
-                              "value": "{{identity}}",
-                              "test": "7"
-                            },
-                            {
-                              "name": "@status",
-                              "value": "{{$_GET.status}}",
-                              "test": "Completed"
-                            }
-                          ]
-                        }
+                    "steps": [
+                      {
+                        "name": "custom",
+                        "module": "dbupdater",
+                        "action": "custom",
+                        "options": {
+                          "connection": "VizzyDB",
+                          "sql": {
+                            "query": "SELECT ta.task_assigned_id, ta.user_id, ta.country, ta.visa_type, ta.task_type, ta.your_notes, ta.status,  \n       CASE WHEN ta.task_type = 'Default' THEN dt.default_task_id ELSE ct.custom_task_id END AS task_id,\n       CASE WHEN ta.task_type = 'Default' THEN dt.task_name ELSE ct.task_name END AS task_name,\n       CASE WHEN ta.task_type = 'Default' THEN dt.required ELSE ct.required END AS required,\n       CASE WHEN ta.task_type = 'Default' THEN dt.description ELSE ct.description END AS description\nFROM task_assigned ta \nLEFT JOIN default_task dt ON ta.task_id = dt.default_task_id AND ta.task_type = 'Default'\nLEFT JOIN custom_task ct ON ta.task_id = ct.custom_task_id AND ta.task_type = 'Custom' \nwhere (ta.country=@Country or ta.country='All') and (ta.visa_type='All' or ta.visa_type=@VisaType) \nAND ta.user_id=@identity and ta.status=@status ORDER BY ta.task_assigned_id ASC;",
+                            "params": [
+                              {
+                                "name": "@Country",
+                                "value": "{{GetVisaInfo.destination_country}}",
+                                "test": "Germany"
+                              },
+                              {
+                                "name": "@VisaType",
+                                "value": "{{GetVisaInfo.visa_application_type}}",
+                                "test": "Waiting"
+                              },
+                              {
+                                "name": "@identity",
+                                "value": "{{identity}}",
+                                "test": "28"
+                              },
+                              {
+                                "name": "@status",
+                                "value": "{{$_GET.status}}",
+                                "test": "Waiting"
+                              }
+                            ]
+                          }
+                        },
+                        "output": true,
+                        "meta": [
+                          {
+                            "name": "task_assigned_id",
+                            "type": "number"
+                          },
+                          {
+                            "name": "user_id",
+                            "type": "number"
+                          },
+                          {
+                            "name": "country",
+                            "type": "text"
+                          },
+                          {
+                            "name": "visa_type",
+                            "type": "text"
+                          },
+                          {
+                            "name": "task_type",
+                            "type": "text"
+                          },
+                          {
+                            "name": "your_notes",
+                            "type": "text"
+                          },
+                          {
+                            "name": "status",
+                            "type": "text"
+                          },
+                          {
+                            "name": "task_id",
+                            "type": "number"
+                          },
+                          {
+                            "name": "task_name",
+                            "type": "text"
+                          },
+                          {
+                            "name": "required",
+                            "type": "text"
+                          },
+                          {
+                            "name": "description",
+                            "type": "text"
+                          }
+                        ],
+                        "outputType": "array"
                       },
-                      "output": true,
-                      "meta": [
-                        {
-                          "name": "task_assigned_id",
-                          "type": "number"
+                      {
+                        "name": "customCount",
+                        "module": "dbupdater",
+                        "action": "custom",
+                        "options": {
+                          "connection": "VizzyDB",
+                          "sql": {
+                            "query": "SELECT \n    COUNT(*) AS total_count, \n    COUNT(*) FILTER (WHERE status = 'Waiting') AS waiting_count, \n    COUNT(*) FILTER (WHERE status = 'In-Progress') AS in_progress_count, \n    COUNT(*) FILTER (WHERE status = 'Completed') AS completed_count, \n    COUNT(*) FILTER (WHERE status = 'Ignore') AS ignore_count    \nFROM \n    task_assigned ta\nWHERE \n    ta.visa_info_id = @visa_application_id;",
+                            "params": [
+                              {
+                                "name": "@visa_application_id",
+                                "value": "{{$_GET.visa_application_id}}",
+                                "test": "24"
+                              }
+                            ]
+                          }
                         },
-                        {
-                          "name": "user_id",
-                          "type": "number"
-                        },
-                        {
-                          "name": "country",
-                          "type": "text"
-                        },
-                        {
-                          "name": "visa_type",
-                          "type": "text"
-                        },
-                        {
-                          "name": "task_type",
-                          "type": "text"
-                        },
-                        {
-                          "name": "your_notes",
-                          "type": "text"
-                        },
-                        {
-                          "name": "status",
-                          "type": "text"
-                        },
-                        {
-                          "name": "task_id",
-                          "type": "number"
-                        },
-                        {
-                          "name": "task_name",
-                          "type": "text"
-                        },
-                        {
-                          "name": "required",
-                          "type": "text"
-                        },
-                        {
-                          "name": "description",
-                          "type": "text"
-                        }
-                      ],
-                      "outputType": "array"
-                    }
+                        "output": true,
+                        "meta": [
+                          {
+                            "name": "total_count",
+                            "type": "text"
+                          },
+                          {
+                            "name": "waiting_count",
+                            "type": "text"
+                          },
+                          {
+                            "name": "in_progress_count",
+                            "type": "text"
+                          },
+                          {
+                            "name": "completed_count",
+                            "type": "text"
+                          },
+                          {
+                            "name": "ignore_count",
+                            "type": "text"
+                          }
+                        ],
+                        "outputType": "array"
+                      }
+                    ]
                   },
                   "else": {
-                    "steps": {
-                      "name": "custom",
-                      "module": "dbupdater",
-                      "action": "custom",
-                      "options": {
-                        "connection": "VizzyDB",
-                        "sql": {
-                          "query": "SELECT ta.task_assigned_id, ta.user_id, ta.country, ta.visa_type, ta.task_type, ta.your_notes, ta.status,  \n       CASE WHEN ta.task_type = 'Default' THEN dt.default_task_id ELSE ct.custom_task_id END AS task_id,\n       CASE WHEN ta.task_type = 'Default' THEN dt.task_name ELSE ct.task_name END AS task_name,\n       CASE WHEN ta.task_type = 'Default' THEN dt.required ELSE ct.required END AS required,\n       CASE WHEN ta.task_type = 'Default' THEN dt.description ELSE ct.description END AS description\nFROM task_assigned ta \nLEFT JOIN default_task dt ON ta.task_id = dt.default_task_id AND ta.task_type = 'Default'\nLEFT JOIN custom_task ct ON ta.task_id = ct.custom_task_id AND ta.task_type = 'Custom' \nwhere (ta.country=@Country or ta.country='') and (ta.visa_type='' or ta.visa_type=@VisaType) AND ta.user_id=@identity ORDER BY ta.task_assigned_id ASC;",
-                          "params": [
-                            {
-                              "name": "@Country",
-                              "value": "{{GetVisaInfo.destination_country}}",
-                              "test": "All"
-                            },
-                            {
-                              "name": "@VisaType",
-                              "value": "{{GetVisaInfo.visa_application_type}}",
-                              "test": "All"
-                            },
-                            {
-                              "name": "@identity",
-                              "value": "{{identity}}",
-                              "test": "24"
-                            }
-                          ]
-                        }
+                    "steps": [
+                      {
+                        "name": "custom",
+                        "module": "dbupdater",
+                        "action": "custom",
+                        "options": {
+                          "connection": "VizzyDB",
+                          "sql": {
+                            "query": "SELECT ta.task_assigned_id, ta.user_id, ta.country, ta.visa_type, ta.task_type, ta.your_notes, ta.status,  \n       CASE WHEN ta.task_type = 'Default' THEN dt.default_task_id ELSE ct.custom_task_id END AS task_id,\n       CASE WHEN ta.task_type = 'Default' THEN dt.task_name ELSE ct.task_name END AS task_name,\n       CASE WHEN ta.task_type = 'Default' THEN dt.required ELSE ct.required END AS required,\n       CASE WHEN ta.task_type = 'Default' THEN dt.description ELSE ct.description END AS description\nFROM task_assigned ta \nLEFT JOIN default_task dt ON ta.task_id = dt.default_task_id AND ta.task_type = 'Default'\nLEFT JOIN custom_task ct ON ta.task_id = ct.custom_task_id AND ta.task_type = 'Custom' \nwhere (ta.country=@Country or ta.country='') and (ta.visa_type='' or ta.visa_type=@VisaType) AND ta.user_id=@identity ORDER BY ta.task_assigned_id ASC;",
+                            "params": [
+                              {
+                                "name": "@Country",
+                                "value": "{{GetVisaInfo.destination_country}}",
+                                "test": ""
+                              },
+                              {
+                                "name": "@VisaType",
+                                "value": "{{GetVisaInfo.visa_application_type}}",
+                                "test": ""
+                              },
+                              {
+                                "name": "@identity",
+                                "value": "{{identity}}",
+                                "test": "28"
+                              }
+                            ]
+                          }
+                        },
+                        "output": true,
+                        "meta": [
+                          {
+                            "name": "task_assigned_id",
+                            "type": "number"
+                          },
+                          {
+                            "name": "user_id",
+                            "type": "number"
+                          },
+                          {
+                            "name": "country",
+                            "type": "text"
+                          },
+                          {
+                            "name": "visa_type",
+                            "type": "text"
+                          },
+                          {
+                            "name": "task_type",
+                            "type": "text"
+                          },
+                          {
+                            "name": "your_notes",
+                            "type": "text"
+                          },
+                          {
+                            "name": "status",
+                            "type": "text"
+                          },
+                          {
+                            "name": "task_id",
+                            "type": "number"
+                          },
+                          {
+                            "name": "task_name",
+                            "type": "text"
+                          },
+                          {
+                            "name": "required",
+                            "type": "text"
+                          },
+                          {
+                            "name": "description",
+                            "type": "text"
+                          }
+                        ],
+                        "outputType": "array"
                       },
-                      "output": true,
-                      "meta": [
-                        {
-                          "name": "task_assigned_id",
-                          "type": "number"
+                      {
+                        "name": "customCount",
+                        "module": "dbupdater",
+                        "action": "custom",
+                        "options": {
+                          "connection": "VizzyDB",
+                          "sql": {
+                            "query": "SELECT \n    COUNT(*) AS total_count, \n    COUNT(*) FILTER (WHERE status = 'Waiting') AS waiting_count, \n    COUNT(*) FILTER (WHERE status = 'In-Progress') AS in_progress_count, \n    COUNT(*) FILTER (WHERE status = 'Completed') AS completed_count, \n    COUNT(*) FILTER (WHERE status = 'Ignore') AS ignore_count    \nFROM \n    task_assigned ta\nWHERE \n    ta.visa_info_id = @visa_application_id;",
+                            "params": [
+                              {
+                                "name": "@visa_application_id",
+                                "value": "{{$_GET.visa_application_id}}",
+                                "test": "24"
+                              }
+                            ]
+                          }
                         },
-                        {
-                          "name": "user_id",
-                          "type": "number"
-                        },
-                        {
-                          "name": "country",
-                          "type": "text"
-                        },
-                        {
-                          "name": "visa_type",
-                          "type": "text"
-                        },
-                        {
-                          "name": "task_type",
-                          "type": "text"
-                        },
-                        {
-                          "name": "your_notes",
-                          "type": "text"
-                        },
-                        {
-                          "name": "status",
-                          "type": "text"
-                        },
-                        {
-                          "name": "task_id",
-                          "type": "number"
-                        },
-                        {
-                          "name": "task_name",
-                          "type": "text"
-                        },
-                        {
-                          "name": "required",
-                          "type": "text"
-                        },
-                        {
-                          "name": "description",
-                          "type": "text"
-                        }
-                      ],
-                      "outputType": "array"
-                    }
+                        "output": true,
+                        "meta": [
+                          {
+                            "name": "total_count",
+                            "type": "text"
+                          },
+                          {
+                            "name": "waiting_count",
+                            "type": "text"
+                          },
+                          {
+                            "name": "in_progress_count",
+                            "type": "text"
+                          },
+                          {
+                            "name": "completed_count",
+                            "type": "text"
+                          },
+                          {
+                            "name": "ignore_count",
+                            "type": "text"
+                          }
+                        ],
+                        "outputType": "array"
+                      }
+                    ]
                   }
                 },
                 "outputType": "boolean"

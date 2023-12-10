@@ -56,31 +56,39 @@
     <section id="Listtable">
         <div class="card">
             <div class="card-header border-bottom">
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-3  flex-wrap">
                     <div class="flex-grow-1">
                         <h5 class="card-header">Application Tasks: {{varStatus.value}}<div class="spinner-grow" role="status" dmx-show="scTaskList.state.executing">
                             </div>
                         </h5>
                     </div>
-                    <div class="d-flex align-items-center flex-grow-0">
-                        <button class="btn btn-label-secondary mx-1" id="TaskAll" dmx-on:click="scTaskList.load({status: '', visa_application_id: SelectVisaApplication.value});varStatus.setValue('All')">All
+                    <div class="d-flex align-items-center flex-grow-0 flex-wrap">
+                        <button type="button" class="btn btn-label-secondary text-nowrap d-inline-block me-1 mb-3 mb-md-0" id="TaskAll" dmx-on:click="scTaskList.load({status: '', visa_application_id: SelectVisaApplication.value});varStatus.setValue('All')">
+                            All
+                            <span class="badge bg-gradient-gray text-white badge-notifications w-px-18">{{scTaskList.data.customCount[0].total_count?scTaskList.data.customCount[0].total_count:0}}</span>
                         </button>
-                        <button class="btn btn-label-primary mx-1" id="TaskWaiting" dmx-on:click="scTaskList.load({status: 'Waiting', visa_application_id: SelectVisaApplication.value});varStatus.setValue('Waiting')">Waiting
+                        <button type="button" class="btn btn-label-primary text-nowrap d-inline-block mx-1 mb-3 mb-md-0" id="TaskWaiting" dmx-on:click="scTaskList.load({status: 'Waiting', visa_application_id: SelectVisaApplication.value});varStatus.setValue('Waiting')">
+                            Waiting
+                            <span class="badge bg-primary text-white badge-notifications w-px-18">{{scTaskList.data.customCount[0].waiting_count?scTaskList.data.customCount[0].waiting_count:0}}</span>
                         </button>
-                        <button class="btn btn-label-warning mx-1" id="TaskInProgress" dmx-on:click="scTaskList.load({status: 'In-Progress', visa_application_id: SelectVisaApplication.value});varStatus.setValue('In-Progress')">In-Progress
+
+                        <button type="button" class="btn btn-label-warning text-nowrap d-inline-block mx-1 mb-3 mb-md-0" id="TaskInProgress" dmx-on:click="scTaskList.load({status: 'In-Progress', visa_application_id: SelectVisaApplication.value});varStatus.setValue('In-Progress')">In-Progress
+                            <span class="badge bg-warning text-white badge-notifications w-px-18">{{scTaskList.data.customCount[0].in_progress_count?scTaskList.data.customCount[0].in_progress_count:0}}</span>
                         </button>
-                        <button class="btn btn-label-success mx-1" id="TaskCompleted" dmx-on:click="scTaskList.load({status: 'Completed', visa_application_id: SelectVisaApplication.value});varStatus.setValue('Completed')">Completed
+
+                        <button type="button" class="btn btn-label-success text-nowrap d-inline-block ms-1 mb-3 mb-md-0" id="TaskCompleted" dmx-on:click="scTaskList.load({status: 'Completed', visa_application_id: SelectVisaApplication.value});varStatus.setValue('Completed')">Completed
+                            <span class="badge bg-success text-white badge-notifications w-px-18">{{scTaskList.data.customCount[0].completed_count?scTaskList.data.customCount[0].completed_count:0}}</span>
                         </button>
-                        <button class="btn add-new btn-primary mx-2" tabindex="0" aria-controls="DataTables_Table_0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser" dmx-on:click="TaskForm.reset();ddTaskList.select(0)"><span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i><span class="d-none d-sm-inline-block">New Task</span></span></button>
+                        <button class="btn add-new btn-primary mx-2 mb-3 mb-md-0" tabindex="0" aria-controls="DataTables_Table_0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser" dmx-on:click="TaskForm.reset();ddTaskList.select(0)"><span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i><span class="d-none d-sm-inline-block">New Task</span></span></button>
                     </div>
                 </div>
-                <div class="d-flex float-end">
-                    <div class="col-12 col-md-6 me-1 mb-3">
+                <div class="d-flex float-end flex-md-nowrap flex-wrap">
+                    <div class="col-12 col-md-6 me-1">
                         <label class="form-label" for="SelectVisaApplication">Which Application?</label>
                         <select class="select2 form-select" id="SelectVisaApplication" dmx-bind:options="scUserInfo.data.VisaApplicationInfo" optionvalue="visa_info_id" optiontext="destination_country+', '+visa_application_type"></select>
                     </div>
-                    <div class="col-12 col-md-6  mb-3">
-                        <label class="form-label" for="SearchItems"></label>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label pb-3" for="SearchItems"></label>
                         <input class="form-control" id="SearchItems" placeholder="Search here" />
                     </div>
                 </div>
@@ -89,26 +97,24 @@
                 <table class="table  table-hover">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Status</th>
-                            <th>Task</th>
-                            <th>Required</th>
-                            <th>Description</th>
-                            <th>Your Notes</th>
-                            <th>Actions</th>
+                            <th class="px-2">Status</th>
+                            <th class="px-2">Task</th>
+                            <th class="px-2">Required</th>
+                            <th class="px-2">Description</th>
+                            <th class="px-2">Your Notes</th>
+                            <th class="ps-0 pe-2">Actions</th>
                         </tr>
                     </thead>
                     <tbody is="dmx-repeat" dmx-generator="bs5table" dmx-bind:repeat="dvTaskList.data" id="tableRepeat1" key="task_assigned_id">
                         <tr>
-                            <td>{{$index+1}}</td>
-                            <td>
+                            <td class="px-2">
                                 <span class="badge " text-capitalized dmx-class:bg-label-primary="(status=='Waiting')" dmx-class:bg-label-success="(status=='Completed')" dmx-class:bg-label-warning="(status=='In-Progress')" dmx-class:bg-label-secondary="(status=='Ignore')">{{status}}</span>
                             </td>
-                            <td>{{task_name}}</td>
-                            <td>{{required}}</td>
-                            <td>{{description}}</td>
-                            <td>{{your_notes}}</td>
-                            <td>
+                            <td class="px-2">{{task_name}}</td>
+                            <td class="px-2">{{required}}</td>
+                            <td class="px-2">{{description}}</td>
+                            <td class="px-2">{{your_notes}}</td>
+                            <td class="px-0">
                                 <div class="d-flex align-items-center">
                                     <a href="#" type="button" class="text-body" aria-label="Edit Tasks" data-bs-original-title="Edit Tasks" tabindex="0" aria-controls="DataTables_Table_0" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser" dmx-on:click="ddTaskList.select(task_assigned_id)"><i class="mx-2 ti ti-edit ti-sm"></i></a>
                                     <a href="#" data-bs-toggle="tooltip" class="text-body" data-bs-placement="top" aria-label="Delete Tasks" dmx-show="task_type!='Default'" data-bs-original-title="Delete Tasks" dmx-on:click="run({'bootbox.confirm':{message:'Are you sure to delete the custom task?',title:'Delete a Custom Task',buttons:{confirm:{label:'Yes',className:'btn-primary'},cancel:{label:'No',className:'btn-secondary'}},swapButtonOrder:true,centerVertical:true,then:{steps:{run:{action:`scDelCustomTask.load({assigned_task_id: task_assigned_id});scTaskList.load({visa_application_id: SelectVisaApplication.value})`}}},name:'DelCustomTask'}})"><i class="mx-2 ti ti-sm ti-trash"></i></a>
