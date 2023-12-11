@@ -65,26 +65,26 @@
                     <div class="d-flex align-items-center flex-grow-0 flex-wrap">
                         <button type="button" class="btn btn-label-secondary text-nowrap d-inline-block me-1 mb-3 mb-md-0" id="TaskAll" dmx-on:click="scTaskList.load({status: '', visa_application_id: SelectVisaApplication.value});varStatus.setValue('All')">
                             All
-                            <span class="badge bg-gray text-white badge-notifications w-px-18">{{scTaskList.data.customCount[0].total_count?scTaskList.data.customCount[0].total_count:0}}</span>
+                            <span class="badge bg-gray text-white badge-notifications w-px-18 ms-2">{{scTaskList.data.customCount[0].total_count?scTaskList.data.customCount[0].total_count:0}}</span>
                         </button>
                         <button type="button" class="btn btn-label-primary text-nowrap d-inline-block mx-1 mb-3 mb-md-0" id="TaskWaiting" dmx-on:click="scTaskList.load({status: 'Waiting', visa_application_id: SelectVisaApplication.value});varStatus.setValue('Waiting')">
                             Waiting
-                            <span class="badge bg-primary text-white badge-notifications w-px-18">{{scTaskList.data.customCount[0].waiting_count?scTaskList.data.customCount[0].waiting_count:0}}</span>
+                            <span class="badge bg-primary text-white badge-notifications w-px-18 ms-2">{{scTaskList.data.customCount[0].waiting_count?scTaskList.data.customCount[0].waiting_count:0}}</span>
                         </button>
 
                         <button type="button" class="btn btn-label-warning text-nowrap d-inline-block mx-1 mb-3 mb-md-0" id="TaskInProgress" dmx-on:click="scTaskList.load({status: 'In-Progress', visa_application_id: SelectVisaApplication.value});varStatus.setValue('In-Progress')">In-Progress
-                            <span class="badge bg-warning text-white badge-notifications w-px-18">{{scTaskList.data.customCount[0].in_progress_count?scTaskList.data.customCount[0].in_progress_count:0}}</span>
+                            <span class="badge bg-warning text-white badge-notifications w-px-18 ms-2">{{scTaskList.data.customCount[0].in_progress_count?scTaskList.data.customCount[0].in_progress_count:0}}</span>
                         </button>
 
                         <button type="button" class="btn btn-label-success text-nowrap d-inline-block ms-1 mb-3 mb-md-0" id="TaskCompleted" dmx-on:click="scTaskList.load({status: 'Completed', visa_application_id: SelectVisaApplication.value});varStatus.setValue('Completed')">Completed
-                            <span class="badge bg-success text-white badge-notifications w-px-18">{{scTaskList.data.customCount[0].completed_count?scTaskList.data.customCount[0].completed_count:0}}</span>
+                            <span class="badge bg-success text-white badge-notifications w-px-18 ms-2">{{scTaskList.data.customCount[0].completed_count?scTaskList.data.customCount[0].completed_count:0}}</span>
                         </button>
                         <button class="btn add-new btn-primary mx-2 mb-3 mb-md-0" tabindex="0" aria-controls="DataTables_Table_0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser" dmx-on:click="TaskForm.reset();ddTaskList.select(0)"><span><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i><span class="d-none d-sm-inline-block">New Task</span></span></button>
                     </div>
                 </div>
                 <div class="d-flex float-end flex-md-nowrap flex-wrap">
                     <div class="col-12 col-md-6 me-1">
-                        <label class="form-label" for="SelectVisaApplication">Which Application?</label>
+                        <label class="form-label" for="SelectVisaApplication">Your Applications</label>
                         <select class="form-select" id="SelectVisaApplication" dmx-bind:options="scUserInfo.data.VisaApplicationInfo" optionvalue="visa_info_id" optiontext="destination_country+', '+visa_application_type"></select>
                     </div>
                     <div class="col-12 col-md-6">
@@ -98,10 +98,9 @@
                     <thead>
                         <tr>
                             <th class="px-2">Status</th>
-                            <th class="px-2">Task</th>
+                            <th class="px-2" style="width: 20%;">Task</th>
                             <th class="px-2">Required</th>
-                            <th class="px-2">Description</th>
-                            <th class="px-2">Your Notes</th>
+                            <th class="px-2">Information</th>
                             <th class="ps-0 pe-2">Actions</th>
                         </tr>
                     </thead>
@@ -113,7 +112,6 @@
                             <td class="px-2">{{task_name}}</td>
                             <td class="px-2">{{required}}</td>
                             <td class="px-2">{{description}}</td>
-                            <td class="px-2">{{your_notes}}</td>
                             <td class="px-0">
                                 <div class="d-flex align-items-center">
                                     <a href="#" type="button" class="text-body" aria-label="Edit Tasks" data-bs-original-title="Edit Tasks" tabindex="0" aria-controls="DataTables_Table_0" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser" dmx-on:click="ddTaskList.select(task_assigned_id)"><i class="mx-2 ti ti-edit ti-sm"></i></a>
@@ -145,7 +143,7 @@
                             <input type="text" id="add-task-name" class="form-control" placeholder="Task Name" aria-label="Task Name" name="task_name" required="" dmx-bind:value="ddTaskList.data.task_name" />
                         </div>
                         <div class="mb-3" dmx-show="ddTaskList.data.task_type!='Default'">
-                            <label class="form-label" for="add-task-name">Which Application?<strong class="compulsory">*</strong></label>
+                            <label class="form-label" for="add-task-name">Your Applications<strong class="compulsory">*</strong></label>
                             <select class="form-select" id="TaskCountry" dmx-bind:options="scUserInfo.data.VisaApplicationInfo" optiontext="destination_country+', '+visa_application_type" optionvalue="visa_info_id" name="visa_info_id"></select>
                         </div>
                         <div class="row">
@@ -170,7 +168,7 @@
                             </div>
                         </div>
                         <div class="mb-3" dmx-show="ddTaskList.data.task_type!='Default'">
-                            <label class=" form-label" for="add-task-description">Description</label>
+                            <label class=" form-label" for="add-task-description">Information</label>
                             <textarea type="text" id="add-task-description" class="form-control" placeholder="Add a description... " aria-label="description" name="description" dmx-bind:value="ddTaskList.data.description" rows="6"></textarea>
                         </div>
                         <div class="mb-3">
