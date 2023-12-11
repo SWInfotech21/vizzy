@@ -78,13 +78,21 @@
               {
                 "table": "users",
                 "column": "profile_link"
+              },
+              {
+                "table": "users",
+                "column": "user_language"
+              },
+              {
+                "table": "users",
+                "column": "user_currency"
               }
             ],
             "table": {
               "name": "users"
             },
             "joins": [],
-            "query": "SELECT user_id, first_name, last_name, user_email, user_type, user_dob, profile_link\nFROM users\nWHERE user_id = :P1 /* {{$_SESSION.user_id}} */ AND active = :P2 /* {{1}} */",
+            "query": "SELECT user_id, first_name, last_name, user_email, user_type, user_dob, profile_link, user_language, user_currency\nFROM users\nWHERE user_id = :P1 /* {{$_SESSION.user_id}} */ AND active = :P2 /* {{1}} */",
             "params": [
               {
                 "operator": "equal",
@@ -178,6 +186,14 @@
           {
             "type": "text",
             "name": "profile_link"
+          },
+          {
+            "type": "text",
+            "name": "user_language"
+          },
+          {
+            "type": "text",
+            "name": "user_currency"
           }
         ],
         "outputType": "object"

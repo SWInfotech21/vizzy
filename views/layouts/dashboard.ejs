@@ -74,10 +74,10 @@
 <body is="dmx-app" id="dashboard">
     <div is="dmx-browser" id="browser1"></div>
     <dmx-notifications id="notifies1"></dmx-notifications>
-    <dmx-value id="varLanguage" dmx-bind:value="0"></dmx-value>
     <dmx-value id="varPageName" dmx-bind:value="'Home'"></dmx-value>
     <dmx-serverconnect id="scLogOut" url="/api/User/LogOut" noload dmx-on:success="browser1.goto('/portal/login')"></dmx-serverconnect>
     <dmx-serverconnect id="scUserInfo" url="/api/User/UserInfo"></dmx-serverconnect>
+    <dmx-serverconnect id="scUpLangCurrency" url="/api/User/UpdateLangCurrency" noload dmx-on:success="scUserInfo.load({})"></dmx-serverconnect>
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
@@ -233,31 +233,31 @@
                             <!-- Language -->
                             <li class="nav-item dropdown-language dropdown me-2 me-xl-0">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-                                    <i class="ti ti-language rounded-circle"></i> {{(varLanguage.value==0?'ENG':varLanguage.value)}}
+                                    <i class="ti ti-language rounded-circle"></i> {{scUserInfo.data.query.user_language?scUserInfo.data.query.user_language:'ENG'}}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    <li dmx-on:click="varLanguage.setValue('ENG')">
-                                        <a class="dropdown-item" href="#" data-language="en" dmx-class:active="(varLanguage.value=='ENG')">
+                                    <li dmx-on:click="scUpLangCurrency.load({user_language: 'ENG'})">
+                                        <a class="dropdown-item" href="#" data-language="en" dmx-class:active="(scUserInfo.data.query.user_language=='ENG')">
                                             <span class="align-middle">English</span>
                                         </a>
                                     </li>
-                                    <li dmx-on:click="varLanguage.setValue('ESP')">
-                                        <a class="dropdown-item" href="#" data-language="fr" dmx-class:active="(varLanguage.value=='ESP')">
+                                    <li dmx-on:click="scUpLangCurrency.load({user_language: 'ESP'})">
+                                        <a class="dropdown-item" href="#" data-language="fr" dmx-class:active="(scUserInfo.data.query.user_language=='ESP')">
                                             <span class="align-middle">French</span>
                                         </a>
                                     </li>
-                                    <li dmx-on:click="varLanguage.setValue('DEU')">
-                                        <a class="dropdown-item" href="#" data-language="de" dmx-class:active="(varLanguage.value=='DEU')">
+                                    <li dmx-on:click="scUpLangCurrency.load({user_language: 'DEU'})">
+                                        <a class="dropdown-item" href="#" data-language="de" dmx-class:active="(scUserInfo.data.query.user_language=='DEU')">
                                             <span class="align-middle">German</span>
                                         </a>
                                     </li>
-                                    <li dmx-on:click="varLanguage.setValue('POR')">
-                                        <a class="dropdown-item" href="#" data-language="pt" dmx-class:active="(varLanguage.value=='POR')">
+                                    <li dmx-on:click="scUpLangCurrency.load({user_language: 'POR'})">
+                                        <a class="dropdown-item" href="#" data-language="pt" dmx-class:active="(scUserInfo.data.query.user_language=='POR')">
                                             <span class="align-middle">Portuguese</span>
                                         </a>
                                     </li>
-                                    <li dmx-on:click="varLanguage.setValue('TUR')">
-                                        <a class="dropdown-item" href="#" dmx-class:active="(varLanguage.value=='TUR')">
+                                    <li dmx-on:click="scUpLangCurrency.load({user_language: 'TUR'})">
+                                        <a class="dropdown-item" href="#" dmx-class:active="(scUserInfo.data.query.user_language=='TUR')">
                                             <span class="align-middle">Turkish</span>
                                         </a>
                                     </li>
