@@ -44,11 +44,6 @@
         "type": "text",
         "fieldName": "description",
         "name": "description"
-      },
-      {
-        "type": "text",
-        "fieldName": "your_notes",
-        "name": "your_notes"
       }
     ]
   },
@@ -182,12 +177,6 @@
                                 "values": [
                                   {
                                     "table": "task_assigned",
-                                    "column": "your_notes",
-                                    "type": "text",
-                                    "value": "{{$_POST.your_notes}}"
-                                  },
-                                  {
-                                    "table": "task_assigned",
                                     "column": "status",
                                     "type": "text",
                                     "value": "{{$_POST.status}}"
@@ -218,27 +207,22 @@
                                   "conditional": null,
                                   "valid": true
                                 },
-                                "query": "UPDATE task_assigned\nSET your_notes = :P1 /* {{$_POST.your_notes}} */, status = :P2 /* {{$_POST.status}} */, updated_on = :P3 /* {{NOW}} */\nWHERE task_assigned_id = :P4 /* {{$_POST.task_assigned_id}} */",
+                                "query": "UPDATE task_assigned\nSET status = :P1 /* {{$_POST.status}} */, updated_on = :P2 /* {{NOW}} */\nWHERE task_assigned_id = :P3 /* {{$_POST.task_assigned_id}} */",
                                 "params": [
                                   {
                                     "name": ":P1",
                                     "type": "expression",
-                                    "value": "{{$_POST.your_notes}}"
-                                  },
-                                  {
-                                    "name": ":P2",
-                                    "type": "expression",
                                     "value": "{{$_POST.status}}"
                                   },
                                   {
-                                    "name": ":P3",
+                                    "name": ":P2",
                                     "type": "expression",
                                     "value": "{{NOW}}"
                                   },
                                   {
                                     "operator": "equal",
                                     "type": "expression",
-                                    "name": ":P4",
+                                    "name": ":P3",
                                     "value": "{{$_POST.task_assigned_id}}"
                                   }
                                 ]
@@ -451,12 +435,6 @@
                                   "values": [
                                     {
                                       "table": "task_assigned",
-                                      "column": "your_notes",
-                                      "type": "text",
-                                      "value": "{{$_POST.your_notes}}"
-                                    },
-                                    {
-                                      "table": "task_assigned",
                                       "column": "status",
                                       "type": "text",
                                       "value": "{{$_POST.status}}"
@@ -499,37 +477,32 @@
                                     "conditional": null,
                                     "valid": true
                                   },
-                                  "query": "UPDATE task_assigned\nSET your_notes = :P1 /* {{$_POST.your_notes}} */, status = :P2 /* {{$_POST.status}} */, updated_on = :P3 /* {{NOW}} */, country = :P4 /* {{GetCustomDetails.country}} */, visa_type = :P5 /* {{GetCustomDetails.visa_type}} */\nWHERE task_assigned_id = :P6 /* {{$_POST.task_assigned_id}} */",
+                                  "query": "UPDATE task_assigned\nSET status = :P1 /* {{$_POST.status}} */, updated_on = :P2 /* {{NOW}} */, country = :P3 /* {{GetCustomDetails.country}} */, visa_type = :P4 /* {{GetCustomDetails.visa_type}} */\nWHERE task_assigned_id = :P5 /* {{$_POST.task_assigned_id}} */",
                                   "params": [
                                     {
                                       "name": ":P1",
                                       "type": "expression",
-                                      "value": "{{$_POST.your_notes}}"
+                                      "value": "{{$_POST.status}}"
                                     },
                                     {
                                       "name": ":P2",
                                       "type": "expression",
-                                      "value": "{{$_POST.status}}"
+                                      "value": "{{NOW}}"
                                     },
                                     {
                                       "name": ":P3",
                                       "type": "expression",
-                                      "value": "{{NOW}}"
-                                    },
-                                    {
-                                      "name": ":P4",
-                                      "type": "expression",
                                       "value": "{{GetCustomDetails.country}}"
                                     },
                                     {
-                                      "name": ":P5",
+                                      "name": ":P4",
                                       "type": "expression",
                                       "value": "{{GetCustomDetails.visa_type}}"
                                     },
                                     {
                                       "operator": "equal",
                                       "type": "expression",
-                                      "name": ":P6",
+                                      "name": ":P5",
                                       "value": "{{$_POST.task_assigned_id}}"
                                     }
                                   ]
@@ -850,12 +823,6 @@
                             },
                             {
                               "table": "task_assigned",
-                              "column": "your_notes",
-                              "type": "text",
-                              "value": "{{$_POST.your_notes}}"
-                            },
-                            {
-                              "table": "task_assigned",
                               "column": "status",
                               "type": "text",
                               "value": "{{$_POST.status}}"
@@ -874,7 +841,7 @@
                             }
                           ],
                           "table": "task_assigned",
-                          "query": "INSERT INTO task_assigned\n(user_id, country, visa_type, task_id, task_type, your_notes, status, created_on, visa_info_id) VALUES (:P1 /* {{identity}} */, :P2 /* {{GetVisaInfo.destination_country}} */, :P3 /* {{GetVisaInfo.visa_application_type}} */, :P4 /* {{GetCustomId.custom_task_id}} */, :P5 /* {{'Custom'}} */, :P6 /* {{$_POST.your_notes}} */, :P7 /* {{$_POST.status}} */, :P8 /* {{NOW}} */, :P9 /* {{$_POST.visa_info_id}} */)",
+                          "query": "INSERT INTO task_assigned\n(user_id, country, visa_type, task_id, task_type, status, created_on, visa_info_id) VALUES (:P1 /* {{identity}} */, :P2 /* {{GetVisaInfo.destination_country}} */, :P3 /* {{GetVisaInfo.visa_application_type}} */, :P4 /* {{GetCustomId.custom_task_id}} */, :P5 /* {{'Custom'}} */, :P6 /* {{$_POST.status}} */, :P7 /* {{NOW}} */, :P8 /* {{$_POST.visa_info_id}} */)",
                           "params": [
                             {
                               "name": ":P1",
@@ -904,20 +871,15 @@
                             {
                               "name": ":P6",
                               "type": "expression",
-                              "value": "{{$_POST.your_notes}}"
+                              "value": "{{$_POST.status}}"
                             },
                             {
                               "name": ":P7",
                               "type": "expression",
-                              "value": "{{$_POST.status}}"
-                            },
-                            {
-                              "name": ":P8",
-                              "type": "expression",
                               "value": "{{NOW}}"
                             },
                             {
-                              "name": ":P9",
+                              "name": ":P8",
                               "type": "expression",
                               "value": "{{$_POST.visa_info_id}}"
                             }

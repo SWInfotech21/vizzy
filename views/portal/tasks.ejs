@@ -1,7 +1,7 @@
 <!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="tasks" appconnect="local" dmx-on:ready="varPageName.setValue('Tasks')" components="{dmxDataTraversal:{},dmxValidator:{},dmxFormatter:{},dmxBootbox5:{},dmxBootstrap5Modal:{},dmxBootstrap5Offcanvas:{}}" -->
 <meta name="ac:route" content="/portal/tasks">
 <dmx-serverconnect id="scTaskList" url="/api/Tasks/TaskList" dmx-on:success="varPageName.setValue('Tasks')" dmx-param:visa_application_id="SelectVisaApplication.value"></dmx-serverconnect>
-<dmx-data-view id="dvTaskList" dmx-bind:data="scTaskList.data.custom" filter="((task_name.lowercase().contains(SearchItems.value.lowercase())) || (description.lowercase().contains(SearchItems.value.lowercase())) || (your_notes.lowercase().contains(SearchItems.value.lowercase())))"></dmx-data-view>
+<dmx-data-view id="dvTaskList" dmx-bind:data="scTaskList.data.custom" filter="((task_name.lowercase().contains(SearchItems.value.lowercase())) || (description.lowercase().contains(SearchItems.value.lowercase())))"></dmx-data-view>
 <dmx-data-detail id="ddTaskList" dmx-bind:data="dvTaskList.data" key="task_assigned_id"></dmx-data-detail>
 <dmx-serverconnect id="scDelCustomTask" url="/api/Tasks/DeleteCustomTask" noload></dmx-serverconnect>
 <dmx-value id="varStatus" dmx-bind:value="'All'"></dmx-value>
@@ -170,10 +170,6 @@
                         <div class="mb-3" dmx-show="ddTaskList.data.task_type!='Default'">
                             <label class=" form-label" for="add-task-description">Information</label>
                             <textarea type="text" id="add-task-description" class="form-control" placeholder="Add a description... " aria-label="description" name="description" dmx-bind:value="ddTaskList.data.description" rows="6"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class=" form-label" for="add-task-notes">Your Notes</label>
-                            <textarea type="text" id="add-task-notes" class="form-control" placeholder="Your notes" aria-label="Your notes" name="your_notes" dmx-bind:value="ddTaskList.data.your_notes" rows="6"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit mt-2" dmx-bind:disabled="state.executing">{{ddTaskList.data.task_assigned_id?'Update':'Save'}}</button>
                         <button type="reset" class="btn btn-label-secondary btn-secondary mt-2" data-bs-dismiss="offcanvas">Cancel</button>
