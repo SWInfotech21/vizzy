@@ -7,6 +7,11 @@
       "layout": "main"
     },
     {
+      "path": "/portal/register",
+      "layout": "outer-main",
+      "page": "portal/register"
+    },
+    {
       "path": "/pricing",
       "page": "pricing",
       "layout": "main"
@@ -15,11 +20,6 @@
       "path": "/contact-us",
       "page": "contact-us",
       "layout": "main"
-    },
-    {
-      "path": "/reset-password/:token",
-      "page": "portal/register",
-      "layout": "outer-main"
     },
     {
       "path": "/portal/login",
