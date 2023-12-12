@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/portal/forgot-password.ejs",
+      "linkedForm": "formAuthentication"
+    },
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      "Mailer/mail",
+      {
+        "name": "",
+        "module": "mail",
+        "action": "send",
+        "options": {
+          "instance": "mail",
+          "subject": "Vizzy Reset Password Link",
+          "fromName": "No-Reply",
+          "fromEmail": "info@softturing.com",
+          "toEmail": "arifulislam200891@gmail.com",
+          "body": "Hi Ariful,\n<br><br>\nYou can reset your password <a href=\"{{$_SERVER.BASE_URL}}/reset-pass/{{Token}}\">here</a> ({{$_SERVER.BASE_URL}}/reset-pass/{{Token}}).\n<br>\nThis link will expire in 2 hours.\n<br><br>\n\nReagrds,<br>\nVizzy Team",
+          "toName": "Ariful Islam",
+          "contentType": "html"
+        },
+        "output": true
+      }
+    ]
+  }
+}
