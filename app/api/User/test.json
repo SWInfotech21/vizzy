@@ -16,21 +16,76 @@
     ]
   },
   "exec": {
-    "steps": {
-      "name": "",
-      "module": "mail",
-      "action": "send",
-      "options": {
-        "instance": "mail",
-        "subject": "Vizzy Reset Password Link",
-        "fromName": "No-Reply",
-        "fromEmail": "info@softturing.com",
-        "toEmail": "arifulislam200891@gmail.com",
-        "toName": "Ariful Islam",
-        "body": "testing 1234",
-        "replyTo": "info@softturing.com"
+    "steps": [
+      {
+        "name": "",
+        "module": "mail",
+        "action": "send",
+        "options": {
+          "instance": "mail",
+          "subject": "Vizzy Reset Password Link",
+          "fromName": "No-Reply",
+          "fromEmail": "info@softturing.com",
+          "toEmail": "arifulislam200891@gmail.com",
+          "toName": "Ariful Islam",
+          "body": "testing 1234",
+          "replyTo": "info@softturing.com"
+        },
+        "output": true,
+        "disabled": true
       },
-      "output": true
-    }
+      {
+        "name": "Token",
+        "module": "core",
+        "action": "setvalue",
+        "options": {
+          "value": "{{UUID}}"
+        },
+        "meta": [],
+        "outputType": "text"
+      },
+      {
+        "name": "api",
+        "module": "api",
+        "action": "send",
+        "options": {
+          "method": "POST",
+          "url": "https://angelspark.in/comp/email.php",
+          "data": {
+            "email_ids": "{{'arifulislam200891@gmail.com'}}",
+            "user_fname": "{{'Arif'}}",
+            "user_lname": "{{'India'}}",
+            "server_url": "{{'https://monkfish-app-y6lx4.ondigitalocean.app'}}",
+            "token": "{{Token}}"
+          }
+        },
+        "output": true
+      },
+      {
+        "name": "api_copy",
+        "module": "api",
+        "action": "send",
+        "options": {
+          "method": "POST",
+          "url": "https://angelspark.in/comp/email.php",
+          "params": {
+            "email_ids": "{{'arifulislam200891@gmail.com'}}",
+            "user_fname": "{{'Arif'}}",
+            "user_lname": "{{'India'}}",
+            "server_url": "{{'https://monkfish-app-y6lx4.ondigitalocean.app'}}",
+            "token": "{{Token}}"
+          },
+          "data": {
+            "email_ids": "{{'arifulislam200891@gmail.com'}}",
+            "user_fname": "{{'Arif'}}",
+            "user_lname": "{{'India'}}",
+            "server_url": "{{'https://monkfish-app-y6lx4.ondigitalocean.app'}}",
+            "token": "{{Token}}"
+          }
+        },
+        "output": true,
+        "disabled": true
+      }
+    ]
   }
 }
