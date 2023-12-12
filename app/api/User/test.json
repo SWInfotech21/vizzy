@@ -42,7 +42,8 @@
           "value": "{{UUID}}"
         },
         "meta": [],
-        "outputType": "text"
+        "outputType": "text",
+        "disabled": true
       },
       {
         "name": "api",
@@ -59,7 +60,8 @@
             "token": "{{Token}}"
           }
         },
-        "output": true
+        "output": true,
+        "disabled": true
       },
       {
         "name": "api_copy",
