@@ -25,7 +25,8 @@
           "value": "{{UUID}}"
         },
         "meta": [],
-        "outputType": "text"
+        "outputType": "text",
+        "disabled": true
       },
       "Mailer/mail",
       {

@@ -6,7 +6,6 @@
     "host": "softturing.com",
     "port": 465,
     "username": "info@softturing.com",
-    "password": "wijtuwDAUtm2",
-    "useSSL": true
+    "password": "wijtuwDAUtm2"
   }
 }
