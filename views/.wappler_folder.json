@@ -20,11 +20,15 @@
     "description": ""
   },
   "reset-password.ejs": {
-    "layoutPage": "",
+    "layoutPage": "reset-password",
     "description": ""
   },
   "contact-us.ejs": {
     "layoutPage": "main",
+    "description": ""
+  },
+  "reset-pass.ejs": {
+    "layoutPage": "reset-password",
     "description": ""
   }
 }

@@ -1,8 +1,5 @@
-<!-- Wappler include fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="resetpassword" appConnect="local" -->
-<meta name="ac:route" content="/reset-password">
-<!DOCTYPE html>
-
-<html lang="en" class="light-style layout-wide customizer-hide" dir="ltr" data-theme="theme-default" data-assets-path="/assets/" data-template="vertical-menu-template">
+<!-- Wappler include head-page="layouts/reset-password" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="resetpass" appConnect="local" -->
+<meta name="ac:route" content="/reset-pass/:token">
 
 <head>
     <meta charset="utf-8" />
@@ -58,16 +55,16 @@
             <!-- /Left Text -->
             <div class="d-none d-lg-flex col-lg-7 p-0">
                 <div class="auth-cover-bg auth-cover-bg-color d-flex justify-content-center align-items-center">
-                    <img src="/assets/img/front-pages/landing-page/Powerful-cuate.svg" alt="auth-reset-password-cover" class="img-fluid my-5 auth-illustration" data-app-light-img="illustrations/auth-reset-password-illustration-light.png" data-app-dark-img="illustrations/auth-reset-password-illustration-dark.png" />
+                    <img src="/assets/img/front-pages/landing-page/Powerful-cuate.svg" alt="auth-reset-password-cover" class="img-fluid my-5 auth-illustration" />
 
-                    <img src="/assets/img/illustrations/bg-shape-image-light.png" alt="auth-reset-password-cover" class="platform-bg" data-app-light-img="illustrations/bg-shape-image-light.png" data-app-dark-img="illustrations/bg-shape-image-dark.png" />
+                    <img src="/assets/img/illustrations/bg-shape-image-light.png" alt="auth-reset-password-cover" class="platform-bg" />
                 </div>
             </div>
             <!-- /Left Text -->
 
             <!-- Reset Password -->
             <div class="d-flex col-12 col-lg-5 align-items-center p-4 p-sm-5">
-                <div class="w-px-400 mx-auto">
+                <div class="w-px-400 mx-auto col-10">
                     <!-- Logo -->
                     <div class="app-brand mb-4">
                         <a href="index" class="app-brand-link gap-2">
@@ -83,25 +80,27 @@
                     </div>
                     <!-- /Logo -->
                     <h4 class="mb-1">Reset Password 🔒</h4>
-                    <p class="mb-4">for <span class="fw-medium">john.doe@email.com</span></p>
-                    <form id="formAuthentication" class="mb-3" action="login" method="POST">
+                    <!-- <p class="mb-4">for <span class="fw-medium">john.doe@email.com</span></p> -->
+                    <form id="formResetPassword" class="mb-3" action="/api/User/ResetPassword" method="post" is="dmx-serverconnect-form" dmx-on:success="notifies1.success('Password is set. You can login now.');browser1.goto('/portal/login')" dmx-on:error="notifies1.danger(lastError.response)">
+                        <input id="txtToken" name="Token" type="hidden" class="form-control" required="" dmx-bind:value="query.token">
                         <div class="mb-3 form-password-toggle">
                             <label class="form-label" for="password">New Password</label>
                             <div class="input-group input-group-merge">
-                                <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                                <input type="password" id="password" class="form-control" name="Password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" required="" />
                                 <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
                             </div>
                         </div>
                         <div class="mb-3 form-password-toggle">
                             <label class="form-label" for="confirm-password">Confirm Password</label>
                             <div class="input-group input-group-merge">
-                                <input type="password" id="confirm-password" class="form-control" name="confirm-password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                                <input type="password" id="ConfirmPassword" class="form-control" name="ConfirmPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" required="" />
                                 <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
                             </div>
                         </div>
-                        <button class="btn btn-primary d-grid w-100 mb-3">Set new password</button>
+                        <button class="btn btn-primary d-grid w-100 mb-3" dmx-bind:disabled="state.executing" dmx-on:click="run({condition:{if:`(formResetPassword.password.value == formResetPassword.ConfirmPassword.value)`,then:{steps:{run:{action:`formResetPassword.submit()`,name:'SubmitResetForm'}}},else:{steps:{run:{action:`formResetPassword.reset();notifies1.warning(\'Passwords do not match.\')`}}}}})">Set new password <span class="spinner-grow" role="status" dmx-show="state.executing">
+                            </span></button>
                         <div class="text-center">
-                            <a href="login">
+                            <a href="/portal/login">
                                 <i class="ti ti-chevron-left scaleX-n1-rtl"></i>
                                 Back to login
                             </a>
@@ -141,5 +140,3 @@
     <!-- Page JS -->
     <script src="/assets/js/pages-auth.js"></script>
 </body>
-
-</html>

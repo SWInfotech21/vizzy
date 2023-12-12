@@ -192,5 +192,21 @@ dmx.config({
       ],
       "outputType": "array"
     }
+  },
+  "resetpassword": {
+    "query": [
+      {
+        "type": "text",
+        "name": "token"
+      }
+    ]
+  },
+  "resetpass": {
+    "query": [
+      {
+        "type": "text",
+        "name": "token"
+      }
+    ]
   }
 });
