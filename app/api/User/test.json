@@ -17,6 +17,16 @@
   },
   "exec": {
     "steps": [
+      {
+        "name": "Token",
+        "module": "core",
+        "action": "setvalue",
+        "options": {
+          "value": "{{UUID}}"
+        },
+        "meta": [],
+        "outputType": "text"
+      },
       "Mailer/mail",
       {
         "name": "",
