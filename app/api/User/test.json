@@ -40,7 +40,8 @@
           "fromEmail": "info@softturing.com",
           "toEmail": "arifulislam200891@gmail.com",
           "toName": "Ariful Islam",
-          "body": "testing 1234"
+          "body": "testing 1234",
+          "replyTo": "info@softturing.com"
         },
         "output": true
       }
