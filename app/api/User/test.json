@@ -38,9 +38,8 @@
           "fromName": "No-Reply",
           "fromEmail": "info@softturing.com",
           "toEmail": "arifulislam200891@gmail.com",
-          "body": "Hi Ariful,\n<br><br>\nYou can reset your password <a href=\"https://monkfish-app-y6lx4.ondigitalocean.app/reset-pass/{{Token}}\">here</a> https://monkfish-app-y6lx4.ondigitalocean.app/reset-pass/{{Token}}).\n<br>\nThis link will expire in 2 hours.\n<br><br>\n\nReagrds,<br>\nVizzy Team",
           "toName": "Ariful Islam",
-          "contentType": "html"
+          "body": "testing 1234"
         },
         "output": true
       }
