@@ -16,35 +16,21 @@
     ]
   },
   "exec": {
-    "steps": [
-      {
-        "name": "Token",
-        "module": "core",
-        "action": "setvalue",
-        "options": {
-          "value": "{{UUID}}"
-        },
-        "meta": [],
-        "outputType": "text",
-        "disabled": true
+    "steps": {
+      "name": "",
+      "module": "mail",
+      "action": "send",
+      "options": {
+        "instance": "mail",
+        "subject": "Vizzy Reset Password Link",
+        "fromName": "No-Reply",
+        "fromEmail": "info@softturing.com",
+        "toEmail": "arifulislam200891@gmail.com",
+        "toName": "Ariful Islam",
+        "body": "testing 1234",
+        "replyTo": "info@softturing.com"
       },
-      "Mailer/mail",
-      {
-        "name": "",
-        "module": "mail",
-        "action": "send",
-        "options": {
-          "instance": "mail",
-          "subject": "Vizzy Reset Password Link",
-          "fromName": "No-Reply",
-          "fromEmail": "info@softturing.com",
-          "toEmail": "arifulislam200891@gmail.com",
-          "toName": "Ariful Islam",
-          "body": "testing 1234",
-          "replyTo": "info@softturing.com"
-        },
-        "output": true
-      }
-    ]
+      "output": true
+    }
   }
 }
