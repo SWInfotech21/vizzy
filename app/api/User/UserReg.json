@@ -290,11 +290,11 @@
                               "table": "users",
                               "column": "user_language",
                               "type": "text",
-                              "value": "{{(($_POST.preffered_lang=='English')?'ENG':($_POST.preffered_lang=='German')?'DEU':($_POST.preffered_lang=='French')?'ESP':($_POST.preffered_lang=='Spanish')?'SPA':($_POST.preffered_lang=='Danish')?'DAN':($_POST.preffered_lang=='Russian')?'RUS':($_POST.preffered_lang=='Dutch')?'DUT':($_POST.preffered_lang=='Portuguese')?'POR':($_POST.preffered_lang=='Hindi')?'HIN':'ENG')}}"
+                              "value": "{{(($_POST.preffered_lang=='English')?'ENG':($_POST.preffered_lang=='German')?'GER':($_POST.preffered_lang=='French')?'FR':($_POST.preffered_lang=='Spanish')?'SPA':($_POST.preffered_lang=='Danish')?'DAN':($_POST.preffered_lang=='Russian')?'RUS':($_POST.preffered_lang=='Dutch')?'DUT':($_POST.preffered_lang=='Portuguese')?'POR':($_POST.preffered_lang=='Hindi')?'HIN':'ENG')}}"
                             }
                           ],
                           "table": "users",
-                          "query": "INSERT INTO users\n(first_name, last_name, user_email, user_password, salt, created_on, active, ip_address, user_type, user_language) VALUES (:P1 /* {{$_POST.first_name}} */, :P2 /* {{$_POST.last_name}} */, :P3 /* {{$_POST.user_email.lowercase()}} */, :P4 /* {{$_POST.user_password.sha256(NOW_UTC)}} */, :P5 /* {{NOW_UTC}} */, :P6 /* {{NOW_UTC}} */, :P7 /* {{1}} */, :P8 /* {{$_SERVER.REMOTE_ADDR}} */, :P9 /* {{'User'}} */, :P10 /* {{(($_POST.preffered_lang=='English')?'ENG':($_POST.preffered_lang=='German')?'DEU':($_POST.preffered_lang=='French')?'ESP':($_POST.preffered_lang=='Spanish')?'SPA':($_POST.preffered_lang=='Danish')?'DAN':($_POST.preffered_lang=='Russian')?'RUS':($_POST.preffered_lang=='Dutch')?'DUT':($_POST.preffered_lang=='Portuguese')?'POR':($_POST.preffered_lang=='Hindi')?'HIN':'ENG')}} */)",
+                          "query": "INSERT INTO users\n(first_name, last_name, user_email, user_password, salt, created_on, active, ip_address, user_type, user_language) VALUES (:P1 /* {{$_POST.first_name}} */, :P2 /* {{$_POST.last_name}} */, :P3 /* {{$_POST.user_email.lowercase()}} */, :P4 /* {{$_POST.user_password.sha256(NOW_UTC)}} */, :P5 /* {{NOW_UTC}} */, :P6 /* {{NOW_UTC}} */, :P7 /* {{1}} */, :P8 /* {{$_SERVER.REMOTE_ADDR}} */, :P9 /* {{'User'}} */, :P10 /* {{(($_POST.preffered_lang=='English')?'ENG':($_POST.preffered_lang=='German')?'GER':($_POST.preffered_lang=='French')?'FR':($_POST.preffered_lang=='Spanish')?'SPA':($_POST.preffered_lang=='Danish')?'DAN':($_POST.preffered_lang=='Russian')?'RUS':($_POST.preffered_lang=='Dutch')?'DUT':($_POST.preffered_lang=='Portuguese')?'POR':($_POST.preffered_lang=='Hindi')?'HIN':'ENG')}} */)",
                           "params": [
                             {
                               "name": ":P1",
@@ -344,7 +344,7 @@
                             {
                               "name": ":P10",
                               "type": "expression",
-                              "value": "{{(($_POST.preffered_lang=='English')?'ENG':($_POST.preffered_lang=='German')?'DEU':($_POST.preffered_lang=='French')?'ESP':($_POST.preffered_lang=='Spanish')?'SPA':($_POST.preffered_lang=='Danish')?'DAN':($_POST.preffered_lang=='Russian')?'RUS':($_POST.preffered_lang=='Dutch')?'DUT':($_POST.preffered_lang=='Portuguese')?'POR':($_POST.preffered_lang=='Hindi')?'HIN':'ENG')}}"
+                              "value": "{{(($_POST.preffered_lang=='English')?'ENG':($_POST.preffered_lang=='German')?'GER':($_POST.preffered_lang=='French')?'FR':($_POST.preffered_lang=='Spanish')?'SPA':($_POST.preffered_lang=='Danish')?'DAN':($_POST.preffered_lang=='Russian')?'RUS':($_POST.preffered_lang=='Dutch')?'DUT':($_POST.preffered_lang=='Portuguese')?'POR':($_POST.preffered_lang=='Hindi')?'HIN':'ENG')}}"
                             }
                           ]
                         }

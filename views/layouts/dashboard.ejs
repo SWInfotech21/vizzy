@@ -157,21 +157,29 @@
                             <div data-i18n="Cards">Upgrade</div>
                         </a>
                     </li>
-                    <!-- <li class="menu-item">
-                        <a href="#" class="menu-link bg-label-secondary card card-border-shadow-primary" style="padding-bottom:60px;">
-                            <i class="menu-icon tf-icons ti ti-box bg-label-primary"></i>
-                            <div data-i18n="Cards">8,651
-                            </div>
-                            <div data-i18n="Cards" style="position: absolute;top: 30%;">
+                    <li class="menu-item my-3">
+                        <a href="#" class="menu-link bg-label-secondary card card-border-shadow-primary align-items-start" style="padding-bottom:70px;">
+                            <span class="d-flex flex-wrap mt-2">
+                                <i class="menu-icon tf-icons ti ti-box bg-label-primary"></i>
+                                <div data-i18n="Cards" class="text-gray">8,651
+                                </div>
+                            </span>
+                            <!-- <div class="d-flex align-items-center mb-2 pb-1">
+                                <div class="menu-icon avatar me-2">
+                                    <span class="avatar-initial rounded bg-label-primary"><i class="ti ti-box ti-md"></i></span>
+                                </div>
+                                <h4 class="ms-1 mb-0" data-i18n="Cards">8,651</h4>
+                            </div> -->
+                            <div data-i18n="Cards" style="position: absolute;top: 45%;">
                                 <p class="mb-1">Tokens remaining</p>
                                 <p class="mb-0">
                                     <span class="fw-medium me-1">-35</span>
-                                    <small class="text-muted">Average minutes</small>
+                                    <small class="text-lighter">Average minutes</small>
                                 </p>
                             </div>
                         </a>
-                    </li> -->
-                    <li class="menu-item">
+                    </li>
+                    <!-- <li class="menu-item">
                         <a href="#" class="menu-link px-0">
                             <div class="card card-border-shadow-primary h-100 bg-label-secondary w-100">
                                 <div class="card-body px-3">
@@ -190,7 +198,7 @@
                             </div>
 
                         </a>
-                    </li>
+                    </li> -->
                     <!-- <li class="menu-item">
                         <a href="#" target="_blank" class="menu-link">
                             <i class="menu-icon tf-icons ti ti-help-hexagon"></i>
@@ -241,13 +249,13 @@
                                             <span class="align-middle">English</span>
                                         </a>
                                     </li>
-                                    <li dmx-on:click="scUpLangCurrency.load({user_language: 'ESP'})">
-                                        <a class="dropdown-item" href="#" data-language="fr" dmx-class:active="(scUserInfo.data.query.user_language=='ESP')">
+                                    <li dmx-on:click="scUpLangCurrency.load({user_language: 'FR'})">
+                                        <a class="dropdown-item" href="#" data-language="fr" dmx-class:active="(scUserInfo.data.query.user_language=='FR')">
                                             <span class="align-middle">French</span>
                                         </a>
                                     </li>
-                                    <li dmx-on:click="scUpLangCurrency.load({user_language: 'DEU'})">
-                                        <a class="dropdown-item" href="#" data-language="de" dmx-class:active="(scUserInfo.data.query.user_language=='DEU')">
+                                    <li dmx-on:click="scUpLangCurrency.load({user_language: 'GER'})">
+                                        <a class="dropdown-item" href="#" data-language="de" dmx-class:active="(scUserInfo.data.query.user_language=='GER')">
                                             <span class="align-middle">German</span>
                                         </a>
                                     </li>
