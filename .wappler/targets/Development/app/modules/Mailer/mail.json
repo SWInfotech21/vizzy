@@ -3,7 +3,7 @@
   "module": "mail",
   "action": "setup",
   "options": {
-    "host": "softturing.com",
+    "host": "mail.softturing.com",
     "port": 465,
     "username": "info@softturing.com",
     "password": "wijtuwDAUtm2",

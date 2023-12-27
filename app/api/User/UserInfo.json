@@ -86,13 +86,25 @@
               {
                 "table": "users",
                 "column": "user_currency"
+              },
+              {
+                "table": "users",
+                "column": "phone_no"
+              },
+              {
+                "table": "users",
+                "column": "package"
+              },
+              {
+                "table": "users",
+                "column": "resident_country"
               }
             ],
             "table": {
               "name": "users"
             },
             "joins": [],
-            "query": "SELECT user_id, first_name, last_name, user_email, user_type, user_dob, profile_link, user_language, user_currency\nFROM users\nWHERE user_id = :P1 /* {{$_SESSION.user_id}} */ AND active = :P2 /* {{1}} */",
+            "query": "SELECT user_id, first_name, last_name, user_email, user_type, user_dob, profile_link, user_language, user_currency, phone_no, package, resident_country\nFROM users\nWHERE user_id = :P1 /* {{$_SESSION.user_id}} */ AND active = :P2 /* {{1}} */",
             "params": [
               {
                 "operator": "equal",
@@ -194,6 +206,18 @@
           {
             "type": "text",
             "name": "user_currency"
+          },
+          {
+            "type": "text",
+            "name": "phone_no"
+          },
+          {
+            "type": "text",
+            "name": "package"
+          },
+          {
+            "type": "text",
+            "name": "resident_country"
           }
         ],
         "outputType": "object"

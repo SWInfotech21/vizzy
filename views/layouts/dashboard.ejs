@@ -75,8 +75,9 @@
     <div is="dmx-browser" id="browser1"></div>
     <dmx-notifications id="notifies1"></dmx-notifications>
     <dmx-value id="varPageName" dmx-bind:value="'Home'"></dmx-value>
+    <dmx-value id="varSubMenu"></dmx-value>
     <dmx-serverconnect id="scLogOut" url="/api/User/LogOut" noload dmx-on:success="browser1.goto('/portal/login')"></dmx-serverconnect>
-    <dmx-serverconnect id="scUserInfo" url="/api/User/UserInfo"></dmx-serverconnect>
+    <dmx-serverconnect id="scUserInfo" url="/api/User/UserInfo" dmx-on:success="varSubMenu.setValue('Profile')"></dmx-serverconnect>
     <dmx-serverconnect id="scUpLangCurrency" url="/api/User/UpdateLangCurrency" noload dmx-on:success="scUserInfo.load({})"></dmx-serverconnect>
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
@@ -135,7 +136,7 @@
                     <li class="menu-item">
                         <a href="#" class="menu-link">
                             <i class="menu-icon tf-icons ti ti-mood-plus"></i>
-                            <div data-i18n="Services">Services</div>
+                            <div data-i18n="#">Visa News</div>
                         </a>
                     </li>
                     <li class="menu-item">
@@ -160,7 +161,7 @@
                     <li class="menu-item my-3">
                         <a href="#" class="menu-link bg-label-secondary card card-border-shadow-primary align-items-start" style="padding-bottom:70px;">
                             <span class="d-flex flex-wrap mt-2">
-                                <i class="menu-icon tf-icons ti ti-box bg-label-primary"></i>
+                                <i class="menu-icon tf-icons ti ti-box text-primary"></i>
                                 <div data-i18n="Cards" class="text-gray">8,651
                                 </div>
                             </span>

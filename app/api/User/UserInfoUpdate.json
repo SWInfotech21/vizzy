@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/portal/my-profile.ejs",
+      "linkedForm": "formUserProfile"
+    },
+    "$_POST": [
+      {
+        "type": "text",
+        "fieldName": "first_name",
+        "name": "first_name"
+      },
+      {
+        "type": "text",
+        "fieldName": "last_name",
+        "name": "last_name"
+      },
+      {
+        "type": "text",
+        "fieldName": "user_email",
+        "name": "user_email"
+      },
+      {
+        "type": "text",
+        "fieldName": "phone_no",
+        "name": "phone_no"
+      },
+      {
+        "type": "date",
+        "fieldName": "dob",
+        "options": {
+          "rules": {
+            "core:date": {}
+          }
+        },
+        "name": "dob"
+      },
+      {
+        "type": "text",
+        "fieldName": "from_country",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "from_country"
+      },
+      {
+        "type": "datetime",
+        "name": "updated_on"
+      }
+    ],
+    "$_SESSION": [
+      {
+        "type": "text",
+        "name": "user_id"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "security",
+          "permissions": [
+            "write"
+          ],
+          "loginUrl": "/portal/login",
+          "forbiddenUrl": "/*"
+        }
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "trycatch",
+        "options": {
+          "try": {
+            "steps": {
+              "name": "",
+              "module": "core",
+              "action": "condition",
+              "options": {
+                "if": "{{$_SESSION.user_id}}",
+                "then": {
+                  "steps": {
+                    "name": "updateUserInfo",
+                    "module": "dbupdater",
+                    "action": "update",
+                    "options": {
+                      "connection": "VizzyDB",
+                      "sql": {
+                        "type": "update",
+                        "values": [
+                          {
+                            "table": "users",
+                            "column": "first_name",
+                            "type": "text",
+                            "value": "{{$_POST.first_name}}"
+                          },
+                          {
+                            "table": "users",
+                            "column": "last_name",
+                            "type": "text",
+                            "value": "{{$_POST.last_name}}"
+                          },
+                          {
+                            "table": "users",
+                            "column": "user_dob",
+                            "type": "text",
+                            "value": "{{$_POST.dob}}"
+                          },
+                          {
+                            "table": "users",
+                            "column": "updated_on",
+                            "type": "datetime",
+                            "value": "{{$_POST.updated_on}}"
+                          },
+                          {
+                            "table": "users",
+                            "column": "phone_no",
+                            "type": "text",
+                            "value": "{{$_POST.phone_no}}"
+                          },
+                          {
+                            "table": "users",
+                            "column": "resident_country",
+                            "type": "text",
+                            "value": "{{$_POST.from_country}}"
+                          }
+                        ],
+                        "table": "users",
+                        "wheres": {
+                          "condition": "AND",
+                          "rules": [
+                            {
+                              "id": "user_id",
+                              "field": "user_id",
+                              "type": "double",
+                              "operator": "equal",
+                              "value": "{{$_SESSION.user_id}}",
+                              "data": {
+                                "column": "user_id"
+                              },
+                              "operation": "="
+                            }
+                          ],
+                          "conditional": null,
+                          "valid": true
+                        },
+                        "query": "UPDATE users\nSET first_name = :P1 /* {{$_POST.first_name}} */, last_name = :P2 /* {{$_POST.last_name}} */, user_dob = :P3 /* {{$_POST.dob}} */, updated_on = :P4 /* {{$_POST.updated_on}} */, phone_no = :P5 /* {{$_POST.phone_no}} */, resident_country = :P6 /* {{$_POST.from_country}} */\nWHERE user_id = :P7 /* {{$_SESSION.user_id}} */",
+                        "params": [
+                          {
+                            "name": ":P1",
+                            "type": "expression",
+                            "value": "{{$_POST.first_name}}"
+                          },
+                          {
+                            "name": ":P2",
+                            "type": "expression",
+                            "value": "{{$_POST.last_name}}"
+                          },
+                          {
+                            "name": ":P3",
+                            "type": "expression",
+                            "value": "{{$_POST.dob}}"
+                          },
+                          {
+                            "name": ":P4",
+                            "type": "expression",
+                            "value": "{{$_POST.updated_on}}"
+                          },
+                          {
+                            "name": ":P5",
+                            "type": "expression",
+                            "value": "{{$_POST.phone_no}}"
+                          },
+                          {
+                            "name": ":P6",
+                            "type": "expression",
+                            "value": "{{$_POST.from_country}}"
+                          },
+                          {
+                            "operator": "equal",
+                            "type": "expression",
+                            "name": ":P7",
+                            "value": "{{$_SESSION.user_id}}"
+                          }
+                        ]
+                      }
+                    },
+                    "meta": [
+                      {
+                        "name": "affected",
+                        "type": "number"
+                      }
+                    ]
+                  }
+                },
+                "else": {
+                  "steps": {
+                    "name": "Resp",
+                    "module": "core",
+                    "action": "response",
+                    "options": {
+                      "status": 401,
+                      "data": "Failed! Please login and try again"
+                    }
+                  }
+                }
+              },
+              "outputType": "boolean"
+            }
+          },
+          "catch": {
+            "steps": {
+              "name": "Resp",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 401,
+                "data": "An error occurred"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

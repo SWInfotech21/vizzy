@@ -33,7 +33,7 @@
                 <h3 class="mb-1">Welcome to Vizzy! 👋</h3>
                 <p class="mb-4">Please sign-in to your account and start the adventure</p>
 
-                <form id="formAuthentication" class="mb-3" action="/api/User/UserLogin" method="post" is="dmx-serverconnect-form" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp)" dmx-on:success="notifies1.success('Login Successful');formAuthentication.reset(true);browser1.goto('/portal/dashboard')">
+                <form id="formAuthentication" class="mb-3" action="/api/User/UserLogin" method="post" is="dmx-serverconnect-form" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp)" dmx-on:success="notifies1.success('Login Successful');formAuthentication.reset(true);browser1.goto('/portal/my-profile')">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="text" class="form-control" id="email" name="email_username" placeholder="Enter your email" autofocus required="" />
@@ -59,8 +59,8 @@
                             <label class="form-check-label" for="remember-me"> Remember Me </label>
                         </div>
                     </div>
-                    <button class="btn btn-primary d-grid w-100" type="submit" dmx-bind:disabled="state.executing">Sign in<div class="spinner-grow" role="status" dmx-show="state.executing">
-                        </div></button>
+                    <button class="btn btn-primary w-100" type="submit" dmx-bind:disabled="state.executing">Sign in <span class="spinner-grow bg-light" role="status" dmx-show="state.executing">
+                        </span></button>
                 </form>
 
                 <p class="text-center">
