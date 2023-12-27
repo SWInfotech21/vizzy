@@ -1,0 +1,127 @@
+{
+  "meta": {
+    "$_SESSION": [
+      {
+        "type": "text",
+        "name": "user_id"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "security",
+          "permissions": [
+            "write"
+          ],
+          "loginUrl": "/portal/login",
+          "forbiddenUrl": "/*"
+        }
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "trycatch",
+        "options": {
+          "try": {
+            "steps": {
+              "name": "",
+              "module": "core",
+              "action": "condition",
+              "options": {
+                "if": "{{$_SESSION.user_id}}",
+                "then": {
+                  "steps": {
+                    "name": "updateUser",
+                    "module": "dbupdater",
+                    "action": "update",
+                    "options": {
+                      "connection": "VizzyDB",
+                      "sql": {
+                        "type": "update",
+                        "values": [
+                          {
+                            "table": "users",
+                            "column": "active",
+                            "type": "text",
+                            "value": "{{2}}"
+                          }
+                        ],
+                        "table": "users",
+                        "wheres": {
+                          "condition": "AND",
+                          "rules": [
+                            {
+                              "id": "user_id",
+                              "field": "user_id",
+                              "type": "double",
+                              "operator": "equal",
+                              "value": "{{$_SESSION.user_id}}",
+                              "data": {
+                                "column": "user_id"
+                              },
+                              "operation": "="
+                            }
+                          ],
+                          "conditional": null,
+                          "valid": true
+                        },
+                        "query": "UPDATE users\nSET active = :P1 /* {{2}} */\nWHERE user_id = :P2 /* {{$_SESSION.user_id}} */",
+                        "params": [
+                          {
+                            "name": ":P1",
+                            "type": "expression",
+                            "value": "{{2}}"
+                          },
+                          {
+                            "operator": "equal",
+                            "type": "expression",
+                            "name": ":P2",
+                            "value": "{{$_SESSION.user_id}}"
+                          }
+                        ]
+                      }
+                    },
+                    "meta": [
+                      {
+                        "name": "affected",
+                        "type": "number"
+                      }
+                    ]
+                  }
+                },
+                "else": {
+                  "steps": {
+                    "name": "Resp",
+                    "module": "core",
+                    "action": "response",
+                    "options": {
+                      "status": 401,
+                      "data": "Failed! Please login and try again"
+                    }
+                  }
+                }
+              },
+              "outputType": "boolean"
+            }
+          },
+          "catch": {
+            "steps": {
+              "name": "Resp",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 401,
+                "data": "An error occurred"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}
