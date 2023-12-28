@@ -208,5 +208,6 @@ dmx.config({
         "name": "token"
       }
     ]
-  }
+  },
+  "myprofile": {}
 });

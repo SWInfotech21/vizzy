@@ -1,4 +1,4 @@
-<!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="myprofile" appConnect="local" components="{dmxBootstrap5Navigation:{},dmxBootstrap5Alert:{},dmxFormatter:{},dmxBootstrap5Modal:{},dmxValidator:{},dmxBootbox:{},dmxBootbox5:{}}" -->
+<!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="myprofile" appconnect="local" components="{dmxBootstrap5Navigation:{},dmxBootstrap5Alert:{},dmxBootstrap5Modal:{}}" -->
 <meta name="ac:route" content="/portal/my-profile">
 
 <head>
@@ -39,257 +39,258 @@
     <!-- Custom CSS Ends -->
 </head>
 
-<!-- Layout wrapper -->
-<div class="layout-wrapper layout-content-navbar">
-    <div class="layout-container">
+<body dmx-on:load="varPageName.setValue('Profile')">
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
 
-        <!-- Layout container -->
-        <div class="layout-page">
+            <!-- Layout container -->
+            <div class="layout-page">
 
-            <!-- Content wrapper -->
-            <div class="content-wrapper">
-                <!-- Content -->
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+                    <!-- Content -->
 
-                <div class="container-xxl flex-grow-1 container-p-y">
-                    <!-- <h4 class="py-3 mb-4"><span class="text-muted fw-light">Account Settings /</span> Account</h4> -->
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <!-- <h4 class="py-3 mb-4"><span class="text-muted fw-light">Account Settings /</span> Account</h4> -->
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <ul class="nav nav-pills flex-column flex-md-row mb-4">
-                                <li class="nav-item" dmx-class:bg-menu-theme="(varSubMenu.value!='Profile')" dmx-on:click="varSubMenu.setValue('Profile')">
-                                    <a class="nav-link" href="#" dmx-class:active="(varSubMenu.value=='Profile')"><i class="ti-xs ti ti-user-check me-1"></i> Profile</a>
-                                </li>
-                                <li class="nav-item" dmx-class:bg-menu-theme="(varSubMenu.value!='Plan')" dmx-on:click="varSubMenu.setValue('Plan')">
-                                    <a class="nav-link" href="#" dmx-class:active="(varSubMenu.value=='Plan')"><i class="ti-xs ti ti-file-description me-1"></i> Plan</a>
-                                </li>
-                                <li class="nav-item" dmx-class:bg-menu-theme="(varSubMenu.value!='Notifications')" dmx-on:click="varSubMenu.setValue('Notifications')">
-                                    <a class="nav-link" href="#" dmx-class:active="(varSubMenu.value=='Notifications')"><i class="ti-xs ti ti-bell me-1"></i> Notifications</a>
-                                </li>
-                                <li class="nav-item" dmx-class:bg-menu-theme="(varSubMenu.value!='Security')" dmx-on:click="varSubMenu.setValue('Security')">
-                                    <a class="nav-link" href="#" dmx-class:active="(varSubMenu.value=='Security')"><i class="ti-xs ti ti-lock me-1"></i> Security</a>
-                                </li>
-                                <li class="nav-item" dmx-class:bg-menu-theme="(varSubMenu.value!='Billing')" dmx-on:click="varSubMenu.setValue('Billing')">
-                                    <a class="nav-link" href="#" dmx-class:active="(varSubMenu.value=='Billing')"><i class="ti-xs ti ti-message-forward me-1"></i> Billing</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- User Profile Content -->
                         <div class="row">
-                            <div class="col-xl-4 col-lg-5 col-md-5">
-                                <!-- About User -->
-                                <div class="card mb-4">
-                                    <div class="card-body">
-                                        <small class="card-text text-uppercase">About</small>
-                                        <ul class="list-unstyled mb-4 mt-3">
-                                            <li class="d-flex align-items-center mb-3">
-                                                <i class="ti ti-user text-heading"></i><span class="fw-medium mx-2 text-heading">Full Name:</span> <span>{{scUserInfo.data.query.first_name.titlecase()}} {{scUserInfo.data.query.last_name.titlecase()}}</span>
-                                            </li>
-                                            <li class="d-flex align-items-center mb-3">
-                                                <i class="ti ti-calendar text-heading"></i><span class="fw-medium mx-2 text-heading">DOB:</span> <span>{{scUserInfo.data.query.user_dob.formatDate('dd MMM yyyy')}}</span>
-                                            </li>
-                                            <li class="d-flex align-items-center mb-3">
-                                                <i class="ti ti-check text-heading"></i><span class="fw-medium mx-2 text-heading">Plan:</span> <span>{{scUserInfo.data.query.package}}</span>
-                                            </li>
-                                            <li class="d-flex align-items-center mb-3">
-                                                <i class="ti ti-flag text-heading"></i><span class="fw-medium mx-2 text-heading">Country:</span> <span>{{scUserInfo.data.query.resident_country}}</span>
-                                            </li>
-                                            <li class="d-flex align-items-center mb-3">
-                                                <i class="ti ti-file-description text-heading"></i><span class="fw-medium mx-2 text-heading">Languages:</span> <span>{{(scUserInfo.data.query.user_language=='ENG')?'English':(scUserInfo.data.query.user_language=='FR')?'French':(scUserInfo.data.query.user_language=='DE')?'German':(scUserInfo.data.query.user_language=='POR')?'Portuguese':(scUserInfo.data.query.user_language=='TUR')?'Turkish':'English'}}</span>
-                                            </li>
-                                        </ul>
-                                        <small class="card-text text-uppercase">Contacts</small>
-                                        <ul class="list-unstyled mb-4 mt-3">
-                                            <li class="d-flex align-items-center mb-3">
-                                                <i class="ti ti-phone-call"></i><span class="fw-medium mx-2 text-heading">Contact:</span>
-                                                <span>{{scUserInfo.data.query.phone_no}}</span>
-                                            </li>
-                                            <li class="d-flex align-items-center mb-3">
-                                                <i class="ti ti-mail"></i><span class="fw-medium mx-2 text-heading">Email:</span>
-                                                <span>{{scUserInfo.data.query.user_email}}</span>
-                                            </li>
-                                        </ul>
-                                        <div class="float-start"><button class="btn btn-label-primary" type="button" data-bs-toggle="modal" data-bs-target="#editUsers">Edit</button></div>
-                                    </div>
-                                </div>
-                                <!--/ About User -->
+                            <div class="col-md-12">
+                                <ul class="nav nav-pills flex-column flex-md-row mb-4">
+                                    <li class="nav-item" dmx-class:bg-menu-theme="(varSubMenu.value!='Profile')" dmx-on:click="varSubMenu.setValue('Profile')">
+                                        <a class="nav-link" href="#" dmx-class:active="(varSubMenu.value=='Profile')"><i class="ti-xs ti ti-user-check me-1"></i> Profile</a>
+                                    </li>
+                                    <li class="nav-item" dmx-class:bg-menu-theme="(varSubMenu.value!='Plan')" dmx-on:click="varSubMenu.setValue('Plan')">
+                                        <a class="nav-link" href="#" dmx-class:active="(varSubMenu.value=='Plan')"><i class="ti-xs ti ti-file-description me-1"></i> Plan</a>
+                                    </li>
+                                    <li class="nav-item" dmx-class:bg-menu-theme="(varSubMenu.value!='Notifications')" dmx-on:click="varSubMenu.setValue('Notifications')">
+                                        <a class="nav-link" href="#" dmx-class:active="(varSubMenu.value=='Notifications')"><i class="ti-xs ti ti-bell me-1"></i> Notifications</a>
+                                    </li>
+                                    <li class="nav-item" dmx-class:bg-menu-theme="(varSubMenu.value!='Security')" dmx-on:click="varSubMenu.setValue('Security')">
+                                        <a class="nav-link" href="#" dmx-class:active="(varSubMenu.value=='Security')"><i class="ti-xs ti ti-lock me-1"></i> Security</a>
+                                    </li>
+                                    <li class="nav-item" dmx-class:bg-menu-theme="(varSubMenu.value!='Billing')" dmx-on:click="varSubMenu.setValue('Billing')">
+                                        <a class="nav-link" href="#" dmx-class:active="(varSubMenu.value=='Billing')"><i class="ti-xs ti ti-message-forward me-1"></i> Billing</a>
+                                    </li>
+                                </ul>
                             </div>
-                            <!-- Profile Content Right Side -->
-                            <div class="col-xl-8 col-lg-7 col-md-7">
-                                <div class="row mx-0">
-                                    <!-- Orders -->
-                                    <div class="col-lg-4 col-6 mb-4">
-                                        <div class="card h-100">
-                                            <div class="card-body text-center">
-                                                <div class="badge rounded-pill p-2 bg-label-success mb-2">
-                                                    <!-- <i class="ti ti-briefcase ti-sm"></i> -->
-                                                    <i class="fa-solid fa-trophy ti-sm"></i>
-                                                </div>
-                                                <h5 class="card-title mb-2">5 </h5>
-                                                <p>if a person applies for 2/3 visas, which completed task should i show here?</p>
-                                                <small>Task Completed</small>
-                                            </div>
+                            <!-- User Profile Content -->
+                            <div class="row">
+                                <div class="col-xl-4 col-lg-5 col-md-5">
+                                    <!-- About User -->
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <small class="card-text text-uppercase">About</small>
+                                            <ul class="list-unstyled mb-4 mt-3">
+                                                <li class="d-flex align-items-center mb-3">
+                                                    <i class="ti ti-user text-heading"></i><span class="fw-medium mx-2 text-heading">Full Name:</span> <span>{{scUserInfo.data.query.first_name.titlecase()}} {{scUserInfo.data.query.last_name.titlecase()}}</span>
+                                                </li>
+                                                <li class="d-flex align-items-center mb-3">
+                                                    <i class="ti ti-calendar text-heading"></i><span class="fw-medium mx-2 text-heading">DOB:</span> <span>{{scUserInfo.data.query.user_dob.formatDate('dd MMM yyyy')}}</span>
+                                                </li>
+                                                <li class="d-flex align-items-center mb-3">
+                                                    <i class="ti ti-check text-heading"></i><span class="fw-medium mx-2 text-heading">Plan:</span> <span>{{scUserInfo.data.query.package}}</span>
+                                                </li>
+                                                <li class="d-flex align-items-center mb-3">
+                                                    <i class="ti ti-flag text-heading"></i><span class="fw-medium mx-2 text-heading">Country:</span> <span>{{scUserInfo.data.query.resident_country}}</span>
+                                                </li>
+                                                <li class="d-flex align-items-center mb-3">
+                                                    <i class="ti ti-file-description text-heading"></i><span class="fw-medium mx-2 text-heading">Languages:</span> <span>{{(scUserInfo.data.query.user_language=='ENG')?'English':(scUserInfo.data.query.user_language=='FR')?'French':(scUserInfo.data.query.user_language=='DE')?'German':(scUserInfo.data.query.user_language=='POR')?'Portuguese':(scUserInfo.data.query.user_language=='TUR')?'Turkish':'English'}}</span>
+                                                </li>
+                                            </ul>
+                                            <small class="card-text text-uppercase">Contacts</small>
+                                            <ul class="list-unstyled mb-4 mt-3">
+                                                <li class="d-flex align-items-center mb-3">
+                                                    <i class="ti ti-phone-call"></i><span class="fw-medium mx-2 text-heading">Contact:</span>
+                                                    <span>{{scUserInfo.data.query.phone_no}}</span>
+                                                </li>
+                                                <li class="d-flex align-items-center mb-3">
+                                                    <i class="ti ti-mail"></i><span class="fw-medium mx-2 text-heading">Email:</span>
+                                                    <span>{{scUserInfo.data.query.user_email}}</span>
+                                                </li>
+                                            </ul>
+                                            <div class="float-start"><button class="btn btn-label-primary" type="button" data-bs-toggle="modal" data-bs-target="#editUsers">Edit</button></div>
                                         </div>
                                     </div>
-
-                                    <!-- Reviews -->
-                                    <div class="col-lg-4 col-6 mb-4">
-                                        <div class="card h-100">
-                                            <div class="card-body text-center">
-                                                <div class="badge rounded-pill p-2 bg-label-primary mb-2">
-                                                    <i class="fa-solid fa-list-ul"></i>
-                                                </div>
-                                                <h5 class="card-title mb-2">6</h5>
-                                                <small>Tasks Waiting</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-8 col-12 mb-4">
-                                        <!-- Revenue Growth -->
-                                        <div class="card h-100">
-                                            <div class="card-body">
-                                                <div class="col-12">
-                                                    <div class="card-title mb-auto">
-                                                        <h5 class="mb-1 text-nowrap">Well done, increase your support.</h5>
-                                                        <small>You are ready for an upgrade from: {{scUserInfo.data.query.package}}</small>
+                                    <!--/ About User -->
+                                </div>
+                                <!-- Profile Content Right Side -->
+                                <div class="col-xl-8 col-lg-7 col-md-7">
+                                    <div class="row mx-0">
+                                        <!-- Orders -->
+                                        <div class="col-lg-4 col-6 mb-4">
+                                            <div class="card h-100">
+                                                <div class="card-body text-center">
+                                                    <div class="badge rounded-pill p-2 bg-label-success mb-2">
+                                                        <!-- <i class="ti ti-briefcase ti-sm"></i> -->
+                                                        <i class="fa-solid fa-trophy ti-sm"></i>
                                                     </div>
-                                                    <div class="float-end">
-                                                        <button class="btn btn-success" dmx-show="scUserInfo.data.query.package=='Basic'">More support</button>
-                                                    </div>
+                                                    <h5 class="card-title mb-2">5 </h5>
+                                                    <p>if a person applies for 2/3 visas, which completed task should i show here?</p>
+                                                    <small>Task Completed</small>
                                                 </div>
                                             </div>
                                         </div>
 
-                                    </div>
-
-                                </div>
-
-                            </div>
-                            <!-- Profile Content Right Side Ends-->
-
-
-                            <!-- Delete User Account -->
-                            <div class="col-12">
-                                <div class="card">
-                                    <h5 class="card-header">Delete Account</h5>
-                                    <div class="card-body">
-                                        <div class="mb-3 col-12 mb-0">
-                                            <div class="alert alert-warning">
-                                                <h5 class="alert-heading mb-1">Are you sure you want to delete your account?</h5>
-                                                <p>Once you delete your account, there is no going back. Please be certain.</p>
-                                                <p class="mb-0">Note, if you paid for a month, you could continue using the service before the next billing date starts.</p>
+                                        <!-- Reviews -->
+                                        <div class="col-lg-4 col-6 mb-4">
+                                            <div class="card h-100">
+                                                <div class="card-body text-center">
+                                                    <div class="badge rounded-pill p-2 bg-label-primary mb-2">
+                                                        <i class="fa-solid fa-list-ul"></i>
+                                                    </div>
+                                                    <h5 class="card-title mb-2">6</h5>
+                                                    <small>Tasks Waiting</small>
+                                                </div>
                                             </div>
                                         </div>
-                                        <form id="formAccountDeactivation" is="dmx-serverconnect-form" method="post" action="/api/User/DeleteUserProfile" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp)" dmx-on:success="notifies1.success('User Profile Deleted Successfully');formAccountDeactivation.reset(true);browser1.goto('/portal/login')">
-                                            <div class="form-check mb-4">
-                                                <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation" required="" />
-                                                <label class="form-check-label" for="accountActivation">I confirm my account deactivation</label>
+                                        <div class="col-lg-8 col-12 mb-4">
+                                            <!-- Revenue Growth -->
+                                            <div class="card h-100">
+                                                <div class="card-body">
+                                                    <div class="col-12">
+                                                        <div class="card-title mb-auto">
+                                                            <h5 class="mb-1 text-nowrap">Well done, increase your support.</h5>
+                                                            <small>You are ready for an upgrade from: {{scUserInfo.data.query.package}}</small>
+                                                        </div>
+                                                        <div class="float-end">
+                                                            <button class="btn btn-success" dmx-show="scUserInfo.data.query.package=='Basic'">More support</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <button class="btn btn-danger deactivate-account" dmx-on:click="run({condition:{if:`formAccountDeactivation.accountActivation.checked`,then:{steps:{'bootbox.confirm':{message:'Are you sure to delete the account?',title:'Delete Account',buttons:{confirm:{label:'Yes',className:'btn-primary'},cancel:{label:'No',className:'btn-secondary'}},swapButtonOrder:true,centerVertical:true,then:{steps:{run:{action:`formAccountDeactivation.submit()`}}},name:'DeleteAccount'}}},else:{steps:{run:{action:`notifies1.warning(\'Please tick and confirm the deactivation.\')`}}}}})">Deactivate Account</button>
-                                        </form>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <!-- Profile Content Right Side Ends-->
+
+
+                                <!-- Delete User Account -->
+                                <div class="col-12">
+                                    <div class="card">
+                                        <h5 class="card-header">Delete Account</h5>
+                                        <div class="card-body">
+                                            <div class="mb-3 col-12 mb-0">
+                                                <div class="alert alert-warning">
+                                                    <h5 class="alert-heading mb-1">Are you sure you want to delete your account?</h5>
+                                                    <p>Once you delete your account, there is no going back. Please be certain.</p>
+                                                    <p class="mb-0">Note, if you paid for a month, you could continue using the service before the next billing date starts.</p>
+                                                </div>
+                                            </div>
+                                            <form id="formAccountDeactivation" is="dmx-serverconnect-form" method="post" action="/api/User/DeleteUserProfile" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp)" dmx-on:success="notifies1.success('User Profile Deleted Successfully');formAccountDeactivation.reset(true);browser1.goto('/portal/login')">
+                                                <div class="form-check mb-4">
+                                                    <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation" required="" />
+                                                    <label class="form-check-label" for="accountActivation">I confirm my account deactivation</label>
+                                                </div>
+                                                <button class="btn btn-danger deactivate-account" dmx-on:click="run({condition:{if:`formAccountDeactivation.accountActivation.checked`,then:{steps:{'bootbox.confirm':{message:'Are you sure to delete the account?',title:'Delete Account',buttons:{confirm:{label:'Yes',className:'btn-primary'},cancel:{label:'No',className:'btn-secondary'}},swapButtonOrder:true,centerVertical:true,then:{steps:{run:{action:`formAccountDeactivation.submit()`}}},name:'DeleteAccount'}}},else:{steps:{run:{action:`notifies1.warning(\'Please tick and confirm the deactivation.\')`}}}}})">Deactivate Account</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Delete User Account -->
+
+                            </div>
+
+                            <!-- Edit User modal -->
+                            <div class="modal fade" id="editUsers" tabindex="-1" aria-hidden="true" is="dmx-bs5-modal">
+                                <div class="modal-dialog modal-lg modal-simple modal-enable-otp modal-dialog-centered">
+                                    <div class="modal-content p-3 p-md-5">
+                                        <div class="modal-body">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <div class="mb-4">
+                                                <h3 class="mb-3">Edit Profile Info.</h3>
+                                                <!-- <p class="text-muted">Supported payment methods</p> -->
+                                            </div>
+                                            <form id="formUserProfile" method="post" is="dmx-serverconnect-form" action="/api/User/UserInfoUpdate" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp)" dmx-on:success="notifies1.success('Profile Information Updated Successfully');formUserProfile.reset(true);editUsers.hide();scUserInfo.load({})">
+                                                <div class="row">
+                                                    <div class="mb-3 col-md-6">
+                                                        <label for="firstName" class="form-label">First Name</label>
+                                                        <input class="form-control" type="text" id="firstName" name="first_name" autofocus dmx-bind:value="scUserInfo.data.query.first_name" />
+                                                    </div>
+                                                    <div class="mb-3 col-md-6">
+                                                        <label for="lastName" class="form-label">Last Name</label>
+                                                        <input class="form-control" type="text" name="last_name" id="lastName" dmx-bind:value="scUserInfo.data.query.last_name" />
+                                                    </div>
+                                                    <div class="mb-3 col-md-6">
+                                                        <label for="email" class="form-label">E-mail</label>
+                                                        <input class="form-control" type="text" id="email" name="user_email" placeholder="john.doe@example.com" dmx-bind:value="scUserInfo.data.query.user_email" disabled="true" />
+                                                    </div>
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="form-label" for="phoneNumber">Phone Number/ Mobile</label>
+                                                        <div class="input-group input-group-merge">
+                                                            <input class="form-control" id="phoneNumber" name="phone_no" type="tel" id="html5-tel-input" dmx-bind:value="scUserInfo.data.query.phone_no" placeholder="90-(164)-188-556" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 col-md-6">
+                                                        <label for="fromCountry" class="form-label">Where you live (Country)?</label>
+                                                        <select id="fromCountry" class="form-select" data-allow-clear="true" name="from_country" required="" dmx-bind:value="scUserInfo.data.query.resident_country">
+                                                            <option value="">Select</option>
+                                                            <option value="UK">UK</option>
+                                                            <option value="Germany">Germany</option>
+                                                            <option value="Spain">Spain</option>
+                                                            <option value="France">France</option>
+                                                            <option value="Portugal">Portugal</option>
+                                                            <option value="Switzerland">Switzerland</option>
+                                                            <option value="Netherlands">Netherlands</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3 col-md-6">
+                                                        <label for="dob" class="form-label">DOB</label>
+                                                        <input class="form-control" type="date" id="dob" name="dob" dmx-bind:value="scUserInfo.data.query.user_dob" />
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2">
+                                                    <button type="submit" class="btn btn-primary me-2">Save changes</button>
+                                                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                                                </div>
+                                            </form>
+
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Delete User Account -->
+                            <!-- / Edit User modal -->
+
 
                         </div>
-
-                        <!-- Edit User modal -->
-                        <div class="modal fade" id="editUsers" tabindex="-1" aria-hidden="true" is="dmx-bs5-modal">
-                            <div class="modal-dialog modal-lg modal-simple modal-enable-otp modal-dialog-centered">
-                                <div class="modal-content p-3 p-md-5">
-                                    <div class="modal-body">
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        <div class="mb-4">
-                                            <h3 class="mb-3">Edit Profile Info.</h3>
-                                            <!-- <p class="text-muted">Supported payment methods</p> -->
-                                        </div>
-                                        <form id="formUserProfile" method="post" is="dmx-serverconnect-form" action="/api/User/UserInfoUpdate" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp)" dmx-on:success="notifies1.success('Profile Information Updated Successfully');formUserProfile.reset(true);editUsers.hide();scUserInfo.load({})">
-                                            <div class="row">
-                                                <div class="mb-3 col-md-6">
-                                                    <label for="firstName" class="form-label">First Name</label>
-                                                    <input class="form-control" type="text" id="firstName" name="first_name" autofocus dmx-bind:value="scUserInfo.data.query.first_name" />
-                                                </div>
-                                                <div class="mb-3 col-md-6">
-                                                    <label for="lastName" class="form-label">Last Name</label>
-                                                    <input class="form-control" type="text" name="last_name" id="lastName" dmx-bind:value="scUserInfo.data.query.last_name" />
-                                                </div>
-                                                <div class="mb-3 col-md-6">
-                                                    <label for="email" class="form-label">E-mail</label>
-                                                    <input class="form-control" type="text" id="email" name="user_email" placeholder="john.doe@example.com" dmx-bind:value="scUserInfo.data.query.user_email" disabled="true" />
-                                                </div>
-                                                <div class="mb-3 col-md-6">
-                                                    <label class="form-label" for="phoneNumber">Phone Number/ Mobile</label>
-                                                    <div class="input-group input-group-merge">
-                                                        <span class="input-group-text">US (+1)</span>
-                                                        <input type="text" id="phoneNumber" name="phone_no" class="form-control" placeholder="202 555 0111" dmx-bind:value="scUserInfo.data.query.phone_no" />
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3 col-md-6">
-                                                    <label for="fromCountry" class="form-label">Where you live(Country)?</label>
-                                                    <select id="fromCountry" class="select2 form-select" data-allow-clear="true" name="from_country" required="" dmx-bind:value="scUserInfo.data.query.resident_country">
-                                                        <option value="">Select</option>
-                                                        <option value="UK">UK</option>
-                                                        <option value="Germany">Germany</option>
-                                                        <option value="Spain">Spain</option>
-                                                        <option value="France">France</option>
-                                                        <option value="Portugal">Portugal</option>
-                                                        <option value="Switzerland">Switzerland</option>
-                                                        <option value="Netherlands">Netherlands</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3 col-md-6">
-                                                    <label for="dob" class="form-label">DOB</label>
-                                                    <input class="form-control" type="date" id="dob" name="dob" dmx-bind:value="scUserInfo.data.query.user_dob" />
-                                                </div>
-                                            </div>
-                                            <div class="mt-2">
-                                                <button type="submit" class="btn btn-primary me-2">Save changes</button>
-                                                <button type="reset" class="btn btn-label-secondary">Cancel</button>
-                                            </div>
-                                        </form>
-
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- / Edit User modal -->
-
-
                     </div>
+                    <!-- / Content -->
+
+                    <div class="content-backdrop fade"></div>
                 </div>
-                <!-- / Content -->
-
-                <div class="content-backdrop fade"></div>
+                <!-- Content wrapper -->
             </div>
-            <!-- Content wrapper -->
+            <!-- / Layout page -->
         </div>
-        <!-- / Layout page -->
+
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+
+        <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+        <div class="drag-target"></div>
     </div>
+    <!-- / Layout wrapper -->
+    <!-- Core JS -->
+    <script src="/assets/vendor/libs/popper/popper.js"></script>
+    <script src="/assets/vendor/libs/node-waves/node-waves.js"></script>
+    <script src="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="/assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="/assets/vendor/js/menu.js"></script>
+    <!-- endbuild -->
 
-    <!-- Overlay -->
-    <div class="layout-overlay layout-menu-toggle"></div>
+    <!-- Vendors JS -->
+    <script src="/assets/vendor/libs/select2/select2.js"></script>
+    <script src="/assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
+    <script src="/assets/vendor/libs/bloodhound/bloodhound.js"></script>
 
-    <!-- Drag Target Area To SlideIn Menu On Small Screens -->
-    <div class="drag-target"></div>
-</div>
-<!-- / Layout wrapper -->
-<!-- Core JS -->
-<script src="/assets/vendor/libs/popper/popper.js"></script>
-<script src="/assets/vendor/libs/node-waves/node-waves.js"></script>
-<script src="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-<script src="/assets/vendor/libs/hammer/hammer.js"></script>
-<script src="/assets/vendor/libs/typeahead-js/typeahead.js"></script>
-<script src="/assets/vendor/js/menu.js"></script>
-<!-- endbuild -->
+    <!-- Main JS -->
+    <script src="/assets/js/main.js"></script>
 
-<!-- Vendors JS -->
-<script src="/assets/vendor/libs/select2/select2.js"></script>
-<script src="/assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
-<script src="/assets/vendor/libs/bloodhound/bloodhound.js"></script>
-
-<!-- Main JS -->
-<script src="/assets/js/main.js"></script>
-
-<!-- Page JS -->
-<script src="/assets/js/forms-selects.js"></script>
+    <!-- Page JS -->
+    <script src="/assets/js/forms-selects.js"></script>
+</body>
