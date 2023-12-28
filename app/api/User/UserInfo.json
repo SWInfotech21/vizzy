@@ -455,6 +455,196 @@
           }
         ],
         "outputType": "object"
+      },
+      {
+        "name": "TotalTasksWaiting",
+        "module": "dbconnector",
+        "action": "single",
+        "options": {
+          "connection": "VizzyDB",
+          "sql": {
+            "type": "SELECT",
+            "columns": [
+              {
+                "table": "task_assigned",
+                "column": "task_assigned_id",
+                "alias": "CountTasks",
+                "aggregate": "COUNT"
+              }
+            ],
+            "table": {
+              "name": "task_assigned"
+            },
+            "joins": [],
+            "query": "SELECT COUNT(task_assigned_id) AS CountTasks\nFROM task_assigned\nWHERE user_id = :P1 /* {{identity}} */ AND status = :P2 /* {{'Waiting'}} */",
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{identity}}"
+              },
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P2",
+                "value": "{{'Waiting'}}"
+              }
+            ],
+            "groupBy": [],
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "task_assigned.user_id",
+                  "field": "task_assigned.user_id",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{identity}}",
+                  "data": {
+                    "table": "task_assigned",
+                    "column": "user_id",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "integer",
+                      "primary": false,
+                      "unique": false,
+                      "nullable": false,
+                      "name": "user_id"
+                    }
+                  },
+                  "operation": "="
+                },
+                {
+                  "id": "task_assigned.status",
+                  "field": "task_assigned.status",
+                  "type": "string",
+                  "operator": "equal",
+                  "value": "{{'Waiting'}}",
+                  "data": {
+                    "table": "task_assigned",
+                    "column": "status",
+                    "type": "text",
+                    "columnObj": {
+                      "type": "string",
+                      "maxLength": 100,
+                      "primary": false,
+                      "unique": false,
+                      "nullable": true,
+                      "name": "status"
+                    }
+                  },
+                  "operation": "="
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            }
+          }
+        },
+        "output": true,
+        "meta": [
+          {
+            "type": "number",
+            "name": "CountTasks"
+          }
+        ],
+        "outputType": "object"
+      },
+      {
+        "name": "TotalCompletedTasks",
+        "module": "dbconnector",
+        "action": "single",
+        "options": {
+          "connection": "VizzyDB",
+          "sql": {
+            "type": "SELECT",
+            "columns": [
+              {
+                "table": "task_assigned",
+                "column": "task_assigned_id",
+                "alias": "CountTasks",
+                "aggregate": "COUNT"
+              }
+            ],
+            "table": {
+              "name": "task_assigned"
+            },
+            "joins": [],
+            "query": "SELECT COUNT(task_assigned_id) AS CountTasks\nFROM task_assigned\nWHERE user_id = :P1 /* {{identity}} */ AND status = :P2 /* {{'Completed'}} */",
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{identity}}"
+              },
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P2",
+                "value": "{{'Completed'}}"
+              }
+            ],
+            "groupBy": [],
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "task_assigned.user_id",
+                  "field": "task_assigned.user_id",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{identity}}",
+                  "data": {
+                    "table": "task_assigned",
+                    "column": "user_id",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "integer",
+                      "primary": false,
+                      "unique": false,
+                      "nullable": false,
+                      "name": "user_id"
+                    }
+                  },
+                  "operation": "="
+                },
+                {
+                  "id": "task_assigned.status",
+                  "field": "task_assigned.status",
+                  "type": "string",
+                  "operator": "equal",
+                  "value": "{{'Completed'}}",
+                  "data": {
+                    "table": "task_assigned",
+                    "column": "status",
+                    "type": "text",
+                    "columnObj": {
+                      "type": "string",
+                      "maxLength": 100,
+                      "primary": false,
+                      "unique": false,
+                      "nullable": true,
+                      "name": "status"
+                    }
+                  },
+                  "operation": "="
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            }
+          }
+        },
+        "output": true,
+        "meta": [
+          {
+            "type": "number",
+            "name": "CountTasks"
+          }
+        ],
+        "outputType": "object"
       }
     ]
   }

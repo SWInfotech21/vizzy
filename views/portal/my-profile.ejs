@@ -105,7 +105,7 @@
                                     <!-- About User -->
                                     <div class="card mb-4">
                                         <div class="card-body">
-                                            <small class="card-text text-uppercase">About</small>
+                                            <small class="card-text text-uppercase px-1">About</small>
                                             <ul class="list-unstyled mb-4 mt-3">
                                                 <li class="d-flex align-items-center mb-3">
                                                     <i class="ti ti-user text-heading"></i><span class="fw-medium mx-2 text-heading">Full Name:</span> <span>{{scUserInfo.data.query.first_name.titlecase()}} {{scUserInfo.data.query.last_name.titlecase()}}</span>
@@ -123,7 +123,7 @@
                                                     <i class="ti ti-file-description text-heading"></i><span class="fw-medium mx-2 text-heading">Languages:</span> <span>{{(scUserInfo.data.query.user_language=='ENG')?'English':(scUserInfo.data.query.user_language=='FR')?'French':(scUserInfo.data.query.user_language=='DE')?'German':(scUserInfo.data.query.user_language=='POR')?'Portuguese':(scUserInfo.data.query.user_language=='TUR')?'Turkish':'English'}}</span>
                                                 </li>
                                             </ul>
-                                            <small class="card-text text-uppercase">Contacts</small>
+                                            <small class="card-text text-uppercase px-1">Contacts</small>
                                             <ul class="list-unstyled mb-4 mt-3">
                                                 <li class="d-flex align-items-center mb-3">
                                                     <i class="ti ti-phone-call"></i><span class="fw-medium mx-2 text-heading">Contact:</span>
@@ -134,7 +134,7 @@
                                                     <span>{{scUserInfo.data.query.user_email}}</span>
                                                 </li>
                                             </ul>
-                                            <div class="float-start"><button class="btn btn-label-primary" type="button" data-bs-toggle="modal" data-bs-target="#editUsers">Edit</button></div>
+                                            <div class="float-start px-1"><button class="btn btn-label-primary" type="button" data-bs-toggle="modal" data-bs-target="#editUsers">Edit</button></div>
                                         </div>
                                     </div>
                                     <!--/ About User -->
@@ -150,9 +150,8 @@
                                                         <!-- <i class="ti ti-briefcase ti-sm"></i> -->
                                                         <i class="fa-solid fa-trophy ti-sm"></i>
                                                     </div>
-                                                    <h5 class="card-title mb-2">5 </h5>
-                                                    <p>if a person applies for 2/3 visas, which completed task should i show here?</p>
-                                                    <small>Task Completed</small>
+                                                    <h5 class="card-title mb-2">{{scUserInfo.data.TotalCompletedTasks.CountTasks}}</h5>
+                                                    <h6>Total Tasks Completed</h6>
                                                 </div>
                                             </div>
                                         </div>
@@ -164,8 +163,8 @@
                                                     <div class="badge rounded-pill p-2 bg-label-primary mb-2">
                                                         <i class="fa-solid fa-list-ul"></i>
                                                     </div>
-                                                    <h5 class="card-title mb-2">6</h5>
-                                                    <small>Tasks Waiting</small>
+                                                    <h5 class="card-title mb-2">{{scUserInfo.data.TotalTasksWaiting.CountTasks}}</h5>
+                                                    <h6>Total Waiting Tasks</h6>
                                                 </div>
                                             </div>
                                         </div>
