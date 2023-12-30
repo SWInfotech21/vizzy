@@ -1,0 +1,271 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/portal/my-profile.ejs",
+      "linkedForm": "OTPVerifyForm"
+    },
+    "$_POST": [
+      {
+        "type": "text",
+        "fieldName": "OTPEmail",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            }
+          }
+        },
+        "name": "OTPEmail"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "security",
+          "permissions": [
+            "write"
+          ],
+          "loginUrl": "/portal/login",
+          "forbiddenUrl": "/*"
+        }
+      },
+      {
+        "name": "identity",
+        "module": "auth",
+        "action": "identify",
+        "options": {
+          "provider": "security"
+        },
+        "output": false,
+        "meta": []
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "trycatch",
+        "options": {
+          "try": {
+            "steps": [
+              {
+                "name": "GetUserOTP",
+                "module": "dbconnector",
+                "action": "single",
+                "options": {
+                  "connection": "VizzyDB",
+                  "sql": {
+                    "type": "SELECT",
+                    "columns": [
+                      {
+                        "table": "users",
+                        "column": "pass_reset_token"
+                      },
+                      {
+                        "table": "users",
+                        "column": "two_factor"
+                      }
+                    ],
+                    "table": {
+                      "name": "users"
+                    },
+                    "joins": [],
+                    "wheres": {
+                      "condition": "AND",
+                      "rules": [
+                        {
+                          "id": "users.user_id",
+                          "field": "users.user_id",
+                          "type": "double",
+                          "operator": "equal",
+                          "value": "{{identity}}",
+                          "data": {
+                            "table": "users",
+                            "column": "user_id",
+                            "type": "number",
+                            "columnObj": {
+                              "type": "integer",
+                              "primary": false,
+                              "unique": false,
+                              "nullable": false,
+                              "name": "user_id"
+                            }
+                          },
+                          "operation": "="
+                        },
+                        {
+                          "id": "users.active",
+                          "field": "users.active",
+                          "type": "string",
+                          "operator": "equal",
+                          "value": "{{1}}",
+                          "data": {
+                            "table": "users",
+                            "column": "active",
+                            "type": "text",
+                            "columnObj": {
+                              "type": "string",
+                              "maxLength": -5,
+                              "primary": false,
+                              "unique": false,
+                              "nullable": true,
+                              "name": "active"
+                            }
+                          },
+                          "operation": "="
+                        },
+                        {
+                          "id": "users.deleted_on",
+                          "field": "users.deleted_on",
+                          "type": "datetime",
+                          "operator": "is_null",
+                          "value": null,
+                          "data": {
+                            "table": "users",
+                            "column": "deleted_on",
+                            "type": "datetime",
+                            "columnObj": {
+                              "type": "timestamp",
+                              "primary": false,
+                              "unique": false,
+                              "nullable": true,
+                              "name": "deleted_on"
+                            }
+                          },
+                          "operation": "IS NULL"
+                        }
+                      ],
+                      "conditional": null,
+                      "valid": true
+                    },
+                    "query": "SELECT pass_reset_token, two_factor\nFROM users\nWHERE user_id = :P1 /* {{identity}} */ AND active = :P2 /* {{1}} */ AND deleted_on IS NULL",
+                    "params": [
+                      {
+                        "operator": "equal",
+                        "type": "expression",
+                        "name": ":P1",
+                        "value": "{{identity}}"
+                      },
+                      {
+                        "operator": "equal",
+                        "type": "expression",
+                        "name": ":P2",
+                        "value": "{{1}}"
+                      }
+                    ]
+                  }
+                },
+                "output": false,
+                "meta": [
+                  {
+                    "type": "text",
+                    "name": "pass_reset_token"
+                  },
+                  {
+                    "type": "text",
+                    "name": "two_factor"
+                  }
+                ],
+                "outputType": "object"
+              },
+              {
+                "name": "",
+                "module": "core",
+                "action": "condition",
+                "options": {
+                  "if": "{{(GetUserOTP.pass_reset_token==$_POST.OTPEmail)}}",
+                  "then": {
+                    "steps": {
+                      "name": "updateUser",
+                      "module": "dbupdater",
+                      "action": "update",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "update",
+                          "values": [
+                            {
+                              "table": "users",
+                              "column": "two_factor",
+                              "type": "text",
+                              "value": "{{((GetUserOTP.two_factor!='Yes')?'Yes':'No')}}"
+                            }
+                          ],
+                          "table": "users",
+                          "wheres": {
+                            "condition": "AND",
+                            "rules": [
+                              {
+                                "id": "user_id",
+                                "field": "user_id",
+                                "type": "double",
+                                "operator": "equal",
+                                "value": "{{identity}}",
+                                "data": {
+                                  "column": "user_id"
+                                },
+                                "operation": "="
+                              }
+                            ],
+                            "conditional": null,
+                            "valid": true
+                          },
+                          "query": "UPDATE users\nSET two_factor = :P1 /* {{((GetUserOTP.two_factor!='Yes')?'Yes':'No')}} */\nWHERE user_id = :P2 /* {{identity}} */",
+                          "params": [
+                            {
+                              "name": ":P1",
+                              "type": "expression",
+                              "value": "{{((GetUserOTP.two_factor!='Yes')?'Yes':'No')}}"
+                            },
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P2",
+                              "value": "{{identity}}"
+                            }
+                          ]
+                        }
+                      },
+                      "meta": [
+                        {
+                          "name": "affected",
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  },
+                  "else": {
+                    "steps": {
+                      "name": "Resp",
+                      "module": "core",
+                      "action": "response",
+                      "options": {
+                        "status": 401,
+                        "data": "OTP Mismatched"
+                      }
+                    }
+                  }
+                },
+                "outputType": "boolean"
+              }
+            ]
+          },
+          "catch": {
+            "steps": {
+              "name": "Resp",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 401,
+                "data": "An error occurred!"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

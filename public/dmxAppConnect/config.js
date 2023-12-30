@@ -209,5 +209,35 @@ dmx.config({
       }
     ]
   },
-  "myprofile": {}
+  "myprofile": {
+    "repeat1": {
+      "meta": [
+        {
+          "type": "number",
+          "name": "visa_info_id"
+        },
+        {
+          "type": "text",
+          "name": "destination_country"
+        },
+        {
+          "type": "text",
+          "name": "from_country"
+        },
+        {
+          "type": "text",
+          "name": "visa_application_type"
+        },
+        {
+          "type": "text",
+          "name": "preffered_lang"
+        },
+        {
+          "type": "text",
+          "name": "package"
+        }
+      ],
+      "outputType": "array"
+    }
+  }
 });

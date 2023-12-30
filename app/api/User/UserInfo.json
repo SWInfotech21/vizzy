@@ -98,13 +98,17 @@
               {
                 "table": "users",
                 "column": "resident_country"
+              },
+              {
+                "table": "users",
+                "column": "two_factor"
               }
             ],
             "table": {
               "name": "users"
             },
             "joins": [],
-            "query": "SELECT user_id, first_name, last_name, user_email, user_type, user_dob, profile_link, user_language, user_currency, phone_no, package, resident_country\nFROM users\nWHERE user_id = :P1 /* {{$_SESSION.user_id}} */ AND active = :P2 /* {{1}} */",
+            "query": "SELECT user_id, first_name, last_name, user_email, user_type, user_dob, profile_link, user_language, user_currency, phone_no, package, resident_country, two_factor\nFROM users\nWHERE user_id = :P1 /* {{$_SESSION.user_id}} */ AND active = :P2 /* {{1}} */",
             "params": [
               {
                 "operator": "equal",
@@ -218,6 +222,10 @@
           {
             "type": "text",
             "name": "resident_country"
+          },
+          {
+            "type": "text",
+            "name": "two_factor"
           }
         ],
         "outputType": "object"

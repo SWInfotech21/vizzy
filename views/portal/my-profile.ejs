@@ -1,4 +1,4 @@
-<!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="myprofile" appconnect="local" components="{dmxBootstrap5Navigation:{},dmxBootstrap5Alert:{},dmxBootstrap5Modal:{}}" -->
+<!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="myprofile" appconnect="local" components="{dmxBootstrap5Navigation:{},dmxBootstrap5Alert:{},dmxBootstrap5Modal:{},dmxValidator:{}}" -->
 <meta name="ac:route" content="/portal/my-profile">
 
 <head>
@@ -30,6 +30,8 @@
 
     <!-- Page CSS -->
     <link rel="stylesheet" href="/assets/vendor/css/pages/cards-advance.css" />
+    <!-- Page CSS -->
+    <link rel="stylesheet" href="/assets/vendor/css/pages/page-account-settings.css" />
 
     <!-- Helpers -->
     <script src="/assets/vendor/libs/jquery/jquery.js"></script>
@@ -63,19 +65,19 @@
 
                                     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked />
-                                        <label class="btn btn-outline-primary" for="btnradio1">Profile</label>
+                                        <label class="btn btn-outline-primary" for="btnradio1" dmx-on:click="varSubMenu.setValue('Profile')">Profile</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio2" />
-                                        <label class="btn btn-outline-primary" for="btnradio2">Plan</label>
+                                        <label class="btn btn-outline-primary" for="btnradio2" dmx-on:click="varSubMenu.setValue('Plan')">Plan</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio3" />
-                                        <label class="btn btn-outline-primary" for="btnradio3">Notifications</label>
+                                        <label class="btn btn-outline-primary" for="btnradio3" dmx-on:click="varSubMenu.setValue('Notifications')">Notifications</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio4" />
-                                        <label class="btn btn-outline-primary" for="btnradio4">Security</label>
+                                        <label class="btn btn-outline-primary" for="btnradio4" dmx-on:click="varSubMenu.setValue('Security')">Security</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio5" />
-                                        <label class="btn btn-outline-primary" for="btnradio5">Billing</label>
+                                        <label class="btn btn-outline-primary" for="btnradio5" dmx-on:click="varSubMenu.setValue('Billing')">Billing</label>
                                     </div>
                                 </div>
 
@@ -100,7 +102,7 @@
                                 </ul> -->
                             </div>
                             <!-- User Profile Content -->
-                            <div class="row">
+                            <div class="row" dmx-show="(varSubMenu.value=='Profile')">
                                 <div class="col-xl-4 col-lg-5 col-md-5">
                                     <!-- About User -->
                                     <div class="card mb-4">
@@ -142,7 +144,7 @@
                                 <!-- Profile Content Right Side -->
                                 <div class="col-xl-8 col-lg-7 col-md-7">
                                     <div class="row mx-0">
-                                        <!-- Orders -->
+                                        <!-- Completed -->
                                         <div class="col-lg-4 col-6 mb-4">
                                             <div class="card h-100">
                                                 <div class="card-body text-center">
@@ -156,7 +158,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Reviews -->
+                                        <!-- Waiting -->
                                         <div class="col-lg-4 col-6 mb-4">
                                             <div class="card h-100">
                                                 <div class="card-body text-center">
@@ -169,7 +171,7 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-8 col-12 mb-4">
-                                            <!-- Revenue Growth -->
+                                            <!-- Basic Message -->
                                             <div class="card h-100">
                                                 <div class="card-body">
                                                     <div class="col-12">
@@ -178,7 +180,7 @@
                                                             <small>You are ready for an upgrade from: {{scUserInfo.data.query.package}}</small>
                                                         </div>
                                                         <div class="float-end">
-                                                            <button class="btn btn-success" dmx-show="scUserInfo.data.query.package=='Basic'">More support</button>
+                                                            <button class="btn btn-success">More support</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -217,6 +219,558 @@
                                 <!-- Delete User Account -->
 
                             </div>
+                            <!-- User Plan Content -->
+                            <div class="row" dmx-show="(varSubMenu.value=='Plan')">
+                                <div class="col-12 col-md-6">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <div class="col-12">
+                                                <!-- Basic Message -->
+                                                <div class="card-title mb-auto" dmx-show="scUserInfo.data.query.package=='Basic'">
+                                                    <h5 class="mb-1 text-nowrap">Well done…</h5>
+                                                    <h6>You are on a Basic plan</h6>
+                                                    <p>Reduce your stress and gain more support. Feel guided and assured you can get through complex situation with easy to understand details improving the success of your application</p>
+                                                </div>
+                                                <div class="float-end" dmx-show="scUserInfo.data.query.package=='Basic'">
+                                                    <button class="btn btn-primary">Upgrade your plan</button>
+                                                </div>
+                                                <!-- Pro Message -->
+                                                <div class="card-title mb-auto" dmx-show="scUserInfo.data.query.package=='Pro'">
+                                                    <h5 class="mb-1 text-nowrap">Nice work…</h5>
+                                                    <h6>You are on the Pro plan</h6>
+                                                    <p>Do you need any personal support and not getting a complex query answered, contact our support team now.</p>
+                                                </div>
+                                                <div class="float-end" dmx-show="scUserInfo.data.query.package=='Pro'">
+                                                    <button class="btn btn-primary" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#downgradeModal">Downgrade Request</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="card">
+                                        <div class="d-flex align-items-end row">
+                                            <div class="col-8">
+                                                <div class="card-body text-wrap">
+                                                    <h5 class="card-title mb-0">Your tokens: 8,651</h5>
+                                                    <p class="mb-2">We recommend you purchase more tokens.
+                                                        Always make sure you top-up your tokens so it does affect your chats with the visa advisor 24 hours a day.</p>
+                                                    <h4 class="text-primary mb-1"></h4>
+                                                    <a href="javascript:;" class="btn btn-primary">Add more tokens</a>
+                                                </div>
+                                            </div>
+                                            <div class="col-4 text-center text-sm-left">
+                                                <div class="card-body pb-0 px-0 px-md-4">
+                                                    <img src="../../assets/img/illustrations/card-advance-sale.png" height="140" alt="view sales" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-12 col-md-12 mt-3">
+                                    <div class="card h-100">
+                                        <div class="card-header pb-0">
+                                            <div class="d-flex justify-content-between">
+                                                <h5 class="d-block mb-2">We recommend that you keep your tokens topped up</h5>
+                                                <!-- <p class="card-text text-success">+18.2%</p> -->
+                                            </div>
+                                            <!-- <h4 class="card-title mb-1">$42.5k</h4> -->
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row mt-4">
+                                                <div class="col-4">
+                                                    <!-- <div class="d-flex gap-2 align-items-center mb-2">
+                                                        <span class="badge bg-label-info p-1 rounded"><i class="ti ti-shopping-cart ti-xs"></i></span>
+                                                        <p class="mb-0">Order</p>
+                                                    </div> -->
+                                                    <h5 class="mb-0 pt-1">Tokens</h5>
+                                                    <small class="text-muted">11,440</small>
+                                                </div>
+                                                <div class="col-4">
+                                                    <!-- <div class="divider divider-vertical">
+                                                        <div class="divider-text">
+                                                            <span class="badge-divider-bg bg-label-secondary">VS</span>
+                                                        </div>
+                                                    </div> -->
+                                                </div>
+                                                <div class="col-4 text-end">
+                                                    <!-- <div class="d-flex gap-2 justify-content-end align-items-center mb-2">
+                                                        <p class="mb-0">Visits</p>
+                                                        <span class="badge bg-label-primary p-1 rounded"><i class="ti ti-link ti-xs"></i></span>
+                                                    </div> -->
+                                                    <h5 class="mb-0 pt-1">Recommended amount</h5>
+                                                    <small class="text-muted">20,000</small>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center my-4">
+                                                <div class="progress w-100" style="height: 8px">
+                                                    <div class="progress-bar bg-info" style="width: 70%" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                            <p>You have used 12,456 tokens so far</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-12 my-3">
+                                    <h4>We are helping you with the following visa:</h4>
+                                    <!-- Orders last week -->
+                                    <div class="col-xl-3 col-md-4 col-6 mb-4" dmx-repeat:repeat1="scUserInfo.data.VisaApplicationInfo">
+                                        <div class="card h-100">
+                                            <div class="card-header pb-3">
+                                                <h5 class="card-title mb-0">{{visa_application_type}}</h5>
+                                                <small class="text-muted">{{destination_country}}</small>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-center gap-3">
+                                                    <h4 class="mb-0"><button class="btn btn-success btn-sm">Active</button></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <!-- User Notifications Content -->
+                            <div class="row mx-0" dmx-show="(varSubMenu.value=='Notifications')">
+
+                                <!-- Nitification List Table -->
+                                <div class="card">
+                                    <!-- Notifications -->
+                                    <!-- <h5 class="card-header pb-1">Notifications List</h5> -->
+                                    <!-- <div class="card-body">
+                                        <span>We need permission from your browser to show notifications.
+                                            <span class="notificationRequest"><span class="fw-medium">Request Permission</span></span></span>
+                                        <div class="error"></div>
+                                    </div> -->
+                                    <div class="table-responsive">
+                                        <table class="table table-striped border-top">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-nowrap">Notification</th>
+                                                    <th class="text-nowrap text-center">When</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Custom Task is created</td>
+                                                    <td>
+                                                        <div class="form-check d-flex justify-content-center">
+                                                            1 day ago
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">
+                                                        <h6 class="mb-1">Tasks</h6>
+                                                        <p class="mb-1">Custom task "Where does it come from?" is completed</p>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-check d-flex justify-content-center">
+                                                            5 days Ago
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">
+                                                        <h6 class="mb-1">Token Alert</h6>
+                                                        <p class="mb-1">Your token is low, please renew asap.</p>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-check d-flex justify-content-center">
+                                                            5 days Ago
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- /table Notifications -->
+                                </div>
+
+                            </div>
+                            <!-- User Security Content -->
+                            <div class="row mx-0" dmx-show="(varSubMenu.value=='Security')">
+                                <!-- Change Password -->
+                                <div class="card mb-4">
+                                    <h5 class="card-header">Change Password</h5>
+                                    <div class="card-body">
+                                        <form id="formAccountSettings" method="POST" onsubmit="return false">
+                                            <div class="row">
+                                                <div class="mb-3 col-md-6 form-password-toggle">
+                                                    <label class="form-label" for="currentPassword">Current Password</label>
+                                                    <div class="input-group input-group-merge">
+                                                        <input class="form-control" type="password" name="currentPassword" id="currentPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                                                        <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="mb-3 col-md-6 form-password-toggle">
+                                                    <label class="form-label" for="newPassword">New Password</label>
+                                                    <div class="input-group input-group-merge">
+                                                        <input class="form-control" type="password" id="newPassword" name="newPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                                                        <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3 col-md-6 form-password-toggle">
+                                                    <label class="form-label" for="confirmPassword">Confirm New Password</label>
+                                                    <div class="input-group input-group-merge">
+                                                        <input class="form-control" type="password" name="confirmPassword" id="confirmPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                                                        <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 mb-4">
+                                                    <h6>Password Requirements:</h6>
+                                                    <ul class="ps-3 mb-0">
+                                                        <li class="mb-1">Minimum 8 characters long - the more, the better</li>
+                                                        <li class="mb-1">At least one lowercase character</li>
+                                                        <li>At least one number, symbol, or whitespace character</li>
+                                                    </ul>
+                                                </div>
+                                                <div>
+                                                    <button type="submit" class="btn btn-primary me-2">Save changes</button>
+                                                    <button type="reset" class="btn btn-label-secondary">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!--/ Change Password -->
+
+                                <!-- Two-steps verification -->
+                                <div class="card mb-4">
+                                    <h5 class="card-header">Two-steps verification</h5>
+                                    <div class="card-body">
+                                        <h5 class="mb-3">{{(scUserInfo.data.query.two_factor=='Yes')?'Two factor authentication is enabled now.':'Two factor authentication is not enabled yet.'}}</h5>
+                                        <p class="w-75">
+                                            Two-factor authentication adds an additional layer of security to your account by requiring more
+                                            than just a password to log in.
+                                            <a href="#">Learn more.</a>
+                                        </p>
+                                        <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#enableOTP" dmx-show="(scUserInfo.data.query.two_factor!='Yes')">
+                                            Enable two-factor authentication
+                                        </button><button class="btn btn-label-danger mt-2" data-bs-toggle="modal" data-bs-target="#enableOTP" dmx-show="(scUserInfo.data.query.two_factor=='Yes')">
+                                            Disable two-factor authentication
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Modal -->
+                                <!-- Enable OTP Modal -->
+                                <div class="modal fade" id="enableOTP" tabindex="-1" aria-hidden="true" is="dmx-bs5-modal">
+                                    <div class="modal-dialog modal-simple modal-enable-otp modal-dialog-centered">
+                                        <div class="modal-content p-3 p-md-5">
+                                            <div class="modal-body">
+                                                <dmx-value id="varFormEnable" dmx-bind:value="'Email'"></dmx-value>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <div class="text-center mb-4">
+                                                    <h3 class="mb-2">Enable One Time Password <span class="spinner-grow" role="status" dmx-show="enableOTPForm.state.executing"></span><span class="spinner-grow" role="status" dmx-show="OTPVerifyForm.state.executing"></span></h3>
+                                                    <p>Verify Your Email Id</p>
+                                                </div>
+                                                <p>{{(varFormEnable.value=='Email')?'Enter your registered email id and we will send you a verification code.':'Enter the OTP sent to the registered email'}}
+                                                </p>
+                                                <form id="enableOTPForm" class="row g-3" is="dmx-serverconnect-form" method="post" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp)" dmx-on:success="notifies1.success('OTP sent to the registered email');enableOTPForm.reset(true);varFormEnable.setValue('OTP')" dmx-show="(varFormEnable.value=='Email')" action="/api/MyProfile/TwoFactorOTP">
+                                                    <div class="col-12">
+                                                        <label class="form-label" for="modalEnableOTPEmail">Email Id</label>
+                                                        <div class="input-group">
+                                                            <input type="text" id="modalEnableOTPEmail" name="modalEnableOTPEmail" class="form-control" placeholder="abc@example.com" required="" data-rule-email="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <button type="submit" class="btn btn-primary me-sm-3 me-1" dmx-bind:disabled="state.executing">Send OTP</button>
+                                                        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">
+                                                            Cancel
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                                <form id="OTPVerifyForm" class="row g-3" is="dmx-serverconnect-form" method="post" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp)" dmx-on:success="notifies1.success('Success! Two-factor authentication enabled');varFormEnable.setValue('Email');OTPVerifyForm.reset(true);enableOTP.hide();scUserInfo.load({});varSubMenu.setValue('Security')" dmx-show="(varFormEnable.value=='OTP')" action="/api/MyProfile/TwoFactorVerifyOTP">
+                                                    <div class="col-12">
+                                                        <label class="form-label" for="modalEnableOTPEmail">Enter OTP</label>
+                                                        <div class="input-group">
+                                                            <input type="text" id="OTPEmail" name="OTPEmail" class="form-control" placeholder="5475" required="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <button type="submit" class="btn btn-primary me-sm-3 me-1" dmx-bind:disabled="state.executing">Submit</button>
+                                                        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">
+                                                            Cancel
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/ Enable OTP Modal -->
+
+                                <!-- /Modal -->
+
+                                <!--/ Two-steps verification -->
+
+
+                            </div>
+                            <!-- User Billing Content -->
+                            <div class="row mx-0" dmx-show="(varSubMenu.value=='Billing')">
+
+
+                                <div class="card mb-4">
+                                    <h5 class="card-header">Payment Methods</h5>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <form id="creditCardForm" class="row g-3" onsubmit="return false">
+                                                    <div class="col-12 mb-2">
+                                                        <div class="form-check form-check-inline">
+                                                            <input name="collapsible-payment" class="form-check-input" type="radio" value="" id="collapsible-payment-cc" checked="" />
+                                                            <label class="form-check-label" for="collapsible-payment-cc">Credit/Debit/ATM Card</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input name="collapsible-payment" class="form-check-input" type="radio" value="" id="collapsible-payment-cash" />
+                                                            <label class="form-check-label" for="collapsible-payment-cash">Paypal account</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label class="form-label w-100" for="paymentCard">Card Number</label>
+                                                        <div class="input-group input-group-merge">
+                                                            <input id="paymentCard" name="paymentCard" class="form-control credit-card-mask" type="text" placeholder="1356 3215 6548 7898" aria-describedby="paymentCard2" />
+                                                            <span class="input-group-text cursor-pointer p-1" id="paymentCard2"><span class="card-type"></span></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <label class="form-label" for="paymentName">Name</label>
+                                                        <input type="text" id="paymentName" class="form-control" placeholder="John Doe" />
+                                                    </div>
+                                                    <div class="col-6 col-md-3">
+                                                        <label class="form-label" for="paymentExpiryDate">Exp. Date</label>
+                                                        <input type="text" id="paymentExpiryDate" class="form-control expiry-date-mask" placeholder="MM/YY" />
+                                                    </div>
+                                                    <div class="col-6 col-md-3">
+                                                        <label class="form-label" for="paymentCvv">CVV Code</label>
+                                                        <div class="input-group input-group-merge">
+                                                            <input type="text" id="paymentCvv" class="form-control cvv-code-mask" maxlength="3" placeholder="654" />
+                                                            <span class="input-group-text cursor-pointer" id="paymentCvv2"><i class="ti ti-help text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Card Verification Value"></i></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label class="switch">
+                                                            <input type="checkbox" class="switch-input" />
+                                                            <span class="switch-toggle-slider">
+                                                                <span class="switch-on"></span>
+                                                                <span class="switch-off"></span>
+                                                            </span>
+                                                            <span class="switch-label">Save card for future billing?</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-12 mt-4">
+                                                        <button type="submit" class="btn btn-primary me-sm-3 me-1">Save Changes</button>
+                                                        <button type="reset" class="btn btn-label-secondary">Cancel</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-6 mt-5 mt-md-0">
+                                                <h6>My Cards</h6>
+                                                <div class="added-cards">
+                                                    <div class="cardMaster bg-lighter p-3 rounded mb-3">
+                                                        <div class="d-flex justify-content-between flex-sm-row flex-column">
+                                                            <div class="card-information me-2">
+                                                                <img class="mb-3 img-fluid" src="../../assets/img/icons/payments/mastercard.png" alt="Master Card" />
+                                                                <div class="d-flex align-items-center mb-2 flex-wrap gap-2">
+                                                                    <p class="mb-0 me-2">Tom McBride</p>
+                                                                    <span class="badge bg-label-primary">Primary</span>
+                                                                </div>
+                                                                <span class="card-number">&#8727;&#8727;&#8727;&#8727; &#8727;&#8727;&#8727;&#8727; 9856</span>
+                                                            </div>
+                                                            <div class="d-flex flex-column text-start text-lg-end">
+                                                                <div class="d-flex order-sm-0 order-1 mt-sm-0 mt-3">
+                                                                    <button class="btn btn-label-primary me-2" data-bs-toggle="modal" data-bs-target="#editCCModal">
+                                                                        Edit
+                                                                    </button>
+                                                                    <button class="btn btn-label-secondary">Delete</button>
+                                                                </div>
+                                                                <small class="mt-sm-auto mt-2 order-sm-1 order-0">Card expires at 12/26</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="cardMaster bg-lighter p-3 rounded">
+                                                        <div class="d-flex justify-content-between flex-sm-row flex-column">
+                                                            <div class="card-information me-2">
+                                                                <img class="mb-3 img-fluid" src="../../assets/img/icons/payments/visa.png" alt="Visa Card" />
+                                                                <p class="mb-2">Mildred Wagner</p>
+                                                                <span class="card-number">&#8727;&#8727;&#8727;&#8727; &#8727;&#8727;&#8727;&#8727; 5896</span>
+                                                            </div>
+                                                            <div class="d-flex flex-column text-start text-lg-end">
+                                                                <div class="d-flex order-sm-0 order-1 mt-sm-0 mt-3">
+                                                                    <button class="btn btn-label-primary me-2" data-bs-toggle="modal" data-bs-target="#editCCModal">
+                                                                        Edit
+                                                                    </button>
+                                                                    <button class="btn btn-label-secondary">Delete</button>
+                                                                </div>
+                                                                <small class="mt-sm-auto mt-2 order-sm-1 order-0">Card expires at 10/27</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Modal -->
+                                                <!-- Add New Credit Card Modal -->
+                                                <div class="modal fade" id="editCCModal" tabindex="-1" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-simple modal-add-new-cc">
+                                                        <div class="modal-content p-3 p-md-5">
+                                                            <div class="modal-body">
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                <div class="text-center mb-4">
+                                                                    <h3 class="mb-2">Edit Card</h3>
+                                                                    <p class="text-muted">Edit your saved card details</p>
+                                                                </div>
+                                                                <form id="editCCForm" class="row g-3" onsubmit="return false">
+                                                                    <div class="col-12">
+                                                                        <label class="form-label w-100" for="modalEditCard">Card Number</label>
+                                                                        <div class="input-group input-group-merge">
+                                                                            <input id="modalEditCard" name="modalEditCard" class="form-control credit-card-mask-edit" type="text" placeholder="4356 3215 6548 7898" value="4356 3215 6548 7898" aria-describedby="modalEditCard2" />
+                                                                            <span class="input-group-text cursor-pointer p-1" id="modalEditCard2"><span class="card-type-edit"></span></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12 col-md-6">
+                                                                        <label class="form-label" for="modalEditName">Name</label>
+                                                                        <input type="text" id="modalEditName" class="form-control" placeholder="John Doe" value="John Doe" />
+                                                                    </div>
+                                                                    <div class="col-6 col-md-3">
+                                                                        <label class="form-label" for="modalEditExpiryDate">Exp. Date</label>
+                                                                        <input type="text" id="modalEditExpiryDate" class="form-control expiry-date-mask-edit" placeholder="MM/YY" value="08/28" />
+                                                                    </div>
+                                                                    <div class="col-6 col-md-3">
+                                                                        <label class="form-label" for="modalEditCvv">CVV Code</label>
+                                                                        <div class="input-group input-group-merge">
+                                                                            <input type="text" id="modalEditCvv" class="form-control cvv-code-mask-edit" maxlength="3" placeholder="654" value="XXX" />
+                                                                            <span class="input-group-text cursor-pointer" id="modalEditCvv2"><i class="ti ti-help text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Card Verification Value"></i></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <label class="switch">
+                                                                            <input type="checkbox" class="switch-input" />
+                                                                            <span class="switch-toggle-slider">
+                                                                                <span class="switch-on"></span>
+                                                                                <span class="switch-off"></span>
+                                                                            </span>
+                                                                            <span class="switch-label">Set as primary card</span>
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="col-12 text-center">
+                                                                        <button type="submit" class="btn btn-primary me-sm-3 me-1">Update</button>
+                                                                        <button type="reset" class="btn btn-label-danger" data-bs-dismiss="modal" aria-label="Close">
+                                                                            Remove
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--/ Add New Credit Card Modal -->
+
+                                                <!--/ Modal -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card mb-4">
+                                    <!-- Billing Address -->
+                                    <h5 class="card-header">Billing Address</h5>
+                                    <div class="card-body">
+                                        <form id="formBillingAddress" onsubmit="return false">
+                                            <div class="row">
+                                                <div class="mb-3 col-sm-6">
+                                                    <label for="companyName" class="form-label">Company Name</label>
+                                                    <input type="text" id="companyName" name="companyName" class="form-control" placeholder="Pixinvent" />
+                                                </div>
+                                                <div class="mb-3 col-sm-6">
+                                                    <label for="billingEmail" class="form-label">Billing Email</label>
+                                                    <input class="form-control" type="text" id="billingEmail" name="billingEmail" placeholder="john.doe@example.com" />
+                                                </div>
+                                                <div class="mb-3 col-sm-6">
+                                                    <label for="taxId" class="form-label">Tax ID</label>
+                                                    <input type="text" id="taxId" name="taxId" class="form-control" placeholder="Enter Tax ID" />
+                                                </div>
+                                                <div class="mb-3 col-sm-6">
+                                                    <label for="vatNumber" class="form-label">VAT Number</label>
+                                                    <input class="form-control" type="text" id="vatNumber" name="vatNumber" placeholder="Enter VAT Number" />
+                                                </div>
+                                                <div class="mb-3 col-sm-6">
+                                                    <label for="mobileNumber" class="form-label">Mobile</label>
+                                                    <div class="input-group input-group-merge">
+                                                        <span class="input-group-text">US (+1)</span>
+                                                        <input class="form-control mobile-number" type="text" id="mobileNumber" name="mobileNumber" placeholder="202 555 0111" />
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3 col-sm-6">
+                                                    <label for="country" class="form-label">Country</label>
+                                                    <select id="country" class="form-select select2" name="country">
+                                                        <option selected>USA</option>
+                                                        <option>Canada</option>
+                                                        <option>UK</option>
+                                                        <option>Germany</option>
+                                                        <option>France</option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3 col-12">
+                                                    <label for="billingAddress" class="form-label">Billing Address</label>
+                                                    <input type="text" class="form-control" id="billingAddress" name="billingAddress" placeholder="Billing Address" />
+                                                </div>
+                                                <div class="mb-3 col-sm-6">
+                                                    <label for="state" class="form-label">State</label>
+                                                    <input class="form-control" type="text" id="state" name="state" placeholder="California" />
+                                                </div>
+                                                <div class="mb-3 col-sm-6">
+                                                    <label for="zipCode" class="form-label">Zip Code</label>
+                                                    <input type="text" class="form-control zip-code" id="zipCode" name="zipCode" placeholder="231465" maxlength="6" />
+                                                </div>
+                                            </div>
+                                            <div class="mt-2">
+                                                <button type="submit" class="btn btn-primary me-2">Save changes</button>
+                                                <button type="reset" class="btn btn-label-secondary">Discard</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- /Billing Address -->
+                                </div>
+                                <div class="card">
+                                    <!-- Billing History -->
+                                    <h5 class="card-header">Billing History</h5>
+                                    <div class="card-datatable table-responsive">
+                                        <table class="invoice-list-table table border-top">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>#ID</th>
+                                                    <th><i class="ti ti-trending-up"></i></th>
+                                                    <th>Client</th>
+                                                    <th>Total</th>
+                                                    <th class="text-truncate">Issued Date</th>
+                                                    <th>Balance</th>
+                                                    <th>Invoice Status</th>
+                                                    <th class="cell-fit">Actions</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    <!--/ Billing History -->
+                                </div>
+
+
+
+                            </div>
+
+
+
+
+
+
+
+
+
 
                             <!-- Edit User modal -->
                             <div class="modal fade" id="editUsers" tabindex="-1" aria-hidden="true" is="dmx-bs5-modal">
@@ -225,7 +779,7 @@
                                         <div class="modal-body">
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             <div class="mb-4">
-                                                <h3 class="mb-3">Edit Profile Info.</h3>
+                                                <h3 class="mb-3">Edit Profile Info. <span class="spinner-grow" role="status" dmx-show="state.executing"></span></h3>
                                                 <!-- <p class="text-muted">Supported payment methods</p> -->
                                             </div>
                                             <form id="formUserProfile" method="post" is="dmx-serverconnect-form" action="/api/User/UserInfoUpdate" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp)" dmx-on:success="notifies1.success('Profile Information Updated Successfully');formUserProfile.reset(true);editUsers.hide();scUserInfo.load({})">
@@ -267,7 +821,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="mt-2">
-                                                    <button type="submit" class="btn btn-primary me-2">Save changes</button>
+                                                    <button type="submit" class="btn btn-primary me-2" dmx-bind:disabled="state.executing">Save changes</button>
                                                     <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
                                                 </div>
                                             </form>
@@ -278,6 +832,42 @@
                                 </div>
                             </div>
                             <!-- / Edit User modal -->
+                            <!-- Downgrade Request Modal -->
+                            <div class="modal fade" id="downgradeModal" tabindex="-1" aria-hidden="true" is="dmx-bs5-modal">
+                                <div class="modal-dialog modal-dialog-centered1 modal-simple modal-add-new-cc">
+                                    <div class="modal-content p-3 p-md-5">
+                                        <div class="modal-body p-0">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <div class="text-center mb-4">
+                                                <h3 class="mb-2">Downgrade Request <span class="spinner-grow" role="status" dmx-show="state.executing"></span></h3>
+
+                                                <!-- <p class="text-muted">Add new card to complete payment</p> -->
+                                            </div>
+                                            <form id="scFormDowngrade" class="row g-3" is="dmx-serverconnect-form" method="post" action="/api/MyProfile/DowngradeRequest" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp)" dmx-on:success="notifies1.success('Request sent successfully');scFormDowngrade.reset(true);downgradeModal.hide()">
+                                                <div class="col-12">
+                                                    <label class="form-label w-100" for="DowngradeSubject">Subject</label>
+                                                    <div class="input-group input-group-merge">
+                                                        <input id="DowngradeSubject" name="DowngradeSubject" class="form-control" type="text" placeholder="Requesting for downgrade package" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <label class="form-label" for="DowngradeMessage">Message</label>
+                                                    <textarea type="text" id="DowngradeMessage" class="form-control" placeholder="Requesting for downgrade package" name="DowngradeMessage" required="" rowspan="4" rows="4"></textarea>
+                                                </div>
+                                                <div class="col-12 text-center">
+                                                    <button type="submit" class="btn btn-primary me-sm-3 me-1" dmx-bind:disabled="state.executing">Send</button>
+                                                    <button type="reset" class="btn btn-label-secondary btn-reset" data-bs-dismiss="modal" aria-label="Close">
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/ Downgrade Request Modal -->
+
+
 
 
                         </div>
@@ -317,4 +907,7 @@
 
     <!-- Page JS -->
     <script src="/assets/js/forms-selects.js"></script>
+    <!-- Page JS -->
+    <script src="/assets/js/pages-account-settings-security.js"></script>
+    <script src="/assets/js/modal-enable-otp.js"></script>
 </body>
