@@ -262,6 +262,10 @@
               {
                 "table": "visa_info",
                 "column": "package"
+              },
+              {
+                "table": "visa_info",
+                "column": "created_on"
               }
             ],
             "table": {
@@ -273,10 +277,11 @@
               {
                 "table": "visa_info",
                 "column": "destination_country",
-                "direction": "ASC"
+                "direction": "ASC",
+                "recid": 1
               }
             ],
-            "query": "SELECT visa_info_id, destination_country, from_country, visa_application_type, preffered_lang, package\nFROM visa_info\nWHERE user_id = :P1 /* {{identity}} */\nORDER BY destination_country ASC",
+            "query": "SELECT visa_info_id, destination_country, from_country, visa_application_type, preffered_lang, package, created_on\nFROM visa_info\nWHERE user_id = :P1 /* {{identity}} */\nORDER BY destination_country ASC",
             "params": [
               {
                 "operator": "equal",
@@ -339,6 +344,10 @@
           {
             "type": "text",
             "name": "package"
+          },
+          {
+            "type": "datetime",
+            "name": "created_on"
           }
         ],
         "outputType": "array"
