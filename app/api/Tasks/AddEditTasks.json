@@ -45,6 +45,12 @@
         "fieldName": "description",
         "name": "description"
       }
+    ],
+    "$_SERVER": [
+      {
+        "type": "text",
+        "name": "SERVER_NAME"
+      }
     ]
   },
   "exec": {
@@ -102,6 +108,22 @@
                             {
                               "table": "task_assigned",
                               "column": "task_id"
+                            },
+                            {
+                              "table": "task_assigned",
+                              "column": "visa_info_id"
+                            },
+                            {
+                              "table": "task_assigned",
+                              "column": "country"
+                            },
+                            {
+                              "table": "task_assigned",
+                              "column": "visa_type"
+                            },
+                            {
+                              "table": "task_assigned",
+                              "column": "status"
                             }
                           ],
                           "table": {
@@ -135,7 +157,7 @@
                             "conditional": null,
                             "valid": true
                           },
-                          "query": "SELECT task_type, task_id\nFROM task_assigned\nWHERE task_assigned_id = :P1 /* {{$_POST.task_assigned_id}} */",
+                          "query": "SELECT task_type, task_id, visa_info_id, country, visa_type, status\nFROM task_assigned\nWHERE task_assigned_id = :P1 /* {{$_POST.task_assigned_id}} */",
                           "params": [
                             {
                               "operator": "equal",
@@ -155,6 +177,22 @@
                         {
                           "type": "number",
                           "name": "task_id"
+                        },
+                        {
+                          "type": "number",
+                          "name": "visa_info_id"
+                        },
+                        {
+                          "type": "text",
+                          "name": "country"
+                        },
+                        {
+                          "type": "text",
+                          "name": "visa_type"
+                        },
+                        {
+                          "type": "text",
+                          "name": "status"
                         }
                       ],
                       "outputType": "object"
@@ -166,75 +204,283 @@
                       "options": {
                         "if": "{{(GetTaskDetails.task_type=='Default')}}",
                         "then": {
-                          "steps": {
-                            "name": "updateDefaultTasks",
-                            "module": "dbupdater",
-                            "action": "update",
-                            "options": {
-                              "connection": "VizzyDB",
-                              "sql": {
-                                "type": "update",
-                                "values": [
-                                  {
-                                    "table": "task_assigned",
-                                    "column": "status",
-                                    "type": "text",
-                                    "value": "{{$_POST.status}}"
-                                  },
-                                  {
-                                    "table": "task_assigned",
-                                    "column": "updated_on",
-                                    "type": "datetime",
-                                    "value": "{{NOW}}"
-                                  }
-                                ],
-                                "table": "task_assigned",
-                                "wheres": {
-                                  "condition": "AND",
-                                  "rules": [
+                          "steps": [
+                            {
+                              "name": "GetTask",
+                              "module": "dbconnector",
+                              "action": "single",
+                              "options": {
+                                "connection": "VizzyDB",
+                                "sql": {
+                                  "type": "SELECT",
+                                  "columns": [
                                     {
-                                      "id": "task_assigned_id",
-                                      "field": "task_assigned_id",
-                                      "type": "double",
-                                      "operator": "equal",
-                                      "value": "{{$_POST.task_assigned_id}}",
-                                      "data": {
-                                        "column": "task_assigned_id"
-                                      },
-                                      "operation": "="
+                                      "table": "default_task",
+                                      "column": "task_name"
                                     }
                                   ],
-                                  "conditional": null,
-                                  "valid": true
-                                },
-                                "query": "UPDATE task_assigned\nSET status = :P1 /* {{$_POST.status}} */, updated_on = :P2 /* {{NOW}} */\nWHERE task_assigned_id = :P3 /* {{$_POST.task_assigned_id}} */",
-                                "params": [
-                                  {
-                                    "name": ":P1",
-                                    "type": "expression",
-                                    "value": "{{$_POST.status}}"
+                                  "table": {
+                                    "name": "task_assigned"
                                   },
-                                  {
-                                    "name": ":P2",
-                                    "type": "expression",
-                                    "value": "{{NOW}}"
+                                  "joins": [
+                                    {
+                                      "table": "default_task",
+                                      "column": "*",
+                                      "alias": "default_task",
+                                      "type": "LEFT",
+                                      "clauses": {
+                                        "condition": "AND",
+                                        "rules": [
+                                          {
+                                            "table": "default_task",
+                                            "column": "default_task_id",
+                                            "operator": "equal",
+                                            "value": {
+                                              "table": "task_assigned",
+                                              "column": "task_id"
+                                            },
+                                            "operation": "="
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  "wheres": {
+                                    "condition": "AND",
+                                    "rules": [
+                                      {
+                                        "id": "task_assigned.task_assigned_id",
+                                        "field": "task_assigned.task_assigned_id",
+                                        "type": "double",
+                                        "operator": "equal",
+                                        "value": "{{$_POST.task_assigned_id}}",
+                                        "data": {
+                                          "table": "task_assigned",
+                                          "column": "task_assigned_id",
+                                          "type": "number",
+                                          "columnObj": {
+                                            "type": "integer",
+                                            "primary": false,
+                                            "unique": false,
+                                            "nullable": false,
+                                            "name": "task_assigned_id"
+                                          }
+                                        },
+                                        "operation": "="
+                                      },
+                                      {
+                                        "id": "task_assigned.user_id",
+                                        "field": "task_assigned.user_id",
+                                        "type": "double",
+                                        "operator": "equal",
+                                        "value": "{{identity}}",
+                                        "data": {
+                                          "table": "task_assigned",
+                                          "column": "user_id",
+                                          "type": "number",
+                                          "columnObj": {
+                                            "type": "integer",
+                                            "primary": false,
+                                            "unique": false,
+                                            "nullable": false,
+                                            "name": "user_id"
+                                          }
+                                        },
+                                        "operation": "="
+                                      }
+                                    ],
+                                    "conditional": null,
+                                    "valid": true
                                   },
-                                  {
-                                    "operator": "equal",
-                                    "type": "expression",
-                                    "name": ":P3",
-                                    "value": "{{$_POST.task_assigned_id}}"
-                                  }
-                                ]
-                              }
+                                  "query": "SELECT default_task.task_name\nFROM task_assigned\nLEFT JOIN default_task AS default_task ON (default_task.default_task_id = task_assigned.task_id)\nWHERE task_assigned.task_assigned_id = :P1 /* {{$_POST.task_assigned_id}} */ AND task_assigned.user_id = :P2 /* {{identity}} */",
+                                  "params": [
+                                    {
+                                      "operator": "equal",
+                                      "type": "expression",
+                                      "name": ":P1",
+                                      "value": "{{$_POST.task_assigned_id}}"
+                                    },
+                                    {
+                                      "operator": "equal",
+                                      "type": "expression",
+                                      "name": ":P2",
+                                      "value": "{{identity}}"
+                                    }
+                                  ]
+                                }
+                              },
+                              "output": false,
+                              "meta": [
+                                {
+                                  "type": "text",
+                                  "name": "task_name"
+                                }
+                              ],
+                              "outputType": "object"
                             },
-                            "meta": [
-                              {
-                                "name": "affected",
-                                "type": "number"
-                              }
-                            ]
-                          }
+                            {
+                              "name": "updateDefaultTasks",
+                              "module": "dbupdater",
+                              "action": "update",
+                              "options": {
+                                "connection": "VizzyDB",
+                                "sql": {
+                                  "type": "update",
+                                  "values": [
+                                    {
+                                      "table": "task_assigned",
+                                      "column": "status",
+                                      "type": "text",
+                                      "value": "{{$_POST.status}}"
+                                    },
+                                    {
+                                      "table": "task_assigned",
+                                      "column": "updated_on",
+                                      "type": "datetime",
+                                      "value": "{{NOW}}"
+                                    }
+                                  ],
+                                  "table": "task_assigned",
+                                  "wheres": {
+                                    "condition": "AND",
+                                    "rules": [
+                                      {
+                                        "id": "task_assigned_id",
+                                        "field": "task_assigned_id",
+                                        "type": "double",
+                                        "operator": "equal",
+                                        "value": "{{$_POST.task_assigned_id}}",
+                                        "data": {
+                                          "column": "task_assigned_id"
+                                        },
+                                        "operation": "="
+                                      }
+                                    ],
+                                    "conditional": null,
+                                    "valid": true
+                                  },
+                                  "query": "UPDATE task_assigned\nSET status = :P1 /* {{$_POST.status}} */, updated_on = :P2 /* {{NOW}} */\nWHERE task_assigned_id = :P3 /* {{$_POST.task_assigned_id}} */",
+                                  "params": [
+                                    {
+                                      "name": ":P1",
+                                      "type": "expression",
+                                      "value": "{{$_POST.status}}"
+                                    },
+                                    {
+                                      "name": ":P2",
+                                      "type": "expression",
+                                      "value": "{{NOW}}"
+                                    },
+                                    {
+                                      "operator": "equal",
+                                      "type": "expression",
+                                      "name": ":P3",
+                                      "value": "{{$_POST.task_assigned_id}}"
+                                    }
+                                  ]
+                                }
+                              },
+                              "meta": [
+                                {
+                                  "name": "affected",
+                                  "type": "number"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "insertNotif",
+                              "module": "dbupdater",
+                              "action": "insert",
+                              "options": {
+                                "connection": "VizzyDB",
+                                "sql": {
+                                  "type": "insert",
+                                  "values": [
+                                    {
+                                      "table": "notifications",
+                                      "column": "user_id",
+                                      "type": "number",
+                                      "value": "{{identity}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "application_id",
+                                      "type": "number",
+                                      "value": "{{GetTaskDetails.visa_info_id}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "notif_type",
+                                      "type": "text",
+                                      "value": "{{'Linked'}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "notif_name",
+                                      "type": "text",
+                                      "value": "{{'Task Status Updated'}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "notif_details",
+                                      "type": "text",
+                                      "value": "{{'Your task \"'+GetTask.task_name+'\" status updated from \"'+GetTaskDetails.status+'\" to  \"'+$_POST.status+'\", visa type \"'+GetTaskDetails.visa_type+'\" and visiting country \"'+GetTaskDetails.country+'\".'}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "notif_link",
+                                      "type": "text",
+                                      "value": "{{'https://'+$_SERVER.SERVER_NAME+'/portal/tasks'}}"
+                                    }
+                                  ],
+                                  "table": "notifications",
+                                  "query": "INSERT INTO notifications\n(user_id, application_id, notif_type, notif_name, notif_details, notif_link) VALUES (:P1 /* {{identity}} */, :P2 /* {{GetTaskDetails.visa_info_id}} */, :P3 /* {{'Linked'}} */, :P4 /* {{'Task Status Updated'}} */, :P5 /* {{'Your task \"'+GetTask.task_name+'\" status updated from \"'+GetTaskDetails.status+'\" to  \"'+$_POST.status+'\", visa type \"'+GetTaskDetails.visa_type+'\" and visiting country \"'+GetTaskDetails.country+'\".'}} */, :P6 /* {{'https://'+$_SERVER.SERVER_NAME+'/portal/tasks'}} */)",
+                                  "params": [
+                                    {
+                                      "name": ":P1",
+                                      "type": "expression",
+                                      "value": "{{identity}}"
+                                    },
+                                    {
+                                      "name": ":P2",
+                                      "type": "expression",
+                                      "value": "{{GetTaskDetails.visa_info_id}}"
+                                    },
+                                    {
+                                      "name": ":P3",
+                                      "type": "expression",
+                                      "value": "{{'Linked'}}"
+                                    },
+                                    {
+                                      "name": ":P4",
+                                      "type": "expression",
+                                      "value": "{{'Task Status Updated'}}"
+                                    },
+                                    {
+                                      "name": ":P5",
+                                      "type": "expression",
+                                      "value": "{{'Your task \"'+GetTask.task_name+'\" status updated from \"'+GetTaskDetails.status+'\" to  \"'+$_POST.status+'\", visa type \"'+GetTaskDetails.visa_type+'\" and visiting country \"'+GetTaskDetails.country+'\".'}}"
+                                    },
+                                    {
+                                      "name": ":P6",
+                                      "type": "expression",
+                                      "value": "{{'https://'+$_SERVER.SERVER_NAME+'/portal/tasks'}}"
+                                    }
+                                  ]
+                                }
+                              },
+                              "meta": [
+                                {
+                                  "name": "identity",
+                                  "type": "text"
+                                },
+                                {
+                                  "name": "affected",
+                                  "type": "number"
+                                }
+                              ]
+                            }
+                          ]
                         },
                         "else": {
                           "steps": [
@@ -509,6 +755,99 @@
                                 }
                               },
                               "meta": [
+                                {
+                                  "name": "affected",
+                                  "type": "number"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "insertNotif",
+                              "module": "dbupdater",
+                              "action": "insert",
+                              "options": {
+                                "connection": "VizzyDB",
+                                "sql": {
+                                  "type": "insert",
+                                  "values": [
+                                    {
+                                      "table": "notifications",
+                                      "column": "user_id",
+                                      "type": "number",
+                                      "value": "{{identity}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "application_id",
+                                      "type": "number",
+                                      "value": "{{GetTaskDetails.visa_info_id}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "notif_type",
+                                      "type": "text",
+                                      "value": "{{'Linked'}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "notif_name",
+                                      "type": "text",
+                                      "value": "{{'Custom Task Updated'}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "notif_details",
+                                      "type": "text",
+                                      "value": "{{'Your custom task \"'+GetTaskDetails.task_name+'\" status updated from \"'+GetTaskDetails.status+'\" to  \"'+$_POST.status+'\", visa type \"'+GetTaskDetails.visa_type+'\" and visiting country \"'+GetTaskDetails.country+'\".'}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "notif_link",
+                                      "type": "text",
+                                      "value": "{{'https://'+$_SERVER.SERVER_NAME+'/portal/tasks'}}"
+                                    }
+                                  ],
+                                  "table": "notifications",
+                                  "query": "INSERT INTO notifications\n(user_id, application_id, notif_type, notif_name, notif_details, notif_link) VALUES (:P1 /* {{identity}} */, :P2 /* {{GetTaskDetails.visa_info_id}} */, :P3 /* {{'Linked'}} */, :P4 /* {{'Custom Task Updated'}} */, :P5 /* {{'Your custom task \"'+GetTaskDetails.task_name+'\" status updated from \"'+GetTaskDetails.status+'\" to  \"'+$_POST.status+'\", visa type \"'+GetTaskDetails.visa_type+'\" and visiting country \"'+GetTaskDetails.country+'\".'}} */, :P6 /* {{'https://'+$_SERVER.SERVER_NAME+'/portal/tasks'}} */)",
+                                  "params": [
+                                    {
+                                      "name": ":P1",
+                                      "type": "expression",
+                                      "value": "{{identity}}"
+                                    },
+                                    {
+                                      "name": ":P2",
+                                      "type": "expression",
+                                      "value": "{{GetTaskDetails.visa_info_id}}"
+                                    },
+                                    {
+                                      "name": ":P3",
+                                      "type": "expression",
+                                      "value": "{{'Linked'}}"
+                                    },
+                                    {
+                                      "name": ":P4",
+                                      "type": "expression",
+                                      "value": "{{'Custom Task Updated'}}"
+                                    },
+                                    {
+                                      "name": ":P5",
+                                      "type": "expression",
+                                      "value": "{{'Your custom task \"'+GetTaskDetails.task_name+'\" status updated from \"'+GetTaskDetails.status+'\" to  \"'+$_POST.status+'\", visa type \"'+GetTaskDetails.visa_type+'\" and visiting country \"'+GetTaskDetails.country+'\".'}}"
+                                    },
+                                    {
+                                      "name": ":P6",
+                                      "type": "expression",
+                                      "value": "{{'https://'+$_SERVER.SERVER_NAME+'/portal/tasks'}}"
+                                    }
+                                  ]
+                                }
+                              },
+                              "meta": [
+                                {
+                                  "name": "identity",
+                                  "type": "text"
+                                },
                                 {
                                   "name": "affected",
                                   "type": "number"
@@ -882,6 +1221,99 @@
                               "name": ":P8",
                               "type": "expression",
                               "value": "{{$_POST.visa_info_id}}"
+                            }
+                          ]
+                        }
+                      },
+                      "meta": [
+                        {
+                          "name": "identity",
+                          "type": "text"
+                        },
+                        {
+                          "name": "affected",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "insertNotif",
+                      "module": "dbupdater",
+                      "action": "insert",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "insert",
+                          "values": [
+                            {
+                              "table": "notifications",
+                              "column": "user_id",
+                              "type": "number",
+                              "value": "{{identity}}"
+                            },
+                            {
+                              "table": "notifications",
+                              "column": "application_id",
+                              "type": "number",
+                              "value": "{{GetVisaInfo.visa_info_id}}"
+                            },
+                            {
+                              "table": "notifications",
+                              "column": "notif_type",
+                              "type": "text",
+                              "value": "{{'Linked'}}"
+                            },
+                            {
+                              "table": "notifications",
+                              "column": "notif_name",
+                              "type": "text",
+                              "value": "{{'Custom Task Added'}}"
+                            },
+                            {
+                              "table": "notifications",
+                              "column": "notif_details",
+                              "type": "text",
+                              "value": "{{'You have created a new custom task \"'+$_POST.task_name+'\", task status is \"'+$_POST.status+'\", visa type \"'+GetVisaInfo.visa_application_type+'\" and visiting country \"'+GetVisaInfo.destination_country+'\".'}}"
+                            },
+                            {
+                              "table": "notifications",
+                              "column": "notif_link",
+                              "type": "text",
+                              "value": "{{'https://'+$_SERVER.SERVER_NAME+'/portal/tasks'}}"
+                            }
+                          ],
+                          "table": "notifications",
+                          "query": "INSERT INTO notifications\n(user_id, application_id, notif_type, notif_name, notif_details, notif_link) VALUES (:P1 /* {{identity}} */, :P2 /* {{GetVisaInfo.visa_info_id}} */, :P3 /* {{'Linked'}} */, :P4 /* {{'Custom Task Added'}} */, :P5 /* {{'You have created a new custom task \"'+$_POST.task_name+'\", task status is \"'+$_POST.status+'\", visa type \"'+GetVisaInfo.visa_application_type+'\" and visiting country \"'+GetVisaInfo.destination_country+'\".'}} */, :P6 /* {{'https://'+$_SERVER.SERVER_NAME+'/portal/tasks'}} */)",
+                          "params": [
+                            {
+                              "name": ":P1",
+                              "type": "expression",
+                              "value": "{{identity}}"
+                            },
+                            {
+                              "name": ":P2",
+                              "type": "expression",
+                              "value": "{{GetVisaInfo.visa_info_id}}"
+                            },
+                            {
+                              "name": ":P3",
+                              "type": "expression",
+                              "value": "{{'Linked'}}"
+                            },
+                            {
+                              "name": ":P4",
+                              "type": "expression",
+                              "value": "{{'Custom Task Added'}}"
+                            },
+                            {
+                              "name": ":P5",
+                              "type": "expression",
+                              "value": "{{'You have created a new custom task \"'+$_POST.task_name+'\", task status is \"'+$_POST.status+'\", visa type \"'+GetVisaInfo.visa_application_type+'\" and visiting country \"'+GetVisaInfo.destination_country+'\".'}}"
+                            },
+                            {
+                              "name": ":P6",
+                              "type": "expression",
+                              "value": "{{'https://'+$_SERVER.SERVER_NAME+'/portal/tasks'}}"
                             }
                           ]
                         }

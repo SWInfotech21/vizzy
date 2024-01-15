@@ -1,5 +1,6 @@
-<!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="myprofile" appconnect="local" components="{dmxBootstrap5Navigation:{},dmxBootstrap5Alert:{},dmxBootstrap5Modal:{},dmxValidator:{},dmxFormatter:{}}" -->
+<!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="myprofile" appconnect="local" components="{dmxBootstrap5Navigation:{},dmxBootstrap5Alert:{},dmxBootstrap5Modal:{},dmxValidator:{},dmxFormatter:{},dmxDataTraversal:{}}" -->
 <meta name="ac:route" content="/portal/my-profile">
+<dmx-data-view id="dvNotifications" dmx-bind:data="scNotif.data.query.data"></dmx-data-view>
 
 <head>
     <title>Vizzy Dashboard</title>
@@ -103,7 +104,7 @@
                             </div>
                             <!-- User Profile Content -->
                             <div class="row" dmx-show="(varSubMenu.value=='Profile')">
-                                <div class="col-xl-5 col-lg-5 col-md-6">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-12">
                                     <!-- About User -->
                                     <div class="card mb-4">
                                         <div class="card-body">
@@ -136,16 +137,16 @@
                                                     <span>{{scUserInfo.data.query.user_email}}</span>
                                                 </li>
                                             </ul>
-                                            <div class="float-start px-1"><button class="btn btn-label-primary" type="button" data-bs-toggle="modal" data-bs-target="#editUsers">Edit</button></div>
+                                            <div class="float-start"><button class="btn btn-label-primary" type="button" data-bs-toggle="modal" data-bs-target="#editUsers">Edit</button></div>
                                         </div>
                                     </div>
                                     <!--/ About User -->
                                 </div>
                                 <!-- Profile Content Right Side -->
-                                <div class="col-xl-7 col-lg-7 col-md-6">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-12">
                                     <div class="row mx-0">
                                         <!-- Completed -->
-                                        <div class="col-lg-4 col-6 mb-4">
+                                        <div class="col-lg-6 col-6 mb-4">
                                             <div class="card h-100">
                                                 <div class="card-body text-center">
                                                     <div class="badge rounded-pill p-2 bg-label-success mb-2">
@@ -159,25 +160,25 @@
                                         </div>
 
                                         <!-- Waiting -->
-                                        <div class="col-lg-4 col-6 mb-4">
+                                        <div class="col-lg-6 col-6 mb-4">
                                             <div class="card h-100">
                                                 <div class="card-body text-center">
                                                     <div class="badge rounded-pill p-2 bg-label-primary mb-2">
-                                                        <i class="fa-solid fa-list-ul"></i>
+                                                        <i class="fa-solid fa-list-ul ti-sm"></i>
                                                     </div>
                                                     <h5 class="card-title mb-2">{{scUserInfo.data.TotalTasksWaiting.CountTasks}}</h5>
                                                     <h6>Total Waiting Tasks</h6>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-8 col-12 mb-4">
+                                        <div class="col-lg-12 col-12 mb-4">
                                             <!-- Basic Message -->
                                             <div class="card h-100">
                                                 <div class="card-body">
                                                     <div class="col-12">
                                                         <div class="card-title mb-auto">
                                                             <h5 class="mb-1 text-nowrap">Well done, increase your support.</h5>
-                                                            <small>You are ready for an upgrade from: {{scUserInfo.data.query.package}}</small>
+                                                            <p>You are ready for an upgrade from: {{scUserInfo.data.query.package}}</p>
                                                         </div>
                                                         <div class="float-end">
                                                             <button class="btn btn-success">More support</button>
@@ -253,9 +254,9 @@
                                             <div class="col-8">
                                                 <div class="card-body text-wrap">
                                                     <h5 class="card-title mb-0">Your tokens: 8,651</h5>
-                                                    <p class="mb-2">We recommend you purchase more tokens.
+                                                    <p>We recommend you purchase more tokens.
                                                         Always make sure you top-up your tokens so it does affect your chats with the visa advisor 24 hours a day.</p>
-                                                    <h4 class="text-primary mb-1"></h4>
+                                                    <h4 class="text-primary"></h4>
                                                     <a href="javascript:;" class="btn btn-primary">Add more tokens</a>
                                                 </div>
                                             </div>
@@ -345,35 +346,15 @@
                                                     <th class="text-nowrap text-center">When</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="text-nowrap">Custom Task is created</td>
-                                                    <td>
-                                                        <div class="form-check d-flex justify-content-center">
-                                                            1 day ago
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                            <tbody id="repeatNotif" is="dmx-repeat" dmx-bind:repeat="dvNotifications.data" key="id">
                                                 <tr>
                                                     <td class="text-nowrap">
-                                                        <h6 class="mb-1">Tasks</h6>
-                                                        <p class="mb-1">Custom task "Where does it come from?" is completed</p>
+                                                        <h6 class="mb-1">{{notif_name}}</h6>
+                                                        <p class="mb-1">{{notif_details}}</p>
                                                     </td>
                                                     <td>
                                                         <div class="form-check d-flex justify-content-center">
-                                                            5 days Ago
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-nowrap">
-                                                        <h6 class="mb-1">Token Alert</h6>
-                                                        <p class="mb-1">Your token is low, please renew asap.</p>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-check d-flex justify-content-center">
-                                                            5 days Ago
-                                                        </div>
+                                                            {{(created_on.minutesUntil(varDateTime.datetime) <= 60) ? created_on.minutesUntil(varDateTime.datetime)+' minute(s) ago.' : (created_on.hoursUntil(varDateTime.datetime) <=48) ? created_on.hoursUntil(varDateTime.datetime)+' hour(s) ago.' : (created_on.daysUntil(varDateTime.datetime) <=25) ? created_on.daysUntil(varDateTime.datetime)+' day(s) ago.' : created_on.formatDate('dd MMM yyyy hh:mm A'))))}} </div>
                                                     </td>
                                                 </tr>
                                             </tbody>

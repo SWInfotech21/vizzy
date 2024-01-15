@@ -238,6 +238,172 @@ dmx.config({
         }
       ],
       "outputType": "array"
+    },
+    "dvNotifications": {
+      "meta": [
+        {
+          "type": "number",
+          "name": "id"
+        },
+        {
+          "type": "number",
+          "name": "user_id"
+        },
+        {
+          "type": "number",
+          "name": "application_id"
+        },
+        {
+          "type": "text",
+          "name": "notif_type"
+        },
+        {
+          "type": "text",
+          "name": "notif_name"
+        },
+        {
+          "type": "text",
+          "name": "notif_details"
+        },
+        {
+          "type": "text",
+          "name": "notif_link"
+        },
+        {
+          "type": "datetime",
+          "name": "created_on"
+        },
+        {
+          "type": "text",
+          "name": "checked_by_user"
+        }
+      ],
+      "outputType": "array"
+    },
+    "repeatNotif": {
+      "meta": [
+        {
+          "type": "number",
+          "name": "id"
+        },
+        {
+          "type": "number",
+          "name": "user_id"
+        },
+        {
+          "type": "number",
+          "name": "application_id"
+        },
+        {
+          "type": "text",
+          "name": "notif_type"
+        },
+        {
+          "type": "text",
+          "name": "notif_name"
+        },
+        {
+          "type": "text",
+          "name": "notif_details"
+        },
+        {
+          "type": "text",
+          "name": "notif_link"
+        },
+        {
+          "type": "datetime",
+          "name": "created_on"
+        },
+        {
+          "type": "text",
+          "name": "checked_by_user"
+        }
+      ],
+      "outputType": "array"
+    }
+  },
+  "dashboard": {
+    "dvNavNotif": {
+      "meta": [
+        {
+          "type": "number",
+          "name": "id"
+        },
+        {
+          "type": "number",
+          "name": "user_id"
+        },
+        {
+          "type": "number",
+          "name": "application_id"
+        },
+        {
+          "type": "text",
+          "name": "notif_type"
+        },
+        {
+          "type": "text",
+          "name": "notif_name"
+        },
+        {
+          "type": "text",
+          "name": "notif_details"
+        },
+        {
+          "type": "text",
+          "name": "notif_link"
+        },
+        {
+          "type": "datetime",
+          "name": "created_on"
+        },
+        {
+          "type": "text",
+          "name": "checked_by_user"
+        }
+      ],
+      "outputType": "array"
+    },
+    "repeatNavNotif": {
+      "meta": [
+        {
+          "type": "number",
+          "name": "id"
+        },
+        {
+          "type": "number",
+          "name": "user_id"
+        },
+        {
+          "type": "number",
+          "name": "application_id"
+        },
+        {
+          "type": "text",
+          "name": "notif_type"
+        },
+        {
+          "type": "text",
+          "name": "notif_name"
+        },
+        {
+          "type": "text",
+          "name": "notif_details"
+        },
+        {
+          "type": "text",
+          "name": "notif_link"
+        },
+        {
+          "type": "datetime",
+          "name": "created_on"
+        },
+        {
+          "type": "text",
+          "name": "checked_by_user"
+        }
+      ],
+      "outputType": "array"
     }
   }
 });

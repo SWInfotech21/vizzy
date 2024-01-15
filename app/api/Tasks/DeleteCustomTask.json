@@ -5,6 +5,16 @@
         "type": "text",
         "name": "assigned_task_id"
       }
+    ],
+    "$_POST": [
+      {
+        "type": "number",
+        "name": "application_id"
+      },
+      {
+        "type": "text",
+        "name": "notif_details"
+      }
     ]
   },
   "exec": {
@@ -51,12 +61,54 @@
                       {
                         "table": "task_assigned",
                         "column": "task_id"
+                      },
+                      {
+                        "table": "task_assigned",
+                        "column": "status"
+                      },
+                      {
+                        "table": "cu_task",
+                        "column": "country"
+                      },
+                      {
+                        "table": "cu_task",
+                        "column": "visa_type"
+                      },
+                      {
+                        "table": "cu_task",
+                        "column": "task_name"
+                      },
+                      {
+                        "table": "task_assigned",
+                        "column": "visa_info_id"
                       }
                     ],
                     "table": {
                       "name": "task_assigned"
                     },
-                    "joins": [],
+                    "joins": [
+                      {
+                        "table": "custom_task",
+                        "column": "*",
+                        "alias": "cu_task",
+                        "type": "LEFT",
+                        "clauses": {
+                          "condition": "AND",
+                          "rules": [
+                            {
+                              "table": "cu_task",
+                              "column": "custom_task_id",
+                              "operator": "equal",
+                              "value": {
+                                "table": "task_assigned",
+                                "column": "task_id"
+                              },
+                              "operation": "="
+                            }
+                          ]
+                        }
+                      }
+                    ],
                     "wheres": {
                       "condition": "AND",
                       "rules": [
@@ -125,7 +177,7 @@
                       "conditional": null,
                       "valid": true
                     },
-                    "query": "SELECT task_id\nFROM task_assigned\nWHERE task_assigned_id = :P1 /* {{$_GET.assigned_task_id}} */ AND task_type = :P2 /* {{'Custom'}} */ AND user_id = :P3 /* {{identity}} */",
+                    "query": "SELECT task_assigned.task_id, task_assigned.status, cu_task.country, cu_task.visa_type, cu_task.task_name, task_assigned.visa_info_id\nFROM task_assigned\nLEFT JOIN custom_task AS cu_task ON (cu_task.custom_task_id = task_assigned.task_id)\nWHERE task_assigned.task_assigned_id = :P1 /* {{$_GET.assigned_task_id}} */ AND task_assigned.task_type = :P2 /* {{'Custom'}} */ AND task_assigned.user_id = :P3 /* {{identity}} */",
                     "params": [
                       {
                         "operator": "equal",
@@ -153,6 +205,26 @@
                   {
                     "type": "number",
                     "name": "task_id"
+                  },
+                  {
+                    "type": "text",
+                    "name": "status"
+                  },
+                  {
+                    "type": "text",
+                    "name": "country"
+                  },
+                  {
+                    "type": "text",
+                    "name": "visa_type"
+                  },
+                  {
+                    "type": "text",
+                    "name": "task_name"
+                  },
+                  {
+                    "type": "number",
+                    "name": "visa_info_id"
                   }
                 ],
                 "outputType": "object"
@@ -165,6 +237,88 @@
                   "if": "{{(GetCustomTask.task_id>0)}}",
                   "then": {
                     "steps": [
+                      {
+                        "name": "insertNotif",
+                        "module": "dbupdater",
+                        "action": "insert",
+                        "options": {
+                          "connection": "VizzyDB",
+                          "sql": {
+                            "type": "insert",
+                            "values": [
+                              {
+                                "table": "notifications",
+                                "column": "user_id",
+                                "type": "number",
+                                "value": "{{identity}}"
+                              },
+                              {
+                                "table": "notifications",
+                                "column": "application_id",
+                                "type": "number",
+                                "value": "{{GetCustomTask.visa_info_id}}"
+                              },
+                              {
+                                "table": "notifications",
+                                "column": "notif_type",
+                                "type": "text",
+                                "value": "{{'TextOnly'}}"
+                              },
+                              {
+                                "table": "notifications",
+                                "column": "notif_name",
+                                "type": "text",
+                                "value": "{{'Delete Custom Task'}}"
+                              },
+                              {
+                                "table": "notifications",
+                                "column": "notif_details",
+                                "type": "text",
+                                "value": "{{'You have deleted a custom task \"'+GetCustomTask.task_name+'\", task status was \"'+GetCustomTask.status+'\", visa type \"'+GetCustomTask.visa_type+'\" and visiting country\"'+GetCustomTask.country+'\". '}}"
+                              }
+                            ],
+                            "table": "notifications",
+                            "query": "INSERT INTO notifications\n(user_id, application_id, notif_type, notif_name, notif_details) VALUES (:P1 /* {{identity}} */, :P2 /* {{GetCustomTask.visa_info_id}} */, :P3 /* {{'TextOnly'}} */, :P4 /* {{'Delete Custom Task'}} */, :P5 /* {{'You have deleted a custom task \"'+GetCustomTask.task_name+'\", task status was \"'+GetCustomTask.status+'\", visa type \"'+GetCustomTask.visa_type+'\" and visiting country\"'+GetCustomTask.country+'\". '}} */)",
+                            "params": [
+                              {
+                                "name": ":P1",
+                                "type": "expression",
+                                "value": "{{identity}}"
+                              },
+                              {
+                                "name": ":P2",
+                                "type": "expression",
+                                "value": "{{GetCustomTask.visa_info_id}}"
+                              },
+                              {
+                                "name": ":P3",
+                                "type": "expression",
+                                "value": "{{'TextOnly'}}"
+                              },
+                              {
+                                "name": ":P4",
+                                "type": "expression",
+                                "value": "{{'Delete Custom Task'}}"
+                              },
+                              {
+                                "name": ":P5",
+                                "type": "expression",
+                                "value": "{{'You have deleted a custom task \"'+GetCustomTask.task_name+'\", task status was \"'+GetCustomTask.status+'\", visa type \"'+GetCustomTask.visa_type+'\" and visiting country\"'+GetCustomTask.country+'\". '}}"
+                              }
+                            ]
+                          }
+                        },
+                        "meta": [
+                          {
+                            "name": "identity",
+                            "type": "text"
+                          },
+                          {
+                            "name": "affected",
+                            "type": "number"
+                          }
+                        ]
+                      },
                       {
                         "name": "deleteCustomAssignedTask",
                         "module": "dbupdater",
