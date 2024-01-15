@@ -1036,6 +1036,88 @@
                       "options": {
                         "value": "{{GetUserId.user_id}}"
                       }
+                    },
+                    {
+                      "name": "insertNotif",
+                      "module": "dbupdater",
+                      "action": "insert",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "insert",
+                          "values": [
+                            {
+                              "table": "notifications",
+                              "column": "user_id",
+                              "type": "number",
+                              "value": "{{GetUserId.user_id}}"
+                            },
+                            {
+                              "table": "notifications",
+                              "column": "application_id",
+                              "type": "number",
+                              "value": "{{GetVisaInfo.visa_info_id}}"
+                            },
+                            {
+                              "table": "notifications",
+                              "column": "notif_type",
+                              "type": "text",
+                              "value": "{{'TextOnly'}}"
+                            },
+                            {
+                              "table": "notifications",
+                              "column": "notif_name",
+                              "type": "text",
+                              "value": "{{'Registration Successful'}}"
+                            },
+                            {
+                              "table": "notifications",
+                              "column": "notif_details",
+                              "type": "text",
+                              "value": "{{'You have successfully registered with \"Vizzy\", visa type \"'+GetTasks[0].visa_type+'\" and visiting country \"'+GetTasks[0].country+'\".'}}"
+                            }
+                          ],
+                          "table": "notifications",
+                          "query": "INSERT INTO notifications\n(user_id, application_id, notif_type, notif_name, notif_details) VALUES (:P1 /* {{GetUserId.user_id}} */, :P2 /* {{GetVisaInfo.visa_info_id}} */, :P3 /* {{'TextOnly'}} */, :P4 /* {{'Registration Successful'}} */, :P5 /* {{'You have successfully registered with \"Vizzy\", visa type \"'+GetTasks[0].visa_type+'\" and visiting country \"'+GetTasks[0].country+'\".'}} */)",
+                          "params": [
+                            {
+                              "name": ":P1",
+                              "type": "expression",
+                              "value": "{{GetUserId.user_id}}"
+                            },
+                            {
+                              "name": ":P2",
+                              "type": "expression",
+                              "value": "{{GetVisaInfo.visa_info_id}}"
+                            },
+                            {
+                              "name": ":P3",
+                              "type": "expression",
+                              "value": "{{'TextOnly'}}"
+                            },
+                            {
+                              "name": ":P4",
+                              "type": "expression",
+                              "value": "{{'Registration Successful'}}"
+                            },
+                            {
+                              "name": ":P5",
+                              "type": "expression",
+                              "value": "{{'You have successfully registered with \"Vizzy\", visa type \"'+GetTasks[0].visa_type+'\" and visiting country \"'+GetTasks[0].country+'\".'}}"
+                            }
+                          ]
+                        }
+                      },
+                      "meta": [
+                        {
+                          "name": "identity",
+                          "type": "text"
+                        },
+                        {
+                          "name": "affected",
+                          "type": "number"
+                        }
+                      ]
                     }
                   ]
                 },
