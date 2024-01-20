@@ -1,6 +1,7 @@
 <!-- Wappler include head-page="layouts/outer-main" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="login" appConnect="local" components="{dmxValidator:{}}" -->
 <meta name="ac:route" content="/portal/login">
 <dmx-value id="varPassShowHide" dmx-bind:value="0"></dmx-value>
+<dmx-value id="varSteps" dmx-bind:value="'Login'"></dmx-value>
 <!-- Content -->
 
 <div class="container-fluid">
@@ -31,9 +32,10 @@
                 </div>
                 <!-- /Logo -->
                 <h3 class="mb-1">Welcome to Vizzy! 👋</h3>
-                <p class="mb-4">Please sign-in to your account and start the adventure</p>
+                <p class="mb-4">{{(varSteps.value=='Login')?'Please sign-in to your account and start the adventure':'Please enter the OTP sent to the registered email'}}</p>
 
-                <form id="formAuthentication" class="mb-3" action="/api/User/UserLogin" method="post" is="dmx-serverconnect-form" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp)" dmx-on:success="notifies1.success('Login Successful');formAuthentication.reset(true);browser1.goto('/portal/my-profile')">
+                <form id="formAuthentication" class="mb-3" action="/api/User/UserLogin" method="post" is="dmx-serverconnect-form" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp);" dmx-on:success="notifies1.success(formAuthentication.data.Message);((formAuthentication.data.Status==201)?varSteps.setValue('OTPVerify'):browser1.goto('/portal/my-profile'));formAuthentication.reset(true);" dmx-show="(varSteps.value=='Login')">
+                    <!-- browser1.goto('/portal/my-profile') -->
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="text" class="form-control" id="email" name="email_username" placeholder="Enter your email" autofocus required="" />
@@ -62,11 +64,24 @@
                     <button class="btn btn-primary w-100" type="submit" dmx-bind:disabled="state.executing">Sign in <span class="spinner-grow bg-light" role="status" dmx-show="state.executing">
                         </span></button>
                 </form>
-
-                <p class="text-center">
+                <form id="formOTPVerify" class="mb-3" action="/api/User/Login2FactorOTP" method="post" is="dmx-serverconnect-form" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp);" dmx-on:success="notifies1.success(formOTPVerify.data.Message);browser1.goto('/portal/my-profile');formOTPVerify.reset(true);" dmx-show="(varSteps.value=='OTPVerify')">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">OTP</label>
+                        <input type="number" class="form-control" id="OtpVerify" name="OtpVerify" placeholder="Enter the OTP" required="" />
+                    </div>
+                    <button class="btn btn-primary w-100" type="submit" dmx-bind:disabled="state.executing">Submit <span class="spinner-grow bg-light" role="status" dmx-show="state.executing">
+                        </span></button>
+                </form>
+                <p class="text-center" dmx-show="(varSteps.value=='Login')">
                     <span>New on our platform?</span>
                     <a href="/portal/register">
                         <span>Create an Account</span>
+                    </a>
+                </p>
+                <p class="text-center" dmx-show="(varSteps.value=='OTPVerify')">
+                    <span>Back to Login?</span>
+                    <a href="/portal/login">
+                        <span>Click Here</span>
                     </a>
                 </p>
 

@@ -1,0 +1,254 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/portal/login.ejs",
+      "linkedForm": "formOTPVerify"
+    },
+    "$_POST": [
+      {
+        "type": "number",
+        "fieldName": "OtpVerify",
+        "options": {
+          "rules": {
+            "core:required": {
+              "param": ""
+            },
+            "core:number": {}
+          }
+        },
+        "name": "OtpVerify"
+      }
+    ],
+    "$_SESSION": [
+      {
+        "type": "text",
+        "name": "user_id"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "security",
+          "permissions": [
+            "write"
+          ],
+          "loginUrl": "/portal/login",
+          "forbiddenUrl": "/*"
+        }
+      },
+      {
+        "name": "identity",
+        "module": "auth",
+        "action": "identify",
+        "options": {
+          "provider": "security"
+        },
+        "output": false,
+        "meta": []
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "trycatch",
+        "options": {
+          "try": {
+            "steps": {
+              "name": "",
+              "module": "core",
+              "action": "condition",
+              "options": {
+                "if": "{{$_SESSION.user_id}}",
+                "then": {
+                  "steps": [
+                    {
+                      "name": "GetOTP",
+                      "module": "dbconnector",
+                      "action": "single",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "SELECT",
+                          "columns": [
+                            {
+                              "table": "users",
+                              "column": "pass_reset_token"
+                            },
+                            {
+                              "table": "users",
+                              "column": "reset_token_expiry"
+                            }
+                          ],
+                          "table": {
+                            "name": "users"
+                          },
+                          "joins": [],
+                          "wheres": {
+                            "condition": "AND",
+                            "rules": [
+                              {
+                                "id": "users.user_id",
+                                "field": "users.user_id",
+                                "type": "double",
+                                "operator": "equal",
+                                "value": "{{$_SESSION.user_id}}",
+                                "data": {
+                                  "table": "users",
+                                  "column": "user_id",
+                                  "type": "number",
+                                  "columnObj": {
+                                    "type": "integer",
+                                    "primary": false,
+                                    "unique": false,
+                                    "nullable": false,
+                                    "name": "user_id"
+                                  }
+                                },
+                                "operation": "="
+                              },
+                              {
+                                "id": "users.reset_token_expiry",
+                                "field": "users.reset_token_expiry",
+                                "type": "datetime",
+                                "operator": "greater_or_equal",
+                                "value": "{{NOW.toUTCTime()}}",
+                                "data": {
+                                  "table": "users",
+                                  "column": "reset_token_expiry",
+                                  "type": "datetime",
+                                  "columnObj": {
+                                    "type": "timestamp",
+                                    "primary": false,
+                                    "unique": false,
+                                    "nullable": true,
+                                    "name": "reset_token_expiry"
+                                  }
+                                },
+                                "operation": ">="
+                              }
+                            ],
+                            "conditional": null,
+                            "valid": true
+                          },
+                          "query": "SELECT pass_reset_token, reset_token_expiry\nFROM users\nWHERE user_id = :P1 /* {{$_SESSION.user_id}} */ AND reset_token_expiry >= :P2 /* {{NOW.toUTCTime()}} */",
+                          "params": [
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P1",
+                              "value": "{{$_SESSION.user_id}}"
+                            },
+                            {
+                              "operator": "greater_or_equal",
+                              "type": "expression",
+                              "name": ":P2",
+                              "value": "{{NOW.toUTCTime()}}"
+                            }
+                          ]
+                        }
+                      },
+                      "output": false,
+                      "meta": [
+                        {
+                          "type": "text",
+                          "name": "pass_reset_token"
+                        },
+                        {
+                          "type": "datetime",
+                          "name": "reset_token_expiry"
+                        }
+                      ],
+                      "outputType": "object"
+                    },
+                    {
+                      "name": "",
+                      "module": "core",
+                      "action": "condition",
+                      "options": {
+                        "if": "{{GetOTP.pass_reset_token}}",
+                        "then": {
+                          "steps": {
+                            "name": "",
+                            "module": "core",
+                            "action": "condition",
+                            "options": {
+                              "if": "{{(GetOTP.pass_reset_token==$_POST.OtpVerify)}}",
+                              "then": {
+                                "steps": {
+                                  "name": "Message",
+                                  "module": "core",
+                                  "action": "setvalue",
+                                  "options": {
+                                    "value": "Login Successful"
+                                  },
+                                  "meta": [],
+                                  "output": true,
+                                  "outputType": "text"
+                                }
+                              },
+                              "else": {
+                                "steps": {
+                                  "name": "Resp",
+                                  "module": "core",
+                                  "action": "response",
+                                  "options": {
+                                    "status": 401,
+                                    "data": "Failed! Password mismatched."
+                                  }
+                                }
+                              }
+                            },
+                            "outputType": "boolean"
+                          }
+                        },
+                        "else": {
+                          "steps": {
+                            "name": "Resp",
+                            "module": "core",
+                            "action": "response",
+                            "options": {
+                              "status": 401,
+                              "data": "Failed! OTP expired, please try again."
+                            }
+                          }
+                        }
+                      },
+                      "outputType": "boolean"
+                    }
+                  ]
+                },
+                "else": {
+                  "steps": {
+                    "name": "Resp",
+                    "module": "core",
+                    "action": "response",
+                    "options": {
+                      "status": 401,
+                      "data": "Failed! Please login and try again"
+                    }
+                  }
+                }
+              },
+              "outputType": "boolean"
+            }
+          },
+          "catch": {
+            "steps": {
+              "name": "Resp",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 401,
+                "data": "An error occurred"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

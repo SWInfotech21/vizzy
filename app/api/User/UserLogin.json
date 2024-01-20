@@ -79,6 +79,22 @@
                     {
                       "table": "users",
                       "column": "salt"
+                    },
+                    {
+                      "table": "users",
+                      "column": "two_factor"
+                    },
+                    {
+                      "table": "users",
+                      "column": "first_name"
+                    },
+                    {
+                      "table": "users",
+                      "column": "last_name"
+                    },
+                    {
+                      "table": "users",
+                      "column": "user_email"
                     }
                   ],
                   "table": {
@@ -134,7 +150,7 @@
                     "conditional": null,
                     "valid": true
                   },
-                  "query": "SELECT salt\nFROM users\nWHERE user_email = :P1 /* {{$_POST.email_username.lowercase()}} */ AND active = :P2 /* {{1}} */",
+                  "query": "SELECT salt, two_factor, first_name, last_name, user_email\nFROM users\nWHERE user_email = :P1 /* {{$_POST.email_username.lowercase()}} */ AND active = :P2 /* {{1}} */",
                   "params": [
                     {
                       "operator": "equal",
@@ -155,6 +171,22 @@
                 {
                   "type": "text",
                   "name": "salt"
+                },
+                {
+                  "type": "text",
+                  "name": "two_factor"
+                },
+                {
+                  "type": "text",
+                  "name": "first_name"
+                },
+                {
+                  "type": "text",
+                  "name": "last_name"
+                },
+                {
+                  "type": "text",
+                  "name": "user_email"
                 }
               ],
               "outputType": "object"
@@ -169,7 +201,7 @@
                 "password": "{{$_POST.password.sha256(GetSalt.salt)}}",
                 "remember": "{{$_POST['remember-me']}}"
               },
-              "output": true,
+              "output": false,
               "meta": []
             },
             {
@@ -179,6 +211,257 @@
               "options": {
                 "value": "{{identity}}"
               }
+            },
+            {
+              "name": "",
+              "module": "core",
+              "action": "condition",
+              "options": {
+                "if": "{{(GetSalt.two_factor=='Yes')}}",
+                "then": {
+                  "steps": [
+                    {
+                      "name": "Status",
+                      "module": "core",
+                      "action": "setvalue",
+                      "options": {
+                        "value": 201
+                      },
+                      "meta": [],
+                      "output": true,
+                      "outputType": "text"
+                    },
+                    {
+                      "name": "Message",
+                      "module": "core",
+                      "action": "setvalue",
+                      "options": {
+                        "value": "Two-step verification OTP has sent to the registered email."
+                      },
+                      "meta": [],
+                      "output": true,
+                      "outputType": "text"
+                    },
+                    {
+                      "name": "saltcode",
+                      "module": "core",
+                      "action": "setvalue",
+                      "options": {
+                        "value": "0,1,2,3,4,5,6,7,8,9"
+                      },
+                      "meta": [],
+                      "outputType": "text",
+                      "output": false
+                    },
+                    {
+                      "name": "codearray",
+                      "module": "core",
+                      "action": "setvalue",
+                      "options": {
+                        "value": "{{saltcode.split(',')}}"
+                      },
+                      "meta": [],
+                      "outputType": "text",
+                      "output": false
+                    },
+                    {
+                      "name": "randomarray",
+                      "module": "core",
+                      "action": "setvalue",
+                      "options": {
+                        "key": "g_randomarray",
+                        "value": "{{codearray.randomize()}}"
+                      },
+                      "meta": [],
+                      "outputType": "text",
+                      "output": false
+                    },
+                    {
+                      "name": "mycode",
+                      "module": "core",
+                      "action": "setvalue",
+                      "options": {
+                        "key": "g_mycode"
+                      },
+                      "meta": [],
+                      "outputType": "text",
+                      "output": false
+                    },
+                    {
+                      "name": "repeat",
+                      "module": "core",
+                      "action": "repeat",
+                      "options": {
+                        "repeat": 6,
+                        "outputFields": [],
+                        "exec": {
+                          "steps": {
+                            "name": "mycode",
+                            "module": "core",
+                            "action": "setvalue",
+                            "options": {
+                              "value": "{{g_mycode+randomarray[$index]}}",
+                              "key": "g_mycode"
+                            },
+                            "meta": [],
+                            "outputType": "text",
+                            "output": true
+                          }
+                        }
+                      },
+                      "output": false,
+                      "meta": [
+                        {
+                          "name": "$index",
+                          "type": "number"
+                        },
+                        {
+                          "name": "$number",
+                          "type": "number"
+                        },
+                        {
+                          "name": "$name",
+                          "type": "text"
+                        },
+                        {
+                          "name": "$value",
+                          "type": "object"
+                        },
+                        {
+                          "name": "mycode",
+                          "type": "text",
+                          "sub": []
+                        }
+                      ],
+                      "outputType": "array"
+                    },
+                    {
+                      "name": "finalCode",
+                      "module": "core",
+                      "action": "setvalue",
+                      "options": {
+                        "value": "{{repeat[5].mycode}}"
+                      },
+                      "meta": [],
+                      "outputType": "text",
+                      "output": false
+                    },
+                    {
+                      "name": "updateUser",
+                      "module": "dbupdater",
+                      "action": "update",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "update",
+                          "values": [
+                            {
+                              "table": "users",
+                              "column": "pass_reset_token",
+                              "type": "text",
+                              "value": "{{finalCode.trim()}}"
+                            },
+                            {
+                              "table": "users",
+                              "column": "reset_token_expiry",
+                              "type": "datetime",
+                              "value": "{{NOW.dateAdd('hours', 2).toUTCTime()}}"
+                            }
+                          ],
+                          "table": "users",
+                          "wheres": {
+                            "condition": "AND",
+                            "rules": [
+                              {
+                                "id": "user_id",
+                                "field": "user_id",
+                                "type": "double",
+                                "operator": "equal",
+                                "value": "{{identity}}",
+                                "data": {
+                                  "column": "user_id"
+                                },
+                                "operation": "="
+                              }
+                            ],
+                            "conditional": null,
+                            "valid": true
+                          },
+                          "query": "UPDATE users\nSET pass_reset_token = :P1 /* {{finalCode.trim()}} */, reset_token_expiry = :P2 /* {{NOW.dateAdd('hours', 2).toUTCTime()}} */\nWHERE user_id = :P3 /* {{identity}} */",
+                          "params": [
+                            {
+                              "name": ":P1",
+                              "type": "expression",
+                              "value": "{{finalCode.trim()}}"
+                            },
+                            {
+                              "name": ":P2",
+                              "type": "expression",
+                              "value": "{{NOW.dateAdd('hours', 2).toUTCTime()}}"
+                            },
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P3",
+                              "value": "{{identity}}"
+                            }
+                          ]
+                        }
+                      },
+                      "meta": [
+                        {
+                          "name": "affected",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    "Mailer/mail",
+                    {
+                      "name": "",
+                      "module": "mail",
+                      "action": "send",
+                      "options": {
+                        "instance": "mail",
+                        "subject": "Vizzy OTP for Login using Two-Factor Authentication",
+                        "fromName": "No-Reply",
+                        "fromEmail": "info@softturing.com",
+                        "toEmail": "{{GetSalt.user_email.lowercase()}}",
+                        "body": "Hi {{GetSalt.first_name+' '+GetSalt.last_name}},\n<br><br>\n{{finalCode.trim()}} is your OTP for login using two-factor authentication.\n<br>\nThis OTP will be expired in 2 hours.\n<br><br>\n\nReagrds,<br>\nVizzy Team",
+                        "toName": "{{GetSalt.first_name+' '+GetSalt.last_name}}",
+                        "contentType": "html"
+                      },
+                      "output": true
+                    }
+                  ]
+                },
+                "else": {
+                  "steps": [
+                    {
+                      "name": "Status",
+                      "module": "core",
+                      "action": "setvalue",
+                      "options": {
+                        "value": 200
+                      },
+                      "meta": [],
+                      "output": true,
+                      "outputType": "text"
+                    },
+                    {
+                      "name": "Message",
+                      "module": "core",
+                      "action": "setvalue",
+                      "options": {
+                        "value": "Login Successful"
+                      },
+                      "meta": [],
+                      "output": true,
+                      "outputType": "text"
+                    }
+                  ]
+                }
+              },
+              "outputType": "boolean"
             }
           ]
         },
