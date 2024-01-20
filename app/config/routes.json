@@ -42,6 +42,26 @@
       "layout": "dashboard"
     },
     {
+      "path": "/portal/notifications",
+      "page": "portal/notifications",
+      "layout": "dashboard"
+    },
+    {
+      "path": "/portal/plan",
+      "page": "portal/plan",
+      "layout": "dashboard"
+    },
+    {
+      "path": "/portal/security",
+      "page": "portal/security",
+      "layout": "dashboard"
+    },
+    {
+      "path": "/portal/billing",
+      "page": "portal/billing",
+      "layout": "dashboard"
+    },
+    {
       "path": "/portal/tasks",
       "page": "portal/tasks",
       "layout": "dashboard"

@@ -22,5 +22,21 @@
   "tasks.ejs": {
     "layoutPage": "dashboard",
     "description": ""
+  },
+  "plan.ejs": {
+    "layoutPage": "dashboard",
+    "description": ""
+  },
+  "notifications.ejs": {
+    "layoutPage": "dashboard",
+    "description": ""
+  },
+  "security.ejs": {
+    "layoutPage": "dashboard",
+    "description": ""
+  },
+  "billing.ejs": {
+    "layoutPage": "dashboard",
+    "description": ""
   }
 }
