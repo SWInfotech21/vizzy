@@ -404,6 +404,334 @@ dmx.config({
         }
       ],
       "outputType": "array"
+    },
+    "query": [
+      {
+        "type": "text",
+        "name": "offset"
+      },
+      {
+        "type": "text",
+        "name": "limit"
+      },
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      }
+    ]
+  },
+  "notifications": {
+    "query": [
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "limit"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      },
+      {
+        "type": "text",
+        "name": "offset"
+      }
+    ],
+    "dvNotifications": {
+      "meta": [
+        {
+          "name": "offset",
+          "type": "number"
+        },
+        {
+          "name": "limit",
+          "type": "number"
+        },
+        {
+          "name": "total",
+          "type": "number"
+        },
+        {
+          "name": "page",
+          "type": "object",
+          "sub": [
+            {
+              "name": "offset",
+              "type": "object",
+              "sub": [
+                {
+                  "name": "first",
+                  "type": "number"
+                },
+                {
+                  "name": "prev",
+                  "type": "number"
+                },
+                {
+                  "name": "next",
+                  "type": "number"
+                },
+                {
+                  "name": "last",
+                  "type": "number"
+                }
+              ]
+            },
+            {
+              "name": "current",
+              "type": "number"
+            },
+            {
+              "name": "total",
+              "type": "number"
+            }
+          ]
+        },
+        {
+          "name": "data",
+          "type": "array",
+          "sub": [
+            {
+              "type": "number",
+              "name": "id"
+            },
+            {
+              "type": "number",
+              "name": "user_id"
+            },
+            {
+              "type": "number",
+              "name": "application_id"
+            },
+            {
+              "type": "text",
+              "name": "notif_type"
+            },
+            {
+              "type": "text",
+              "name": "notif_name"
+            },
+            {
+              "type": "text",
+              "name": "notif_details"
+            },
+            {
+              "type": "text",
+              "name": "notif_link"
+            },
+            {
+              "type": "datetime",
+              "name": "created_on"
+            },
+            {
+              "type": "text",
+              "name": "checked_by_user"
+            }
+          ]
+        }
+      ],
+      "outputType": "object"
+    },
+    "repeatNotif": {
+      "meta": [
+        {
+          "type": "number",
+          "name": "id"
+        },
+        {
+          "type": "number",
+          "name": "user_id"
+        },
+        {
+          "type": "number",
+          "name": "application_id"
+        },
+        {
+          "type": "text",
+          "name": "notif_type"
+        },
+        {
+          "type": "text",
+          "name": "notif_name"
+        },
+        {
+          "type": "text",
+          "name": "notif_details"
+        },
+        {
+          "type": "text",
+          "name": "notif_link"
+        },
+        {
+          "type": "datetime",
+          "name": "created_on"
+        },
+        {
+          "type": "text",
+          "name": "checked_by_user"
+        }
+      ],
+      "outputType": "array"
+    }
+  },
+  "billing": {
+    "repeatCardList": {
+      "meta": [
+        {
+          "type": "text",
+          "name": "card_number"
+        },
+        {
+          "type": "text",
+          "name": "card_holder_name"
+        },
+        {
+          "type": "text",
+          "name": "expiry_date"
+        },
+        {
+          "type": "text",
+          "name": "cvv_code"
+        },
+        {
+          "type": "text",
+          "name": "primary_card"
+        }
+      ],
+      "outputType": "array"
+    },
+    "ddCardList": {
+      "meta": [
+        {
+          "type": "number",
+          "name": "id"
+        },
+        {
+          "type": "text",
+          "name": "card_number"
+        },
+        {
+          "type": "text",
+          "name": "card_holder_name"
+        },
+        {
+          "type": "text",
+          "name": "expiry_date"
+        },
+        {
+          "type": "text",
+          "name": "cvv_code"
+        },
+        {
+          "type": "text",
+          "name": "primary_card"
+        }
+      ],
+      "outputType": "array"
+    },
+    "ddBillingAddressList": {
+      "meta": [
+        {
+          "type": "number",
+          "name": "id"
+        },
+        {
+          "type": "text",
+          "name": "billing_place"
+        },
+        {
+          "type": "text",
+          "name": "company_name"
+        },
+        {
+          "type": "text",
+          "name": "billing_email"
+        },
+        {
+          "type": "text",
+          "name": "tax_id"
+        },
+        {
+          "type": "text",
+          "name": "vat_number"
+        },
+        {
+          "type": "text",
+          "name": "billing_mobile"
+        },
+        {
+          "type": "text",
+          "name": "billing_country"
+        },
+        {
+          "type": "text",
+          "name": "billing_address"
+        },
+        {
+          "type": "text",
+          "name": "state"
+        },
+        {
+          "type": "text",
+          "name": "zip_code"
+        }
+      ],
+      "outputType": "array"
+    },
+    "repeatAddressList": {
+      "meta": [
+        {
+          "type": "number",
+          "name": "id"
+        },
+        {
+          "type": "text",
+          "name": "billing_place"
+        },
+        {
+          "type": "text",
+          "name": "company_name"
+        },
+        {
+          "type": "text",
+          "name": "billing_email"
+        },
+        {
+          "type": "text",
+          "name": "tax_id"
+        },
+        {
+          "type": "text",
+          "name": "vat_number"
+        },
+        {
+          "type": "text",
+          "name": "billing_mobile"
+        },
+        {
+          "type": "text",
+          "name": "billing_country"
+        },
+        {
+          "type": "text",
+          "name": "billing_address"
+        },
+        {
+          "type": "text",
+          "name": "state"
+        },
+        {
+          "type": "text",
+          "name": "zip_code"
+        }
+      ],
+      "outputType": "array"
     }
   }
 });

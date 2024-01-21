@@ -1,6 +1,4 @@
-/**
- * Main
- **/
+/** Main **/
 
 'use strict';
 

@@ -1,0 +1,697 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/portal/billing.ejs",
+      "linkedForm": "formBillingAddress"
+    },
+    "$_POST": [
+      {
+        "type": "text",
+        "fieldName": "billing_address_id",
+        "name": "billing_address_id"
+      },
+      {
+        "type": "text",
+        "fieldName": "company_name",
+        "name": "company_name"
+      },
+      {
+        "type": "text",
+        "fieldName": "billing_email",
+        "name": "billing_email"
+      },
+      {
+        "type": "text",
+        "fieldName": "tax_id",
+        "name": "tax_id"
+      },
+      {
+        "type": "text",
+        "fieldName": "vat_number",
+        "name": "vat_number"
+      },
+      {
+        "type": "text",
+        "fieldName": "billing_mobile",
+        "name": "billing_mobile"
+      },
+      {
+        "type": "text",
+        "fieldName": "billing_address",
+        "name": "billing_address"
+      },
+      {
+        "type": "text",
+        "fieldName": "state",
+        "name": "state"
+      },
+      {
+        "type": "text",
+        "fieldName": "zip_code",
+        "options": {
+          "rules": {
+            "core:maxlength": {
+              "param": "6"
+            }
+          }
+        },
+        "name": "zip_code"
+      },
+      {
+        "type": "text",
+        "fieldName": "billing_country",
+        "name": "billing_country"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "security",
+          "permissions": [
+            "write"
+          ],
+          "loginUrl": "/portal/login",
+          "forbiddenUrl": "/*"
+        }
+      },
+      {
+        "name": "identity",
+        "module": "auth",
+        "action": "identify",
+        "options": {
+          "provider": "security"
+        },
+        "output": false,
+        "meta": []
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "trycatch",
+        "options": {
+          "try": {
+            "steps": {
+              "name": "",
+              "module": "core",
+              "action": "condition",
+              "options": {
+                "if": "{{$_POST.billing_address_id}}",
+                "then": {
+                  "steps": [
+                    {
+                      "name": "updateBillingAddress",
+                      "module": "dbupdater",
+                      "action": "update",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "update",
+                          "values": [
+                            {
+                              "table": "billing_address_list",
+                              "column": "company_name",
+                              "type": "text",
+                              "value": "{{$_POST.company_name}}"
+                            },
+                            {
+                              "table": "billing_address_list",
+                              "column": "billing_email",
+                              "type": "text",
+                              "value": "{{$_POST.billing_email}}"
+                            },
+                            {
+                              "table": "billing_address_list",
+                              "column": "tax_id",
+                              "type": "text",
+                              "value": "{{$_POST.tax_id}}"
+                            },
+                            {
+                              "table": "billing_address_list",
+                              "column": "vat_number",
+                              "type": "text",
+                              "value": "{{$_POST.vat_number}}"
+                            },
+                            {
+                              "table": "billing_address_list",
+                              "column": "billing_mobile",
+                              "type": "text",
+                              "value": "{{$_POST.billing_mobile}}"
+                            },
+                            {
+                              "table": "billing_address_list",
+                              "column": "billing_country",
+                              "type": "text",
+                              "value": "{{$_POST.billing_country}}"
+                            },
+                            {
+                              "table": "billing_address_list",
+                              "column": "billing_address",
+                              "type": "text",
+                              "value": "{{$_POST.billing_address}}"
+                            },
+                            {
+                              "table": "billing_address_list",
+                              "column": "state",
+                              "type": "text",
+                              "value": "{{$_POST.state}}"
+                            },
+                            {
+                              "table": "billing_address_list",
+                              "column": "zip_code",
+                              "type": "text",
+                              "value": "{{$_POST.zip_code}}"
+                            },
+                            {
+                              "table": "billing_address_list",
+                              "column": "updated_on",
+                              "type": "datetime",
+                              "value": "{{NOW_UTC}}"
+                            }
+                          ],
+                          "table": "billing_address_list",
+                          "wheres": {
+                            "condition": "AND",
+                            "rules": [
+                              {
+                                "id": "id",
+                                "field": "id",
+                                "type": "double",
+                                "operator": "equal",
+                                "value": "{{$_POST.billing_address_id}}",
+                                "data": {
+                                  "column": "id"
+                                },
+                                "operation": "="
+                              }
+                            ],
+                            "conditional": null,
+                            "valid": true
+                          },
+                          "query": "UPDATE billing_address_list\nSET company_name = :P1 /* {{$_POST.company_name}} */, billing_email = :P2 /* {{$_POST.billing_email}} */, tax_id = :P3 /* {{$_POST.tax_id}} */, vat_number = :P4 /* {{$_POST.vat_number}} */, billing_mobile = :P5 /* {{$_POST.billing_mobile}} */, billing_country = :P6 /* {{$_POST.billing_country}} */, billing_address = :P7 /* {{$_POST.billing_address}} */, state = :P8 /* {{$_POST.state}} */, zip_code = :P9 /* {{$_POST.zip_code}} */, updated_on = :P10 /* {{NOW_UTC}} */\nWHERE id = :P11 /* {{$_POST.billing_address_id}} */",
+                          "params": [
+                            {
+                              "name": ":P1",
+                              "type": "expression",
+                              "value": "{{$_POST.company_name}}"
+                            },
+                            {
+                              "name": ":P2",
+                              "type": "expression",
+                              "value": "{{$_POST.billing_email}}"
+                            },
+                            {
+                              "name": ":P3",
+                              "type": "expression",
+                              "value": "{{$_POST.tax_id}}"
+                            },
+                            {
+                              "name": ":P4",
+                              "type": "expression",
+                              "value": "{{$_POST.vat_number}}"
+                            },
+                            {
+                              "name": ":P5",
+                              "type": "expression",
+                              "value": "{{$_POST.billing_mobile}}"
+                            },
+                            {
+                              "name": ":P6",
+                              "type": "expression",
+                              "value": "{{$_POST.billing_country}}"
+                            },
+                            {
+                              "name": ":P7",
+                              "type": "expression",
+                              "value": "{{$_POST.billing_address}}"
+                            },
+                            {
+                              "name": ":P8",
+                              "type": "expression",
+                              "value": "{{$_POST.state}}"
+                            },
+                            {
+                              "name": ":P9",
+                              "type": "expression",
+                              "value": "{{$_POST.zip_code}}"
+                            },
+                            {
+                              "name": ":P10",
+                              "type": "expression",
+                              "value": "{{NOW_UTC}}"
+                            },
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P11",
+                              "value": "{{$_POST.billing_address_id}}"
+                            }
+                          ]
+                        }
+                      },
+                      "meta": [
+                        {
+                          "name": "affected",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "insertNotif",
+                      "module": "dbupdater",
+                      "action": "insert",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "insert",
+                          "values": [
+                            {
+                              "table": "notifications",
+                              "column": "user_id",
+                              "type": "number",
+                              "value": "{{identity}}"
+                            },
+                            {
+                              "table": "notifications",
+                              "column": "notif_type",
+                              "type": "text",
+                              "value": "{{'TextOnly'}}"
+                            },
+                            {
+                              "table": "notifications",
+                              "column": "notif_name",
+                              "type": "text",
+                              "value": "{{'Billing Address Updated'}}"
+                            },
+                            {
+                              "table": "notifications",
+                              "column": "notif_details",
+                              "type": "text",
+                              "value": "{{'Billing Address Updated with Zip Code: '+$_POST.zip_code+' | Address: '+$_POST.billing_address}}"
+                            }
+                          ],
+                          "table": "notifications",
+                          "query": "INSERT INTO notifications\n(user_id, notif_type, notif_name, notif_details) VALUES (:P1 /* {{identity}} */, :P2 /* {{'TextOnly'}} */, :P3 /* {{'Billing Address Updated'}} */, :P4 /* {{'Billing Address Updated with Zip Code: '+$_POST.zip_code+' | Address: '+$_POST.billing_address}} */)",
+                          "params": [
+                            {
+                              "name": ":P1",
+                              "type": "expression",
+                              "value": "{{identity}}"
+                            },
+                            {
+                              "name": ":P2",
+                              "type": "expression",
+                              "value": "{{'TextOnly'}}"
+                            },
+                            {
+                              "name": ":P3",
+                              "type": "expression",
+                              "value": "{{'Billing Address Updated'}}"
+                            },
+                            {
+                              "name": ":P4",
+                              "type": "expression",
+                              "value": "{{'Billing Address Updated with Zip Code: '+$_POST.zip_code+' | Address: '+$_POST.billing_address}}"
+                            }
+                          ]
+                        }
+                      },
+                      "meta": [
+                        {
+                          "name": "identity",
+                          "type": "text"
+                        },
+                        {
+                          "name": "affected",
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "else": {
+                  "steps": [
+                    {
+                      "name": "GetAddress",
+                      "module": "dbconnector",
+                      "action": "single",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "SELECT",
+                          "columns": [
+                            {
+                              "table": "billing_address_list",
+                              "column": "id",
+                              "alias": "CountId",
+                              "aggregate": "COUNT"
+                            }
+                          ],
+                          "table": {
+                            "name": "billing_address_list"
+                          },
+                          "joins": [],
+                          "query": "SELECT COUNT(id) AS CountId\nFROM billing_address_list\nWHERE zip_code = :P1 /* {{$_POST.zip_code}} */ AND user_id = :P2 /* {{identity}} */",
+                          "params": [
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P1",
+                              "value": "{{$_POST.zip_code}}"
+                            },
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P2",
+                              "value": "{{identity}}"
+                            }
+                          ],
+                          "groupBy": [],
+                          "wheres": {
+                            "condition": "AND",
+                            "rules": [
+                              {
+                                "id": "billing_address_list.zip_code",
+                                "field": "billing_address_list.zip_code",
+                                "type": "string",
+                                "operator": "equal",
+                                "value": "{{$_POST.zip_code}}",
+                                "data": {
+                                  "table": "billing_address_list",
+                                  "column": "zip_code",
+                                  "type": "text",
+                                  "columnObj": {
+                                    "type": "string",
+                                    "maxLength": 50,
+                                    "primary": false,
+                                    "unique": false,
+                                    "nullable": true,
+                                    "name": "zip_code"
+                                  }
+                                },
+                                "operation": "="
+                              },
+                              {
+                                "id": "billing_address_list.user_id",
+                                "field": "billing_address_list.user_id",
+                                "type": "double",
+                                "operator": "equal",
+                                "value": "{{identity}}",
+                                "data": {
+                                  "table": "billing_address_list",
+                                  "column": "user_id",
+                                  "type": "number",
+                                  "columnObj": {
+                                    "type": "integer",
+                                    "primary": false,
+                                    "unique": false,
+                                    "nullable": true,
+                                    "name": "user_id"
+                                  }
+                                },
+                                "operation": "="
+                              }
+                            ],
+                            "conditional": null,
+                            "valid": true
+                          }
+                        }
+                      },
+                      "output": false,
+                      "meta": [
+                        {
+                          "type": "number",
+                          "name": "CountId"
+                        }
+                      ],
+                      "outputType": "object"
+                    },
+                    {
+                      "name": "",
+                      "module": "core",
+                      "action": "condition",
+                      "options": {
+                        "if": "{{(GetAddress.CountId<1)}}",
+                        "then": {
+                          "steps": [
+                            {
+                              "name": "insertAddress",
+                              "module": "dbupdater",
+                              "action": "insert",
+                              "options": {
+                                "connection": "VizzyDB",
+                                "sql": {
+                                  "type": "insert",
+                                  "values": [
+                                    {
+                                      "table": "billing_address_list",
+                                      "column": "user_id",
+                                      "type": "number",
+                                      "value": "{{identity}}"
+                                    },
+                                    {
+                                      "table": "billing_address_list",
+                                      "column": "billing_place",
+                                      "type": "text",
+                                      "value": "{{'Office'}}"
+                                    },
+                                    {
+                                      "table": "billing_address_list",
+                                      "column": "company_name",
+                                      "type": "text",
+                                      "value": "{{$_POST.company_name}}"
+                                    },
+                                    {
+                                      "table": "billing_address_list",
+                                      "column": "billing_email",
+                                      "type": "text",
+                                      "value": "{{$_POST.billing_email}}"
+                                    },
+                                    {
+                                      "table": "billing_address_list",
+                                      "column": "tax_id",
+                                      "type": "text",
+                                      "value": "{{$_POST.tax_id}}"
+                                    },
+                                    {
+                                      "table": "billing_address_list",
+                                      "column": "vat_number",
+                                      "type": "text",
+                                      "value": "{{$_POST.vat_number}}"
+                                    },
+                                    {
+                                      "table": "billing_address_list",
+                                      "column": "billing_mobile",
+                                      "type": "text",
+                                      "value": "{{$_POST.billing_mobile}}"
+                                    },
+                                    {
+                                      "table": "billing_address_list",
+                                      "column": "billing_country",
+                                      "type": "text",
+                                      "value": "{{$_POST.billing_country}}"
+                                    },
+                                    {
+                                      "table": "billing_address_list",
+                                      "column": "billing_address",
+                                      "type": "text",
+                                      "value": "{{$_POST.billing_address}}"
+                                    },
+                                    {
+                                      "table": "billing_address_list",
+                                      "column": "state",
+                                      "type": "text",
+                                      "value": "{{$_POST.state}}"
+                                    },
+                                    {
+                                      "table": "billing_address_list",
+                                      "column": "zip_code",
+                                      "type": "text",
+                                      "value": "{{$_POST.zip_code}}"
+                                    }
+                                  ],
+                                  "table": "billing_address_list",
+                                  "query": "INSERT INTO billing_address_list\n(user_id, billing_place, company_name, billing_email, tax_id, vat_number, billing_mobile, billing_country, billing_address, state, zip_code) VALUES (:P1 /* {{identity}} */, :P2 /* {{'Office'}} */, :P3 /* {{$_POST.company_name}} */, :P4 /* {{$_POST.billing_email}} */, :P5 /* {{$_POST.tax_id}} */, :P6 /* {{$_POST.vat_number}} */, :P7 /* {{$_POST.billing_mobile}} */, :P8 /* {{$_POST.billing_country}} */, :P9 /* {{$_POST.billing_address}} */, :P10 /* {{$_POST.state}} */, :P11 /* {{$_POST.zip_code}} */)",
+                                  "params": [
+                                    {
+                                      "name": ":P1",
+                                      "type": "expression",
+                                      "value": "{{identity}}"
+                                    },
+                                    {
+                                      "name": ":P2",
+                                      "type": "expression",
+                                      "value": "{{'Office'}}"
+                                    },
+                                    {
+                                      "name": ":P3",
+                                      "type": "expression",
+                                      "value": "{{$_POST.company_name}}"
+                                    },
+                                    {
+                                      "name": ":P4",
+                                      "type": "expression",
+                                      "value": "{{$_POST.billing_email}}"
+                                    },
+                                    {
+                                      "name": ":P5",
+                                      "type": "expression",
+                                      "value": "{{$_POST.tax_id}}"
+                                    },
+                                    {
+                                      "name": ":P6",
+                                      "type": "expression",
+                                      "value": "{{$_POST.vat_number}}"
+                                    },
+                                    {
+                                      "name": ":P7",
+                                      "type": "expression",
+                                      "value": "{{$_POST.billing_mobile}}"
+                                    },
+                                    {
+                                      "name": ":P8",
+                                      "type": "expression",
+                                      "value": "{{$_POST.billing_country}}"
+                                    },
+                                    {
+                                      "name": ":P9",
+                                      "type": "expression",
+                                      "value": "{{$_POST.billing_address}}"
+                                    },
+                                    {
+                                      "name": ":P10",
+                                      "type": "expression",
+                                      "value": "{{$_POST.state}}"
+                                    },
+                                    {
+                                      "name": ":P11",
+                                      "type": "expression",
+                                      "value": "{{$_POST.zip_code}}"
+                                    }
+                                  ]
+                                }
+                              },
+                              "meta": [
+                                {
+                                  "name": "identity",
+                                  "type": "text"
+                                },
+                                {
+                                  "name": "affected",
+                                  "type": "number"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "insertNotif",
+                              "module": "dbupdater",
+                              "action": "insert",
+                              "options": {
+                                "connection": "VizzyDB",
+                                "sql": {
+                                  "type": "insert",
+                                  "values": [
+                                    {
+                                      "table": "notifications",
+                                      "column": "user_id",
+                                      "type": "number",
+                                      "value": "{{identity}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "notif_type",
+                                      "type": "text",
+                                      "value": "{{'TextOnly'}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "notif_name",
+                                      "type": "text",
+                                      "value": "{{'A New Billing Address Added'}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "notif_details",
+                                      "type": "text",
+                                      "value": "{{'A new billing address with Zip Code: '+$_POST.zip_code+' | Address: '+$_POST.billing_address+' added successfully.'}}"
+                                    }
+                                  ],
+                                  "table": "notifications",
+                                  "query": "INSERT INTO notifications\n(user_id, notif_type, notif_name, notif_details) VALUES (:P1 /* {{identity}} */, :P2 /* {{'TextOnly'}} */, :P3 /* {{'A New Billing Address Added'}} */, :P4 /* {{'A new billing address with Zip Code: '+$_POST.zip_code+' | Address: '+$_POST.billing_address+' added successfully.'}} */)",
+                                  "params": [
+                                    {
+                                      "name": ":P1",
+                                      "type": "expression",
+                                      "value": "{{identity}}"
+                                    },
+                                    {
+                                      "name": ":P2",
+                                      "type": "expression",
+                                      "value": "{{'TextOnly'}}"
+                                    },
+                                    {
+                                      "name": ":P3",
+                                      "type": "expression",
+                                      "value": "{{'A New Billing Address Added'}}"
+                                    },
+                                    {
+                                      "name": ":P4",
+                                      "type": "expression",
+                                      "value": "{{'A new billing address with Zip Code: '+$_POST.zip_code+' | Address: '+$_POST.billing_address+' added successfully.'}}"
+                                    }
+                                  ]
+                                }
+                              },
+                              "meta": [
+                                {
+                                  "name": "identity",
+                                  "type": "text"
+                                },
+                                {
+                                  "name": "affected",
+                                  "type": "number"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "else": {
+                          "steps": {
+                            "name": "Resp",
+                            "module": "core",
+                            "action": "response",
+                            "options": {
+                              "status": 401,
+                              "data": "Card already used, please update"
+                            }
+                          }
+                        }
+                      },
+                      "outputType": "boolean"
+                    }
+                  ]
+                }
+              },
+              "outputType": "boolean"
+            }
+          },
+          "catch": {
+            "steps": {
+              "name": "Resp",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 401,
+                "data": "An error occurred"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

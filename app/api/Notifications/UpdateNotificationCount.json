@@ -1,0 +1,124 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/portal/security.ejs",
+      "linkedForm": "formChangePass"
+    }
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "security",
+          "permissions": [
+            "write"
+          ],
+          "loginUrl": "/portal/login",
+          "forbiddenUrl": "/*"
+        }
+      },
+      {
+        "name": "identity",
+        "module": "auth",
+        "action": "identify",
+        "options": {
+          "provider": "security"
+        },
+        "output": false,
+        "meta": []
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "trycatch",
+        "options": {
+          "try": {
+            "steps": {
+              "name": "update",
+              "module": "dbupdater",
+              "action": "update",
+              "options": {
+                "connection": "VizzyDB",
+                "sql": {
+                  "type": "update",
+                  "values": [
+                    {
+                      "table": "notifications",
+                      "column": "updated_on",
+                      "type": "datetime",
+                      "value": "{{NOW_UTC}}"
+                    },
+                    {
+                      "table": "notifications",
+                      "column": "checked_by_user",
+                      "type": "text",
+                      "value": "{{'Yes'}}"
+                    }
+                  ],
+                  "table": "notifications",
+                  "wheres": {
+                    "condition": "AND",
+                    "rules": [
+                      {
+                        "id": "user_id",
+                        "field": "user_id",
+                        "type": "double",
+                        "operator": "equal",
+                        "value": "{{identity}}",
+                        "data": {
+                          "column": "user_id"
+                        },
+                        "operation": "="
+                      }
+                    ],
+                    "conditional": null,
+                    "valid": true
+                  },
+                  "query": "UPDATE notifications\nSET updated_on = :P1 /* {{NOW_UTC}} */, checked_by_user = :P2 /* {{'Yes'}} */\nWHERE user_id = :P3 /* {{identity}} */",
+                  "params": [
+                    {
+                      "name": ":P1",
+                      "type": "expression",
+                      "value": "{{NOW_UTC}}"
+                    },
+                    {
+                      "name": ":P2",
+                      "type": "expression",
+                      "value": "{{'Yes'}}"
+                    },
+                    {
+                      "operator": "equal",
+                      "type": "expression",
+                      "name": ":P3",
+                      "value": "{{identity}}"
+                    }
+                  ]
+                }
+              },
+              "meta": [
+                {
+                  "name": "affected",
+                  "type": "number"
+                }
+              ]
+            }
+          },
+          "catch": {
+            "steps": {
+              "name": "Resp",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 401,
+                "data": "An error occurred"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,5 +1,9 @@
 <!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="billing" appConnect="local" components="{dmxDataTraversal:{},dmxBootstrap5Alert:{},dmxBootstrap5Modal:{}}" -->
 <meta name="ac:route" content="/portal/billing">
+<dmx-serverconnect id="scCardList" url="/api/MyProfile/BillingCardList"></dmx-serverconnect>
+<dmx-data-detail id="ddCardList" dmx-bind:data="content.scCardList.data.query.data" key="id"></dmx-data-detail>
+<dmx-serverconnect id="scBillingAddressList" url="/api/MyProfile/BillingAddressList"></dmx-serverconnect>
+<dmx-data-detail id="ddBillingAddressList" dmx-bind:data="scBillingAddressList.data.query.data" key="id"></dmx-data-detail>
 
 <head>
     <title>Vizzy Dashboard</title>
@@ -63,19 +67,19 @@
                                     <!-- Radio -->
                                     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio1" />
-                                        <label class="btn btn-outline-primary" for="btnradio1" dmx-on:click="browser1.goto('/portal/my-profile')">Profile</label>
+                                        <label class="btn btn-outline-primary px-2 px-sm-3 px-md-4" for="btnradio1" dmx-on:click="browser1.goto('/portal/my-profile')">Profile</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio2" />
-                                        <label class="btn btn-outline-primary" for="btnradio2" dmx-on:click="browser1.goto('/portal/plan')">Plan</label>
+                                        <label class="btn btn-outline-primary px-2 px-sm-3 px-md-4" for="btnradio2" dmx-on:click="browser1.goto('/portal/plan')">Plan</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio3" />
-                                        <label class="btn btn-outline-primary" for="btnradio3" dmx-on:click="browser1.goto('/portal/notifications')">Notifications</label>
+                                        <label class="btn btn-outline-primary px-2 px-sm-3 px-md-4" for="btnradio3" dmx-on:click="browser1.goto('/portal/notifications');scUpdateNotif.load()">Notifications</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio4" />
-                                        <label class="btn btn-outline-primary" for="btnradio4" dmx-on:click="browser1.goto('/portal/security')">Security</label>
+                                        <label class="btn btn-outline-primary px-2 px-sm-3 px-md-4" for="btnradio4" dmx-on:click="browser1.goto('/portal/security')">Security</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio5" checked />
-                                        <label class="btn btn-outline-primary" for="btnradio5" dmx-on:click="browser1.goto('/portal/billing')">Billing</label>
+                                        <label class="btn btn-outline-primary px-2 px-sm-3 px-md-4" for="btnradio5" dmx-on:click="browser1.goto('/portal/billing')">Billing</label>
                                     </div>
                                 </div>
 
@@ -91,7 +95,8 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <form id="creditCardForm" class="row g-3" onsubmit="return false">
+                                                <form id="creditCardForm" class="row g-3" is="dmx-serverconnect-form" method="post" action="/api/MyProfile/BillingAddPayMethod" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp)" dmx-on:success="notifies1.success('Card Details Added Successfully');creditCardForm.reset(true);scCardList.load({})">
+                                                    <input type="hidden" name="payment_method_id" dmx-bind:value="ddCardList.data.id">
                                                     <div class="col-12 mb-2">
                                                         <div class="form-check form-check-inline">
                                                             <input name="collapsible-payment" class="form-check-input" type="radio" value="" id="collapsible-payment-cc" checked="" />
@@ -105,28 +110,28 @@
                                                     <div class="col-12">
                                                         <label class="form-label w-100" for="paymentCard">Card Number</label>
                                                         <div class="input-group input-group-merge">
-                                                            <input id="paymentCard" name="paymentCard" class="form-control credit-card-mask" type="text" placeholder="1356 3215 6548 7898" aria-describedby="paymentCard2" />
+                                                            <input id="paymentCard" name="paymentCard" class="form-control credit-card-mask" type="text" placeholder="1356 3215 6548 7898" aria-describedby="paymentCard2" dmx-bind:value="ddCardList.data.card_number" />
                                                             <span class="input-group-text cursor-pointer p-1" id="paymentCard2"><span class="card-type"></span></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-md-6">
                                                         <label class="form-label" for="paymentName">Name</label>
-                                                        <input type="text" id="paymentName" class="form-control" placeholder="John Doe" />
+                                                        <input type="text" id="paymentName" class="form-control" placeholder="John Doe" name="paymentName" dmx-bind:value="ddCardList.data.card_holder_name" />
                                                     </div>
                                                     <div class="col-6 col-md-3">
                                                         <label class="form-label" for="paymentExpiryDate">Exp. Date</label>
-                                                        <input type="text" id="paymentExpiryDate" class="form-control expiry-date-mask" placeholder="MM/YY" />
+                                                        <input type="text" id="paymentExpiryDate" class="form-control expiry-date-mask" placeholder="MM/YY" name="ExpiryDate" dmx-bind:value="ddCardList.data.expiry_date" />
                                                     </div>
                                                     <div class="col-6 col-md-3">
                                                         <label class="form-label" for="paymentCvv">CVV Code</label>
                                                         <div class="input-group input-group-merge">
-                                                            <input type="text" id="paymentCvv" class="form-control cvv-code-mask" maxlength="3" placeholder="654" />
+                                                            <input type="text" id="paymentCvv" class="form-control cvv-code-mask" maxlength="3" placeholder="654" name="paymentCvv" dmx-bind:value="ddCardList.data.cvv_code" />
                                                             <span class="input-group-text cursor-pointer" id="paymentCvv2"><i class="ti ti-help text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Card Verification Value"></i></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <label class="switch">
-                                                            <input type="checkbox" class="switch-input" />
+                                                            <input type="checkbox" class="switch-input" name="SaveOrNot" />
                                                             <span class="switch-toggle-slider">
                                                                 <span class="switch-on"></span>
                                                                 <span class="switch-off"></span>
@@ -135,112 +140,38 @@
                                                         </label>
                                                     </div>
                                                     <div class="col-12 mt-4">
-                                                        <button type="submit" class="btn btn-primary me-sm-3 me-1">Save Changes</button>
+                                                        <button type="submit" class="btn btn-primary me-sm-3 me-1" dmx-bind:disabled="state.executing">{{ddCardList.data.id?'Update':'Save'}}</button>
                                                         <button type="reset" class="btn btn-label-secondary">Cancel</button>
                                                     </div>
                                                 </form>
                                             </div>
                                             <div class="col-md-6 mt-5 mt-md-0">
                                                 <h6>My Cards</h6>
-                                                <div class="added-cards">
+                                                <div class="added-cards" id="repeatCardList" is="dmx-repeat" dmx-bind:repeat="content.scCardList.data.query.data" key="id">
                                                     <div class="cardMaster bg-lighter p-3 rounded mb-3">
                                                         <div class="d-flex justify-content-between flex-sm-row flex-column">
                                                             <div class="card-information me-2">
                                                                 <img class="mb-3 img-fluid" src="../../assets/img/icons/payments/mastercard.png" alt="Master Card" />
                                                                 <div class="d-flex align-items-center mb-2 flex-wrap gap-2">
-                                                                    <p class="mb-0 me-2">Tom McBride</p>
-                                                                    <span class="badge bg-label-primary">Primary</span>
+                                                                    <p class="mb-0 me-2">{{card_holder_name}}</p>
+                                                                    <span class="badge bg-label-primary" dmx-show="primary_card=='Primary'">{{primary_card}}</span>
                                                                 </div>
-                                                                <span class="card-number">&#8727;&#8727;&#8727;&#8727; &#8727;&#8727;&#8727;&#8727; 9856</span>
+                                                                <span class="card-number">&#8727;&#8727;&#8727;&#8727; &#8727;&#8727;&#8727;&#8727; {{card_number.substr(-4, 4)}}</span>
                                                             </div>
                                                             <div class="d-flex flex-column text-start text-lg-end">
                                                                 <div class="d-flex order-sm-0 order-1 mt-sm-0 mt-3">
-                                                                    <button class="btn btn-label-primary me-2" data-bs-toggle="modal" data-bs-target="#editCCModal">
+                                                                    <button class="btn btn-label-primary me-2" dmx-on:click="ddCardList.select(id)">
                                                                         Edit
                                                                     </button>
                                                                     <button class="btn btn-label-secondary">Delete</button>
                                                                 </div>
-                                                                <small class="mt-sm-auto mt-2 order-sm-1 order-0">Card expires at 12/26</small>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="cardMaster bg-lighter p-3 rounded">
-                                                        <div class="d-flex justify-content-between flex-sm-row flex-column">
-                                                            <div class="card-information me-2">
-                                                                <img class="mb-3 img-fluid" src="../../assets/img/icons/payments/visa.png" alt="Visa Card" />
-                                                                <p class="mb-2">Mildred Wagner</p>
-                                                                <span class="card-number">&#8727;&#8727;&#8727;&#8727; &#8727;&#8727;&#8727;&#8727; 5896</span>
-                                                            </div>
-                                                            <div class="d-flex flex-column text-start text-lg-end">
-                                                                <div class="d-flex order-sm-0 order-1 mt-sm-0 mt-3">
-                                                                    <button class="btn btn-label-primary me-2" data-bs-toggle="modal" data-bs-target="#editCCModal">
-                                                                        Edit
-                                                                    </button>
-                                                                    <button class="btn btn-label-secondary">Delete</button>
-                                                                </div>
-                                                                <small class="mt-sm-auto mt-2 order-sm-1 order-0">Card expires at 10/27</small>
+                                                                <small class="mt-sm-auto mt-2 order-sm-1 order-0">Card expires at {{expiry_date}}</small>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- Modal -->
-                                                <!-- Add New Credit Card Modal -->
-                                                <div class="modal fade" id="editCCModal" tabindex="-1" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered modal-simple modal-add-new-cc">
-                                                        <div class="modal-content p-3 p-md-5">
-                                                            <div class="modal-body">
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                <div class="text-center mb-4">
-                                                                    <h3 class="mb-2">Edit Card</h3>
-                                                                    <p class="text-muted">Edit your saved card details</p>
-                                                                </div>
-                                                                <form id="editCCForm" class="row g-3" onsubmit="return false">
-                                                                    <div class="col-12">
-                                                                        <label class="form-label w-100" for="modalEditCard">Card Number</label>
-                                                                        <div class="input-group input-group-merge">
-                                                                            <input id="modalEditCard" name="modalEditCard" class="form-control credit-card-mask-edit" type="text" placeholder="4356 3215 6548 7898" value="4356 3215 6548 7898" aria-describedby="modalEditCard2" />
-                                                                            <span class="input-group-text cursor-pointer p-1" id="modalEditCard2"><span class="card-type-edit"></span></span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-12 col-md-6">
-                                                                        <label class="form-label" for="modalEditName">Name</label>
-                                                                        <input type="text" id="modalEditName" class="form-control" placeholder="John Doe" value="John Doe" />
-                                                                    </div>
-                                                                    <div class="col-6 col-md-3">
-                                                                        <label class="form-label" for="modalEditExpiryDate">Exp. Date</label>
-                                                                        <input type="text" id="modalEditExpiryDate" class="form-control expiry-date-mask-edit" placeholder="MM/YY" value="08/28" />
-                                                                    </div>
-                                                                    <div class="col-6 col-md-3">
-                                                                        <label class="form-label" for="modalEditCvv">CVV Code</label>
-                                                                        <div class="input-group input-group-merge">
-                                                                            <input type="text" id="modalEditCvv" class="form-control cvv-code-mask-edit" maxlength="3" placeholder="654" value="XXX" />
-                                                                            <span class="input-group-text cursor-pointer" id="modalEditCvv2"><i class="ti ti-help text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Card Verification Value"></i></span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-12">
-                                                                        <label class="switch">
-                                                                            <input type="checkbox" class="switch-input" />
-                                                                            <span class="switch-toggle-slider">
-                                                                                <span class="switch-on"></span>
-                                                                                <span class="switch-off"></span>
-                                                                            </span>
-                                                                            <span class="switch-label">Set as primary card</span>
-                                                                        </label>
-                                                                    </div>
-                                                                    <div class="col-12 text-center">
-                                                                        <button type="submit" class="btn btn-primary me-sm-3 me-1">Update</button>
-                                                                        <button type="reset" class="btn btn-label-danger" data-bs-dismiss="modal" aria-label="Close">
-                                                                            Remove
-                                                                        </button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--/ Add New Credit Card Modal -->
 
-                                                <!--/ Modal -->
+
                                             </div>
                                         </div>
                                     </div>
@@ -250,59 +181,92 @@
                                     <!-- Billing Address -->
                                     <h5 class="card-header">Billing Address</h5>
                                     <div class="card-body">
-                                        <form id="formBillingAddress" onsubmit="return false">
-                                            <div class="row">
-                                                <div class="mb-3 col-sm-6">
-                                                    <label for="companyName" class="form-label">Company Name</label>
-                                                    <input type="text" id="companyName" name="companyName" class="form-control" placeholder="Pixinvent" />
-                                                </div>
-                                                <div class="mb-3 col-sm-6">
-                                                    <label for="billingEmail" class="form-label">Billing Email</label>
-                                                    <input class="form-control" type="text" id="billingEmail" name="billingEmail" placeholder="john.doe@example.com" />
-                                                </div>
-                                                <div class="mb-3 col-sm-6">
-                                                    <label for="taxId" class="form-label">Tax ID</label>
-                                                    <input type="text" id="taxId" name="taxId" class="form-control" placeholder="Enter Tax ID" />
-                                                </div>
-                                                <div class="mb-3 col-sm-6">
-                                                    <label for="vatNumber" class="form-label">VAT Number</label>
-                                                    <input class="form-control" type="text" id="vatNumber" name="vatNumber" placeholder="Enter VAT Number" />
-                                                </div>
-                                                <div class="mb-3 col-sm-6">
-                                                    <label for="mobileNumber" class="form-label">Mobile</label>
-                                                    <div class="input-group input-group-merge">
-                                                        <span class="input-group-text">US (+1)</span>
-                                                        <input class="form-control mobile-number" type="text" id="mobileNumber" name="mobileNumber" placeholder="202 555 0111" />
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <form id="formBillingAddress" is="dmx-serverconnect-form" method="post" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp)" dmx-on:success="notifies1.success('Billing Address Added Successfully');formBillingAddress.reset(true);scBillingAddressList.load({})" action="/api/MyProfile/BillingAddressAddEdit">
+                                                    <input type="hidden" name="billing_address_id" dmx-bind:value="ddBillingAddressList.data.id">
+                                                    <div class="row">
+                                                        <div class="mb-3 col-sm-6">
+                                                            <label for="companyName" class="form-label">Company Name</label>
+                                                            <input type="text" id="companyName" name="company_name" class="form-control" placeholder="Pixinvent" dmx-bind:value="ddBillingAddressList.data.company_name" />
+                                                        </div>
+                                                        <div class="mb-3 col-sm-6">
+                                                            <label for="billingEmail" class="form-label">Billing Email</label>
+                                                            <input class="form-control" type="text" id="billingEmail" name="billing_email" placeholder="john.doe@example.com" dmx-bind:value="ddBillingAddressList.data.billing_email" />
+                                                        </div>
+                                                        <div class="mb-3 col-sm-6">
+                                                            <label for="taxId" class="form-label">Tax ID</label>
+                                                            <input type="text" id="taxId" name="tax_id" class="form-control" placeholder="Enter Tax ID" dmx-bind:value="ddBillingAddressList.data.tax_id" />
+                                                        </div>
+                                                        <div class="mb-3 col-sm-6">
+                                                            <label for="vatNumber" class="form-label">VAT Number</label>
+                                                            <input class="form-control" type="text" id="vatNumber" name="vat_number" placeholder="Enter VAT Number" dmx-bind:value="ddBillingAddressList.data.vat_number" />
+                                                        </div>
+                                                        <div class="mb-3 col-sm-6">
+                                                            <label for="mobileNumber" class="form-label">Mobile</label>
+                                                            <div class="input-group input-group-merge">
+                                                                <input class="form-control" id="phoneNumber" name="billing_mobile" type="tel" id="html5-tel-input" dmx-bind:value="scUserInfo.data.query.phone_no" placeholder="90-(164)-188-556" dmx-bind:value="ddBillingAddressList.data.billing_mobile" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-3 col-sm-6">
+                                                            <label for="country" class="form-label">Country</label>
+                                                            <select id="country" class="form-select select2" name="billing_country" dmx-bind:value="ddBillingAddressList.data.billing_country">
+                                                                <option selected>USA</option>
+                                                                <option>Canada</option>
+                                                                <option>UK</option>
+                                                                <option>Germany</option>
+                                                                <option>France</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3 col-12">
+                                                            <label for="billingAddress" class="form-label">Billing Address</label>
+                                                            <input type="text" class="form-control" id="billingAddress" name="billing_address" placeholder="Billing Address" dmx-bind:value="ddBillingAddressList.data.billing_address" />
+                                                        </div>
+                                                        <div class="mb-3 col-sm-6">
+                                                            <label for="state" class="form-label">State</label>
+                                                            <input class="form-control" type="text" id="state" name="state" placeholder="California" dmx-bind:value="ddBillingAddressList.data.state" />
+                                                        </div>
+                                                        <div class="mb-3 col-sm-6">
+                                                            <label for="zipCode" class="form-label">Zip Code</label>
+                                                            <input type="text" class="form-control zip-code" id="zipCode" name="zip_code" placeholder="231465" maxlength="6" dmx-bind:value="ddBillingAddressList.data.zip_code" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <button type="submit" class="btn btn-primary me-sm-3 me-2" dmx-bind:disabled="state.executing">{{ddBillingAddressList.data.id?'Update':'Save changes'}}</button>
+                                                        <button type="reset" class="btn btn-label-secondary">Discard</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-6 mt-5 mt-md-0">
+                                                <h6>Billing Address List</h6>
+                                                <div class="added-cards" id="repeatAddressList" is="dmx-repeat" dmx-bind:repeat="scBillingAddressList.data.query.data" key="id">
+                                                    <div class="cardMaster bg-lighter p-3 rounded mb-3">
+                                                        <div class="d-flex justify-content-between flex-sm-row flex-column">
+                                                            <div class="card-information me-2">
+                                                                <div class="d-flex align-items-center mb-2 flex-wrap gap-2">
+                                                                    <p class="mb-0 me-2">Company Name: {{company_name}}</p>
+                                                                    <span class="badge bg-label-primary">{{billing_place}}</span>
+                                                                </div>
+                                                                <p>Email: {{billing_email}}</p>
+                                                                <span class="card-number">Billing Address: {{billing_address}}</span>
+                                                            </div>
+                                                            <div class="d-flex flex-column text-start text-lg-end">
+                                                                <div class="d-flex order-sm-0 order-1 mt-sm-0 mt-3">
+                                                                    <button class="btn btn-label-primary me-2" dmx-on:click="ddBillingAddressList.select(id)">
+                                                                        Edit
+                                                                    </button>
+                                                                    <button class="btn btn-label-secondary">Delete</button>
+                                                                </div>
+                                                                <p class="text-start">Mobile: {{billing_mobile}}</p>
+                                                                <small class="mt-sm-auto mt-2 order-sm-1 order-0">State: {{state}}&emsp;&emsp;&emsp;ZIP Code: {{zip_code}}</small>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3 col-sm-6">
-                                                    <label for="country" class="form-label">Country</label>
-                                                    <select id="country" class="form-select select2" name="country">
-                                                        <option selected>USA</option>
-                                                        <option>Canada</option>
-                                                        <option>UK</option>
-                                                        <option>Germany</option>
-                                                        <option>France</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3 col-12">
-                                                    <label for="billingAddress" class="form-label">Billing Address</label>
-                                                    <input type="text" class="form-control" id="billingAddress" name="billingAddress" placeholder="Billing Address" />
-                                                </div>
-                                                <div class="mb-3 col-sm-6">
-                                                    <label for="state" class="form-label">State</label>
-                                                    <input class="form-control" type="text" id="state" name="state" placeholder="California" />
-                                                </div>
-                                                <div class="mb-3 col-sm-6">
-                                                    <label for="zipCode" class="form-label">Zip Code</label>
-                                                    <input type="text" class="form-control zip-code" id="zipCode" name="zipCode" placeholder="231465" maxlength="6" />
-                                                </div>
+
+
                                             </div>
-                                            <div class="mt-2">
-                                                <button type="submit" class="btn btn-primary me-2">Save changes</button>
-                                                <button type="reset" class="btn btn-label-secondary">Discard</button>
-                                            </div>
-                                        </form>
+                                        </div>
                                     </div>
                                     <!-- /Billing Address -->
                                 </div>
@@ -361,17 +325,9 @@
     <script src="/assets/vendor/js/menu.js"></script>
     <!-- endbuild -->
 
-    <!-- Vendors JS -->
-    <script src="/assets/vendor/libs/select2/select2.js"></script>
-    <script src="/assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
-    <script src="/assets/vendor/libs/bloodhound/bloodhound.js"></script>
-
     <!-- Main JS -->
     <script src="/assets/js/main.js"></script>
 
     <!-- Page JS -->
     <script src="/assets/js/forms-selects.js"></script>
-    <!-- Page JS -->
-    <script src="/assets/js/pages-account-settings-security.js"></script>
-    <script src="/assets/js/modal-enable-otp.js"></script>
 </body>

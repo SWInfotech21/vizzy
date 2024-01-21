@@ -140,3 +140,7 @@
     color: #a5a3ae !important;
     border: 0;
     }
+    .added-cards{
+        height: 270px;
+        overflow-y: auto;
+    }

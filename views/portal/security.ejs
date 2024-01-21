@@ -1,5 +1,8 @@
-<!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="security" appConnect="local" components="{dmxDataTraversal:{},dmxBootstrap5Alert:{},dmxBootstrap5Modal:{}}" -->
+<!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="security" appConnect="local" components="{dmxDataTraversal:{},dmxBootstrap5Alert:{},dmxBootstrap5Modal:{},dmxValidator:{}}" jquery_35="local" -->
 <meta name="ac:route" content="/portal/security">
+<dmx-value id="varCurrShowHide" dmx-bind:value="0"></dmx-value>
+<dmx-value id="varPassShowHide" dmx-bind:value="0"></dmx-value>
+<dmx-value id="varConfPassShowHide" dmx-bind:value="0"></dmx-value>
 
 <head>
     <title>Vizzy Dashboard</title>
@@ -63,19 +66,19 @@
                                     <!-- Radio -->
                                     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio1" />
-                                        <label class="btn btn-outline-primary" for="btnradio1" dmx-on:click="browser1.goto('/portal/my-profile')">Profile</label>
+                                        <label class="btn btn-outline-primary px-2 px-sm-3 px-md-4" for="btnradio1" dmx-on:click="browser1.goto('/portal/my-profile')">Profile</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio2" />
-                                        <label class="btn btn-outline-primary" for="btnradio2" dmx-on:click="browser1.goto('/portal/plan')">Plan</label>
+                                        <label class="btn btn-outline-primary px-2 px-sm-3 px-md-4" for="btnradio2" dmx-on:click="browser1.goto('/portal/plan')">Plan</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio3" />
-                                        <label class="btn btn-outline-primary" for="btnradio3" dmx-on:click="browser1.goto('/portal/notifications')">Notifications</label>
+                                        <label class="btn btn-outline-primary px-2 px-sm-3 px-md-4" for="btnradio3" dmx-on:click="browser1.goto('/portal/notifications');scUpdateNotif.load()">Notifications</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio4" checked />
-                                        <label class="btn btn-outline-primary" for="btnradio4" dmx-on:click="browser1.goto('/portal/security')">Security</label>
+                                        <label class="btn btn-outline-primary px-2 px-sm-3 px-md-4" for="btnradio4" dmx-on:click="browser1.goto('/portal/security')">Security</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio5" />
-                                        <label class="btn btn-outline-primary" for="btnradio5" dmx-on:click="browser1.goto('/portal/billing')">Billing</label>
+                                        <label class="btn btn-outline-primary px-2 px-sm-3 px-md-4" for="btnradio5" dmx-on:click="browser1.goto('/portal/billing')">Billing</label>
                                     </div>
                                 </div>
 
@@ -87,44 +90,55 @@
                             <div class="row mx-0">
                                 <!-- Change Password -->
                                 <div class="card mb-4">
-                                    <h5 class="card-header">Change Password</h5>
+                                    <h5 class="card-header">Change Password <span class="spinner-grow" role="status" dmx-show="state.executing"></span></h5>
                                     <div class="card-body">
-                                        <form id="formAccountSettings" method="POST" onsubmit="return false">
+                                        <form id="formChangePass" method="post" is="dmx-serverconnect-form" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp)" dmx-on:success="run([{run:{action:`notifies1.success(\'New password updated successfully, please login again\')`}},{wait:{delay:5000}},{run:{action:`formChangePass.reset(true);scLogOut.load(true)`}}])" action="/api/MyProfile/ResetPasswordInside">
                                             <div class="row">
                                                 <div class="mb-3 col-md-6 form-password-toggle">
                                                     <label class="form-label" for="currentPassword">Current Password</label>
                                                     <div class="input-group input-group-merge">
-                                                        <input class="form-control" type="password" name="currentPassword" id="currentPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
-                                                        <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+                                                        <input class="form-control" name="currentPassword" id="currentPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" dmx-bind:type="(varCurrShowHide.value==0)?'password':'text'" required="" />
+                                                        <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off" dmx-show:="(varCurrShowHide.value==0)" dmx-hide="(varCurrShowHide.value==1)" dmx-on:click="varCurrShowHide.setValue(1)"></i><i class="ti ti-eye" dmx-show="(varCurrShowHide.value==1)" dmx-hide="(varCurrShowHide.value==0)" dmx-on:click="varCurrShowHide.setValue(0)"></i></span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="mb-3 col-md-6 form-password-toggle">
-                                                    <label class="form-label" for="newPassword">New Password</label>
+                                                    <label class="form-label" for="multiStepsPass">New Password</label>
                                                     <div class="input-group input-group-merge">
-                                                        <input class="form-control" type="password" id="newPassword" name="newPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
-                                                        <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+                                                        <input class="form-control" type="password" id="multiStepsPass" name="newPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" dmx-bind:type="(varPassShowHide.value==0)?'password':'text'" required="" />
+                                                        <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off" dmx-show:="(varPassShowHide.value==0)" dmx-hide="(varPassShowHide.value==1)" dmx-on:click="varPassShowHide.setValue(1)"></i><i class="ti ti-eye" dmx-show="(varPassShowHide.value==1)" dmx-hide="(varPassShowHide.value==0)" dmx-on:click="varPassShowHide.setValue(0)"></i></span>
+                                                    </div>
+                                                    <div id="message">
+                                                        <p class="mb-0">Password Requirements:</p>
+                                                        <p id="letter" class="invalid mb-0">A <b>lowercase</b> letter</p>
+                                                        <p id="capital" class="invalid mb-0">A <b>capital (uppercase)</b> letter</p>
+                                                        <p id="number" class="invalid mb-0">A <b>number</b></p>
+                                                        <p id="length" class="invalid mb-0">Minimum <b>8 characters</b></p>
+                                                        <p id="special" class="invalid mb-0">Atleast one of these <b>@$!%*#?</b> special characters</p>
                                                     </div>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6 form-password-toggle">
-                                                    <label class="form-label" for="confirmPassword">Confirm New Password</label>
+                                                    <label class="form-label" for="multiStepsConfirmPass">Confirm New Password</label>
                                                     <div class="input-group input-group-merge">
-                                                        <input class="form-control" type="password" name="confirmPassword" id="confirmPassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
-                                                        <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+                                                        <input class="form-control" type="password" name="confirmPassword" id="multiStepsConfirmPass" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" dmx-bind:type="(varConfPassShowHide.value==0)?'password':'text'" required="" />
+                                                        <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off" dmx-show:="(varConfPassShowHide.value==0)" dmx-hide="(varConfPassShowHide.value==1)" dmx-on:click="varConfPassShowHide.setValue(1)"></i><i class="ti ti-eye" dmx-show="(varConfPassShowHide.value==1)" dmx-hide="(varConfPassShowHide.value==0)" dmx-on:click="varConfPassShowHide.setValue(0)"></i></span>
+                                                    </div>
+                                                    <div id="ConfPassError" dmx-class:text-danger="(multiStepsPass.value!=multiStepsConfirmPass.value)" dmx-class:text-success="(multiStepsPass.value==multiStepsConfirmPass.value)">
+                                                        <p class="mb-0">{{multiStepsConfirmPass.value&&(multiStepsPass.value!=multiStepsConfirmPass.value)?'Password Mismatched!':'Password Matched!'}}</p>
                                                     </div>
                                                 </div>
-                                                <div class="col-12 mb-4">
+                                                <!-- <div class="col-12 mb-4">
                                                     <h6>Password Requirements:</h6>
                                                     <ul class="ps-3 mb-0">
                                                         <li class="mb-1">Minimum 8 characters long - the more, the better</li>
                                                         <li class="mb-1">At least one lowercase character</li>
                                                         <li>At least one number, symbol, or whitespace character</li>
                                                     </ul>
-                                                </div>
+                                                </div> -->
                                                 <div>
-                                                    <button type="submit" class="btn btn-primary me-2">Save changes</button>
+                                                    <button type="submit" class="btn btn-primary me-2" dmx-bind:disabled="state.executing">Save changes</button>
                                                     <button type="reset" class="btn btn-label-secondary">Cancel</button>
                                                 </div>
                                             </div>
@@ -231,19 +245,81 @@
     <script src="/assets/vendor/libs/hammer/hammer.js"></script>
     <script src="/assets/vendor/libs/typeahead-js/typeahead.js"></script>
     <script src="/assets/vendor/js/menu.js"></script>
-    <!-- endbuild -->
-
-    <!-- Vendors JS -->
-    <script src="/assets/vendor/libs/select2/select2.js"></script>
-    <script src="/assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
-    <script src="/assets/vendor/libs/bloodhound/bloodhound.js"></script>
-
     <!-- Main JS -->
     <script src="/assets/js/main.js"></script>
 
     <!-- Page JS -->
     <script src="/assets/js/forms-selects.js"></script>
-    <!-- Page JS -->
-    <script src="/assets/js/pages-account-settings-security.js"></script>
-    <script src="/assets/js/modal-enable-otp.js"></script>
+    <script>
+        //Password Validation
+        var myConfInput = document.getElementById("multiStepsConfirmPass");
+        myConfInput.onfocus = function () {
+        document.getElementById("ConfPassError").style.display = "block";
+        }
+        var myInput = document.getElementById("multiStepsPass");
+        var letter = document.getElementById("letter");
+        var capital = document.getElementById("capital");
+        var number = document.getElementById("number");
+        var length = document.getElementById("length");
+        var special = document.getElementById("special");
+        // When the user clicks on the password field, show the message box
+        myInput.onfocus = function () {
+        document.getElementById("message").style.display = "block";
+        }
+        
+        // When the user clicks outside of the password field, hide the message box
+        myInput.onblur = function () {
+        document.getElementById("message").style.display = "none";
+        }
+        // When the user starts to type something inside the password field
+        myInput.onkeyup = function () {
+        var specialChar = /(?=.*[@$!%*#?&])/;
+        if (myInput.value.match(specialChar)) {
+        special.classList.remove("invalid");
+        special.classList.add("valid");
+        } else {
+        special.classList.remove("valid");
+        special.classList.add("invalid");
+        }
+        
+        // Validate lowercase letters
+        var lowerCaseLetters = /[a-z]/g;
+        if (myInput.value.match(lowerCaseLetters)) {
+        letter.classList.remove("invalid");
+        letter.classList.add("valid");
+        } else {
+        letter.classList.remove("valid");
+        letter.classList.add("invalid");
+        }
+        
+        // Validate capital letters
+        var upperCaseLetters = /[A-Z]/g;
+        if (myInput.value.match(upperCaseLetters)) {
+        capital.classList.remove("invalid");
+        capital.classList.add("valid");
+        } else {
+        capital.classList.remove("valid");
+        capital.classList.add("invalid");
+        }
+        
+        // Validate numbers
+        var numbers = /[0-9]/g;
+        if (myInput.value.match(numbers)) {
+        number.classList.remove("invalid");
+        number.classList.add("valid");
+        } else {
+        number.classList.remove("valid");
+        number.classList.add("invalid");
+        }
+        
+        // Validate length
+        if (myInput.value.length >= 8) {
+        length.classList.remove("invalid");
+        length.classList.add("valid");
+        } else {
+        length.classList.remove("valid");
+        length.classList.add("invalid");
+        }
+        }
+    </script>
 </body>

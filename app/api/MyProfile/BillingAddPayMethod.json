@@ -1,0 +1,583 @@
+{
+  "meta": {
+    "options": {
+      "linkedFile": "/views/portal/billing.ejs",
+      "linkedForm": "creditCardForm"
+    },
+    "$_POST": [
+      {
+        "type": "text",
+        "fieldName": "collapsible-payment",
+        "name": "collapsible-payment"
+      },
+      {
+        "type": "text",
+        "fieldName": "paymentCard",
+        "name": "paymentCard"
+      },
+      {
+        "type": "text",
+        "fieldName": "paymentName",
+        "name": "paymentName"
+      },
+      {
+        "type": "text",
+        "fieldName": "ExpiryDate",
+        "name": "ExpiryDate"
+      },
+      {
+        "type": "text",
+        "fieldName": "paymentCvv",
+        "options": {
+          "rules": {
+            "core:maxlength": {
+              "param": "3"
+            }
+          }
+        },
+        "name": "paymentCvv"
+      },
+      {
+        "type": "text",
+        "fieldName": "SaveOrNot",
+        "name": "SaveOrNot"
+      },
+      {
+        "type": "text",
+        "fieldName": "payment_method_id",
+        "name": "payment_method_id"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "security",
+          "permissions": [
+            "write"
+          ],
+          "loginUrl": "/portal/login",
+          "forbiddenUrl": "/*"
+        }
+      },
+      {
+        "name": "identity",
+        "module": "auth",
+        "action": "identify",
+        "options": {
+          "provider": "security"
+        },
+        "output": false,
+        "meta": []
+      },
+      {
+        "name": "",
+        "module": "core",
+        "action": "trycatch",
+        "options": {
+          "try": {
+            "steps": {
+              "name": "",
+              "module": "core",
+              "action": "condition",
+              "options": {
+                "if": "{{$_POST.payment_method_id}}",
+                "then": {
+                  "steps": [
+                    {
+                      "name": "updateCardInfo",
+                      "module": "dbupdater",
+                      "action": "update",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "update",
+                          "values": [
+                            {
+                              "table": "payment_card_info",
+                              "column": "card_number",
+                              "type": "text",
+                              "value": "{{$_POST.paymentCard}}"
+                            },
+                            {
+                              "table": "payment_card_info",
+                              "column": "card_holder_name",
+                              "type": "text",
+                              "value": "{{$_POST.paymentName}}"
+                            },
+                            {
+                              "table": "payment_card_info",
+                              "column": "expiry_date",
+                              "type": "text",
+                              "value": "{{$_POST.ExpiryDate}}"
+                            },
+                            {
+                              "table": "payment_card_info",
+                              "column": "cvv_code",
+                              "type": "text",
+                              "value": "{{$_POST.paymentCvv}}"
+                            },
+                            {
+                              "table": "payment_card_info",
+                              "column": "updated_on",
+                              "type": "datetime",
+                              "value": "{{NOW_UTC}}"
+                            }
+                          ],
+                          "table": "payment_card_info",
+                          "wheres": {
+                            "condition": "AND",
+                            "rules": [
+                              {
+                                "id": "id",
+                                "field": "id",
+                                "type": "double",
+                                "operator": "equal",
+                                "value": "{{$_POST.payment_method_id}}",
+                                "data": {
+                                  "column": "id"
+                                },
+                                "operation": "="
+                              }
+                            ],
+                            "conditional": null,
+                            "valid": true
+                          },
+                          "query": "UPDATE payment_card_info\nSET card_number = :P1 /* {{$_POST.paymentCard}} */, card_holder_name = :P2 /* {{$_POST.paymentName}} */, expiry_date = :P3 /* {{$_POST.ExpiryDate}} */, cvv_code = :P4 /* {{$_POST.paymentCvv}} */, updated_on = :P5 /* {{NOW_UTC}} */\nWHERE id = :P6 /* {{$_POST.payment_method_id}} */",
+                          "params": [
+                            {
+                              "name": ":P1",
+                              "type": "expression",
+                              "value": "{{$_POST.paymentCard}}"
+                            },
+                            {
+                              "name": ":P2",
+                              "type": "expression",
+                              "value": "{{$_POST.paymentName}}"
+                            },
+                            {
+                              "name": ":P3",
+                              "type": "expression",
+                              "value": "{{$_POST.ExpiryDate}}"
+                            },
+                            {
+                              "name": ":P4",
+                              "type": "expression",
+                              "value": "{{$_POST.paymentCvv}}"
+                            },
+                            {
+                              "name": ":P5",
+                              "type": "expression",
+                              "value": "{{NOW_UTC}}"
+                            },
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P6",
+                              "value": "{{$_POST.payment_method_id}}"
+                            }
+                          ]
+                        }
+                      },
+                      "meta": [
+                        {
+                          "name": "affected",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "insertNotif",
+                      "module": "dbupdater",
+                      "action": "insert",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "insert",
+                          "values": [
+                            {
+                              "table": "notifications",
+                              "column": "user_id",
+                              "type": "number",
+                              "value": "{{identity}}"
+                            },
+                            {
+                              "table": "notifications",
+                              "column": "notif_type",
+                              "type": "text",
+                              "value": "{{'TextOnly'}}"
+                            },
+                            {
+                              "table": "notifications",
+                              "column": "notif_name",
+                              "type": "text",
+                              "value": "{{'Payment Methods Updated'}}"
+                            },
+                            {
+                              "table": "notifications",
+                              "column": "notif_details",
+                              "type": "text",
+                              "value": "{{'Payment Card details updated'}}"
+                            }
+                          ],
+                          "table": "notifications",
+                          "query": "INSERT INTO notifications\n(user_id, notif_type, notif_name, notif_details) VALUES (:P1 /* {{identity}} */, :P2 /* {{'TextOnly'}} */, :P3 /* {{'Payment Methods Updated'}} */, :P4 /* {{'Payment Card details updated'}} */)",
+                          "params": [
+                            {
+                              "name": ":P1",
+                              "type": "expression",
+                              "value": "{{identity}}"
+                            },
+                            {
+                              "name": ":P2",
+                              "type": "expression",
+                              "value": "{{'TextOnly'}}"
+                            },
+                            {
+                              "name": ":P3",
+                              "type": "expression",
+                              "value": "{{'Payment Methods Updated'}}"
+                            },
+                            {
+                              "name": ":P4",
+                              "type": "expression",
+                              "value": "{{'Payment Card details updated'}}"
+                            }
+                          ]
+                        }
+                      },
+                      "meta": [
+                        {
+                          "name": "identity",
+                          "type": "text"
+                        },
+                        {
+                          "name": "affected",
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "else": {
+                  "steps": [
+                    {
+                      "name": "GetCard",
+                      "module": "dbconnector",
+                      "action": "single",
+                      "options": {
+                        "connection": "VizzyDB",
+                        "sql": {
+                          "type": "SELECT",
+                          "columns": [
+                            {
+                              "table": "payment_card_info",
+                              "column": "id",
+                              "alias": "CountId",
+                              "aggregate": "COUNT"
+                            }
+                          ],
+                          "table": {
+                            "name": "payment_card_info"
+                          },
+                          "joins": [],
+                          "groupBy": [],
+                          "wheres": {
+                            "condition": "AND",
+                            "rules": [
+                              {
+                                "id": "payment_card_info.user_id",
+                                "field": "payment_card_info.user_id",
+                                "type": "double",
+                                "operator": "equal",
+                                "value": "{{identity}}",
+                                "data": {
+                                  "table": "payment_card_info",
+                                  "column": "user_id",
+                                  "type": "number",
+                                  "columnObj": {
+                                    "type": "integer",
+                                    "primary": false,
+                                    "unique": false,
+                                    "nullable": true,
+                                    "name": "user_id"
+                                  }
+                                },
+                                "operation": "="
+                              },
+                              {
+                                "id": "payment_card_info.card_number",
+                                "field": "payment_card_info.card_number",
+                                "type": "string",
+                                "operator": "equal",
+                                "value": "{{$_POST.paymentCard}}",
+                                "data": {
+                                  "table": "payment_card_info",
+                                  "column": "card_number",
+                                  "type": "text",
+                                  "columnObj": {
+                                    "type": "string",
+                                    "maxLength": 50,
+                                    "primary": false,
+                                    "unique": false,
+                                    "nullable": true,
+                                    "name": "card_number"
+                                  }
+                                },
+                                "operation": "="
+                              }
+                            ],
+                            "conditional": null,
+                            "valid": true
+                          },
+                          "query": "SELECT COUNT(id) AS CountId\nFROM payment_card_info\nWHERE user_id = :P1 /* {{identity}} */ AND card_number = :P2 /* {{$_POST.paymentCard}} */",
+                          "params": [
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P1",
+                              "value": "{{identity}}"
+                            },
+                            {
+                              "operator": "equal",
+                              "type": "expression",
+                              "name": ":P2",
+                              "value": "{{$_POST.paymentCard}}"
+                            }
+                          ]
+                        }
+                      },
+                      "output": false,
+                      "meta": [
+                        {
+                          "type": "number",
+                          "name": "CountId"
+                        }
+                      ],
+                      "outputType": "object"
+                    },
+                    {
+                      "name": "",
+                      "module": "core",
+                      "action": "condition",
+                      "options": {
+                        "if": "{{(GetCard.CountId<1)}}",
+                        "then": {
+                          "steps": [
+                            {
+                              "name": "insertCardInfo",
+                              "module": "dbupdater",
+                              "action": "insert",
+                              "options": {
+                                "connection": "VizzyDB",
+                                "sql": {
+                                  "type": "insert",
+                                  "values": [
+                                    {
+                                      "table": "payment_card_info",
+                                      "column": "user_id",
+                                      "type": "number",
+                                      "value": "{{identity}}"
+                                    },
+                                    {
+                                      "table": "payment_card_info",
+                                      "column": "card_number",
+                                      "type": "text",
+                                      "value": "{{$_POST.paymentCard}}"
+                                    },
+                                    {
+                                      "table": "payment_card_info",
+                                      "column": "card_holder_name",
+                                      "type": "text",
+                                      "value": "{{$_POST.paymentName}}"
+                                    },
+                                    {
+                                      "table": "payment_card_info",
+                                      "column": "expiry_date",
+                                      "type": "text",
+                                      "value": "{{$_POST.ExpiryDate}}"
+                                    },
+                                    {
+                                      "table": "payment_card_info",
+                                      "column": "cvv_code",
+                                      "type": "text",
+                                      "value": "{{$_POST.paymentCvv}}"
+                                    },
+                                    {
+                                      "table": "payment_card_info",
+                                      "column": "is_save_card",
+                                      "type": "text",
+                                      "value": "{{'Yes'}}"
+                                    },
+                                    {
+                                      "table": "payment_card_info",
+                                      "column": "primary_card",
+                                      "type": "text",
+                                      "value": "{{'Primary'}}"
+                                    }
+                                  ],
+                                  "table": "payment_card_info",
+                                  "query": "INSERT INTO payment_card_info\n(user_id, card_number, card_holder_name, expiry_date, cvv_code, is_save_card, primary_card) VALUES (:P1 /* {{identity}} */, :P2 /* {{$_POST.paymentCard}} */, :P3 /* {{$_POST.paymentName}} */, :P4 /* {{$_POST.ExpiryDate}} */, :P5 /* {{$_POST.paymentCvv}} */, :P6 /* {{'Yes'}} */, :P7 /* {{'Primary'}} */)",
+                                  "params": [
+                                    {
+                                      "name": ":P1",
+                                      "type": "expression",
+                                      "value": "{{identity}}"
+                                    },
+                                    {
+                                      "name": ":P2",
+                                      "type": "expression",
+                                      "value": "{{$_POST.paymentCard}}"
+                                    },
+                                    {
+                                      "name": ":P3",
+                                      "type": "expression",
+                                      "value": "{{$_POST.paymentName}}"
+                                    },
+                                    {
+                                      "name": ":P4",
+                                      "type": "expression",
+                                      "value": "{{$_POST.ExpiryDate}}"
+                                    },
+                                    {
+                                      "name": ":P5",
+                                      "type": "expression",
+                                      "value": "{{$_POST.paymentCvv}}"
+                                    },
+                                    {
+                                      "name": ":P6",
+                                      "type": "expression",
+                                      "value": "{{'Yes'}}"
+                                    },
+                                    {
+                                      "name": ":P7",
+                                      "type": "expression",
+                                      "value": "{{'Primary'}}"
+                                    }
+                                  ]
+                                }
+                              },
+                              "meta": [
+                                {
+                                  "name": "identity",
+                                  "type": "text"
+                                },
+                                {
+                                  "name": "affected",
+                                  "type": "number"
+                                }
+                              ]
+                            },
+                            {
+                              "name": "insertNotif",
+                              "module": "dbupdater",
+                              "action": "insert",
+                              "options": {
+                                "connection": "VizzyDB",
+                                "sql": {
+                                  "type": "insert",
+                                  "values": [
+                                    {
+                                      "table": "notifications",
+                                      "column": "user_id",
+                                      "type": "number",
+                                      "value": "{{identity}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "notif_type",
+                                      "type": "text",
+                                      "value": "{{'TextOnly'}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "notif_name",
+                                      "type": "text",
+                                      "value": "{{'Payment Methods Added'}}"
+                                    },
+                                    {
+                                      "table": "notifications",
+                                      "column": "notif_details",
+                                      "type": "text",
+                                      "value": "{{'A new payment card details with card holder name '+$_POST.paymentName+' is added.'}}"
+                                    }
+                                  ],
+                                  "table": "notifications",
+                                  "query": "INSERT INTO notifications\n(user_id, notif_type, notif_name, notif_details) VALUES (:P1 /* {{identity}} */, :P2 /* {{'TextOnly'}} */, :P3 /* {{'Payment Methods Added'}} */, :P4 /* {{'A new payment card details with card holder name '+$_POST.paymentName+' is added.'}} */)",
+                                  "params": [
+                                    {
+                                      "name": ":P1",
+                                      "type": "expression",
+                                      "value": "{{identity}}"
+                                    },
+                                    {
+                                      "name": ":P2",
+                                      "type": "expression",
+                                      "value": "{{'TextOnly'}}"
+                                    },
+                                    {
+                                      "name": ":P3",
+                                      "type": "expression",
+                                      "value": "{{'Payment Methods Added'}}"
+                                    },
+                                    {
+                                      "name": ":P4",
+                                      "type": "expression",
+                                      "value": "{{'A new payment card details with card holder name '+$_POST.paymentName+' is added.'}}"
+                                    }
+                                  ]
+                                }
+                              },
+                              "meta": [
+                                {
+                                  "name": "identity",
+                                  "type": "text"
+                                },
+                                {
+                                  "name": "affected",
+                                  "type": "number"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "else": {
+                          "steps": {
+                            "name": "Resp",
+                            "module": "core",
+                            "action": "response",
+                            "options": {
+                              "status": 401,
+                              "data": "Card already used, please update"
+                            }
+                          }
+                        }
+                      },
+                      "outputType": "boolean"
+                    }
+                  ]
+                }
+              },
+              "outputType": "boolean"
+            }
+          },
+          "catch": {
+            "steps": {
+              "name": "Resp",
+              "module": "core",
+              "action": "response",
+              "options": {
+                "status": 401,
+                "data": "An error occurred"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

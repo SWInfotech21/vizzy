@@ -662,6 +662,101 @@
           }
         ],
         "outputType": "object"
+      },
+      {
+        "name": "TotalUnreadNotifications",
+        "module": "dbconnector",
+        "action": "single",
+        "options": {
+          "connection": "VizzyDB",
+          "sql": {
+            "type": "SELECT",
+            "columns": [
+              {
+                "table": "notifications",
+                "column": "id",
+                "alias": "CountId",
+                "aggregate": "COUNT"
+              }
+            ],
+            "table": {
+              "name": "notifications"
+            },
+            "joins": [],
+            "query": "SELECT COUNT(id) AS CountId\nFROM notifications\nWHERE user_id = :P1 /* {{identity}} */ AND checked_by_user <> :P2 /* {{'Yes'}} */",
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{identity}}"
+              },
+              {
+                "operator": "not_equal",
+                "type": "expression",
+                "name": ":P2",
+                "value": "{{'Yes'}}"
+              }
+            ],
+            "groupBy": [],
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "notifications.user_id",
+                  "field": "notifications.user_id",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{identity}}",
+                  "data": {
+                    "table": "notifications",
+                    "column": "user_id",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "integer",
+                      "primary": false,
+                      "unique": false,
+                      "nullable": true,
+                      "name": "user_id"
+                    }
+                  },
+                  "operation": "="
+                },
+                {
+                  "id": "notifications.checked_by_user",
+                  "field": "notifications.checked_by_user",
+                  "type": "string",
+                  "operator": "not_equal",
+                  "value": "{{'Yes'}}",
+                  "data": {
+                    "table": "notifications",
+                    "column": "checked_by_user",
+                    "type": "text",
+                    "columnObj": {
+                      "type": "string",
+                      "maxLength": 10,
+                      "primary": false,
+                      "unique": false,
+                      "nullable": true,
+                      "name": "checked_by_user"
+                    }
+                  },
+                  "operation": "<>"
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            }
+          }
+        },
+        "output": true,
+        "meta": [
+          {
+            "type": "number",
+            "name": "CountId"
+          }
+        ],
+        "outputType": "object"
       }
     ]
   }

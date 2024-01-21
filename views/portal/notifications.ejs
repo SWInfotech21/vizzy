@@ -1,6 +1,5 @@
-<!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="notifications" appConnect="local" components="{dmxDataTraversal:{},dmxBootstrap5Alert:{},dmxBootstrap5Modal:{}}" -->
+<!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="notifications" appConnect="local" components="{dmxDataTraversal:{},dmxBootstrap5Alert:{},dmxBootstrap5Modal:{},dmxStateManagement:{},dmxBootstrap5PagingGenerator:{},dmxBootstrap5Navigation:{}}" -->
 <meta name="ac:route" content="/portal/notifications">
-<dmx-data-view id="dvNotifications" dmx-bind:data="scNotif.data.query.data"></dmx-data-view>
 
 <head>
     <title>Vizzy Dashboard</title>
@@ -64,19 +63,19 @@
                                     <!-- Radio -->
                                     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio1" />
-                                        <label class="btn btn-outline-primary" for="btnradio1" dmx-on:click="browser1.goto('/portal/my-profile')">Profile</label>
+                                        <label class="btn btn-outline-primary px-2 px-sm-3 px-md-4" for="btnradio1" dmx-on:click="browser1.goto('/portal/my-profile')">Profile</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio2" />
-                                        <label class="btn btn-outline-primary" for="btnradio2" dmx-on:click="browser1.goto('/portal/plan')">Plan</label>
+                                        <label class="btn btn-outline-primary px-2 px-sm-3 px-md-4" for="btnradio2" dmx-on:click="browser1.goto('/portal/plan')">Plan</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio3" checked />
-                                        <label class="btn btn-outline-primary" for="btnradio3" dmx-on:click="browser1.goto('/portal/notifications')">Notifications</label>
+                                        <label class="btn btn-outline-primary px-2 px-sm-3 px-md-4" for="btnradio3" dmx-on:click="browser1.goto('/portal/notifications');scUpdateNotif.load()">Notifications</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio4" />
-                                        <label class="btn btn-outline-primary" for="btnradio4" dmx-on:click="browser1.goto('/portal/security')">Security</label>
+                                        <label class="btn btn-outline-primary px-2 px-sm-3 px-md-4" for="btnradio4" dmx-on:click="browser1.goto('/portal/security')">Security</label>
 
                                         <input type="radio" class="btn-check" name="btnradio" id="btnradio5" />
-                                        <label class="btn btn-outline-primary" for="btnradio5" dmx-on:click="browser1.goto('/portal/billing')">Billing</label>
+                                        <label class="btn btn-outline-primary px-2 px-sm-3 px-md-4" for="btnradio5" dmx-on:click="browser1.goto('/portal/billing')">Billing</label>
                                     </div>
                                 </div>
 
@@ -104,7 +103,7 @@
                                                     <th class="text-nowrap text-center">When</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="repeatNotif" is="dmx-repeat" dmx-bind:repeat="dvNotifications.data" key="id">
+                                            <tbody id="repeatNotif" is="dmx-repeat" dmx-bind:repeat="scNotif.data.query.data" key="id">
                                                 <tr>
                                                     <td class="text-nowrap">
                                                         <h6 class="mb-1">{{notif_name}}</h6>
@@ -120,6 +119,23 @@
                                     </div>
                                     <!-- /table Notifications -->
                                 </div>
+                                <ul class="pagination mt-3" dmx-populate="scNotif.data.query" dmx-state="qm" dmx-offset="offset" dmx-generator="bs5paging">
+                                    <li class="page-item" dmx-class:disabled="scNotif.data.query.page.current == 1" aria-label="First">
+                                        <a href="javascript:void(0)" class="page-link" dmx-on:click="qm.set('offset',scNotif.data.query.page.offset.first)"><span aria-hidden="true">&lsaquo;&lsaquo;</span></a>
+                                    </li>
+                                    <li class="page-item" dmx-class:disabled="scNotif.data.query.page.current == 1" aria-label="Previous">
+                                        <a href="javascript:void(0)" class="page-link" dmx-on:click="qm.set('offset',scNotif.data.query.page.offset.prev)"><span aria-hidden="true">&lsaquo;</span></a>
+                                    </li>
+                                    <li class="page-item" dmx-class:active="title == scNotif.data.query.page.current" dmx-class:disabled="!active" dmx-repeat="scNotif.data.query.getServerConnectPagination(2,1,'...')">
+                                        <a href="javascript:void(0)" class="page-link" dmx-on:click="qm.set('offset',(page-1)*scNotif.data.query.limit)">{{title}}</a>
+                                    </li>
+                                    <li class="page-item" dmx-class:disabled="scNotif.data.query.page.current ==  scNotif.data.query.page.total" aria-label="Next">
+                                        <a href="javascript:void(0)" class="page-link" dmx-on:click="qm.set('offset',scNotif.data.query.page.offset.next)"><span aria-hidden="true">&rsaquo;</span></a>
+                                    </li>
+                                    <li class="page-item" dmx-class:disabled="scNotif.data.query.page.current ==  scNotif.data.query.page.total" aria-label="Last">
+                                        <a href="javascript:void(0)" class="page-link" dmx-on:click="qm.set('offset',scNotif.data.query.page.offset.last)"><span aria-hidden="true">&rsaquo;&rsaquo;</span></a>
+                                    </li>
+                                </ul>
 
                             </div>
 
@@ -150,17 +166,10 @@
     <script src="/assets/vendor/js/menu.js"></script>
     <!-- endbuild -->
 
-    <!-- Vendors JS -->
-    <script src="/assets/vendor/libs/select2/select2.js"></script>
-    <script src="/assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
-    <script src="/assets/vendor/libs/bloodhound/bloodhound.js"></script>
 
     <!-- Main JS -->
     <script src="/assets/js/main.js"></script>
 
     <!-- Page JS -->
     <script src="/assets/js/forms-selects.js"></script>
-    <!-- Page JS -->
-    <script src="/assets/js/pages-account-settings-security.js"></script>
-    <script src="/assets/js/modal-enable-otp.js"></script>
 </body>

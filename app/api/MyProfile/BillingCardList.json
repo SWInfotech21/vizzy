@@ -1,0 +1,235 @@
+{
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "offset"
+      },
+      {
+        "type": "text",
+        "name": "limit"
+      },
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      }
+    ]
+  },
+  "exec": {
+    "steps": [
+      {
+        "name": "",
+        "module": "auth",
+        "action": "restrict",
+        "options": {
+          "provider": "security",
+          "permissions": [
+            "write"
+          ],
+          "loginUrl": "/portal/login",
+          "forbiddenUrl": "/*"
+        }
+      },
+      {
+        "name": "identity",
+        "module": "auth",
+        "action": "identify",
+        "options": {
+          "provider": "security"
+        },
+        "output": false,
+        "meta": []
+      },
+      {
+        "name": "query",
+        "module": "dbconnector",
+        "action": "paged",
+        "options": {
+          "connection": "VizzyDB",
+          "sql": {
+            "type": "SELECT",
+            "columns": [
+              {
+                "table": "payment_card_info",
+                "column": "id"
+              },
+              {
+                "table": "payment_card_info",
+                "column": "card_number"
+              },
+              {
+                "table": "payment_card_info",
+                "column": "card_holder_name"
+              },
+              {
+                "table": "payment_card_info",
+                "column": "expiry_date"
+              },
+              {
+                "table": "payment_card_info",
+                "column": "cvv_code"
+              },
+              {
+                "table": "payment_card_info",
+                "column": "primary_card"
+              }
+            ],
+            "table": {
+              "name": "payment_card_info"
+            },
+            "joins": [],
+            "wheres": {
+              "condition": "AND",
+              "rules": [
+                {
+                  "id": "payment_card_info.user_id",
+                  "field": "payment_card_info.user_id",
+                  "type": "double",
+                  "operator": "equal",
+                  "value": "{{identity}}",
+                  "data": {
+                    "table": "payment_card_info",
+                    "column": "user_id",
+                    "type": "number",
+                    "columnObj": {
+                      "type": "integer",
+                      "primary": false,
+                      "unique": false,
+                      "nullable": true,
+                      "name": "user_id"
+                    }
+                  },
+                  "operation": "="
+                },
+                {
+                  "id": "payment_card_info.is_save_card",
+                  "field": "payment_card_info.is_save_card",
+                  "type": "string",
+                  "operator": "equal",
+                  "value": "{{'Yes'}}",
+                  "data": {
+                    "table": "payment_card_info",
+                    "column": "is_save_card",
+                    "type": "text",
+                    "columnObj": {
+                      "type": "string",
+                      "maxLength": 10,
+                      "primary": false,
+                      "unique": false,
+                      "nullable": true,
+                      "name": "is_save_card"
+                    }
+                  },
+                  "operation": "="
+                }
+              ],
+              "conditional": null,
+              "valid": true
+            },
+            "query": "SELECT id, card_number, card_holder_name, expiry_date, cvv_code, primary_card\nFROM payment_card_info\nWHERE user_id = :P1 /* {{identity}} */ AND is_save_card = :P2 /* {{'Yes'}} */",
+            "params": [
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P1",
+                "value": "{{identity}}"
+              },
+              {
+                "operator": "equal",
+                "type": "expression",
+                "name": ":P2",
+                "value": "{{'Yes'}}"
+              }
+            ]
+          }
+        },
+        "output": true,
+        "meta": [
+          {
+            "name": "offset",
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "type": "number"
+          },
+          {
+            "name": "total",
+            "type": "number"
+          },
+          {
+            "name": "page",
+            "type": "object",
+            "sub": [
+              {
+                "name": "offset",
+                "type": "object",
+                "sub": [
+                  {
+                    "name": "first",
+                    "type": "number"
+                  },
+                  {
+                    "name": "prev",
+                    "type": "number"
+                  },
+                  {
+                    "name": "next",
+                    "type": "number"
+                  },
+                  {
+                    "name": "last",
+                    "type": "number"
+                  }
+                ]
+              },
+              {
+                "name": "current",
+                "type": "number"
+              },
+              {
+                "name": "total",
+                "type": "number"
+              }
+            ]
+          },
+          {
+            "name": "data",
+            "type": "array",
+            "sub": [
+              {
+                "type": "number",
+                "name": "id"
+              },
+              {
+                "type": "text",
+                "name": "card_number"
+              },
+              {
+                "type": "text",
+                "name": "card_holder_name"
+              },
+              {
+                "type": "text",
+                "name": "expiry_date"
+              },
+              {
+                "type": "text",
+                "name": "cvv_code"
+              },
+              {
+                "type": "text",
+                "name": "primary_card"
+              }
+            ]
+          }
+        ],
+        "outputType": "object"
+      }
+    ]
+  }
+}
