@@ -38,5 +38,9 @@
   "billing.ejs": {
     "layoutPage": "dashboard",
     "description": ""
+  },
+  "news.ejs": {
+    "layoutPage": "dashboard",
+    "description": ""
   }
 }

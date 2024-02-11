@@ -73,6 +73,11 @@
       "exec": "/api/User/CheckResetToken"
     },
     {
+      "path": "/portal/news",
+      "page": "portal/news",
+      "layout": "dashboard"
+    },
+    {
       "path": "/*",
       "page": "pages-error",
       "layout": "main"

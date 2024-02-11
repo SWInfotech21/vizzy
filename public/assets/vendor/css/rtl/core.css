@@ -11034,6 +11034,102 @@ html:not([dir=rtl]) .input-group-merge .form-control:not(textarea):not(:last-chi
   color: #b7b5be;
 }
 
+.form-floating > .form-control:not(:-moz-placeholder-shown)::-moz-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:focus::-moz-placeholder, .form-floating > .form-control:not(:placeholder-shown)::-moz-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:not(:-ms-input-placeholder):-ms-input-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:focus:-ms-input-placeholder, .form-floating > .form-control:not(:placeholder-shown):-ms-input-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:not(:-ms-input-placeholder)::-ms-input-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:focus::-ms-input-placeholder, .form-floating > .form-control:not(:placeholder-shown)::-ms-input-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:not(:-moz-placeholder-shown)::-moz-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:not(:-moz-placeholder-shown)::placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:not(:-ms-input-placeholder):-ms-input-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:not(:-ms-input-placeholder)::-ms-input-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:not(:-ms-input-placeholder)::placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:focus::-webkit-input-placeholder, .form-floating > .form-control:not(:placeholder-shown)::-webkit-input-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:not(:-moz-placeholder-shown)::-moz-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:focus::-moz-placeholder, .form-floating > .form-control:not(:placeholder-shown)::-moz-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:not(:-ms-input-placeholder):-ms-input-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:focus:-ms-input-placeholder, .form-floating > .form-control:not(:placeholder-shown):-ms-input-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:not(:-ms-input-placeholder)::-ms-input-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:focus::-ms-input-placeholder, .form-floating > .form-control:not(:placeholder-shown)::-ms-input-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:not(:-moz-placeholder-shown)::-moz-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:not(:-moz-placeholder-shown)::placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:not(:-ms-input-placeholder):-ms-input-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:not(:-ms-input-placeholder)::-ms-input-placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:not(:-ms-input-placeholder)::placeholder {
+  color: #b7b5be;
+}
+
+.form-floating > .form-control:focus::-webkit-input-placeholder, .form-floating > .form-control:not(:placeholder-shown)::-webkit-input-placeholder {
+  color: #b7b5be;
+}
+
 .form-floating > .form-control:focus::-moz-placeholder, .form-floating > .form-control:not(:placeholder-shown)::-moz-placeholder {
   color: #b7b5be;
 }

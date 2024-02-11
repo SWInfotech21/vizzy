@@ -34,7 +34,7 @@
                 <h3 class="mb-1">Welcome to Vizzy! 👋</h3>
                 <p class="mb-4">{{(varSteps.value=='Login')?'Please sign-in to your account and start the adventure':'Please enter the OTP sent to the registered email'}}</p>
 
-                <form id="formAuthentication" class="mb-3" action="/api/User/UserLogin" method="post" is="dmx-serverconnect-form" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp);" dmx-on:success="notifies1.success(formAuthentication.data.Message);((formAuthentication.data.Status==201)?varSteps.setValue('OTPVerify'):browser1.goto('/portal/my-profile'));formAuthentication.reset(true);" dmx-show="(varSteps.value=='Login')">
+                <form id="formAuthentication" class="mb-3" action="/api/User/UserLogin" method="post" is="dmx-serverconnect-form" dmx-on:error="notifies1.warning(lastError.response)" dmx-on:unauthorized="notifies1.warning(lastError.response)" dmx-on:forbidden="notifies1.warning(lastError.response)" dmx-on:invalid="notifies1.warning(lastError.response.data.Resp);" dmx-on:success="notifies1.success(formAuthentication.data.Message);((formAuthentication.data.Status==201)?varSteps.setValue('OTPVerify'):browser1.goto('/portal/news'));formAuthentication.reset(true);" dmx-show="(varSteps.value=='Login')">
                     <!-- browser1.goto('/portal/my-profile') -->
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>

@@ -144,3 +144,7 @@
         height: 270px;
         overflow-y: auto;
     }
+
+    .card .card-body .btn-group ul{
+        min-width: 220px;
+    }
