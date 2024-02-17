@@ -280,12 +280,12 @@
                             <!-- Currency -->
                             <li class="nav-item dropdown-language dropdown me-2 me-xl-0">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-                                    <i class="ti rounded-circle ti-sm" dmx-class:ti-currency-euro="(scUserInfo.data.query.currency_code=='EUR')" dmx-class:ti-currency-pound="(scUserInfo.data.query.currency_code=='POU')" dmx-class:ti-currency-dollar="(scUserInfo.data.query.currency_code=='USD')" dmx-class:ti-currency-rupee="(scUserInfo.data.query.currency_code=='INR')" dmx-class:ti-currency-dollar-canadian="(scUserInfo.data.query.currency_code=='CAD')"></i>
+                                    <i class="ti rounded-circle ti-sm" dmx-class:ti-currency-euro="(scUserInfo.data.query.currency_code=='EUR')" dmx-class:ti-currency-pound="(scUserInfo.data.query.currency_code=='GBP')" dmx-class:ti-currency-dollar="(scUserInfo.data.query.currency_code=='USD')" dmx-class:ti-currency-rupee="(scUserInfo.data.query.currency_code=='INR')" dmx-class:ti-currency-dollar-canadian="(scUserInfo.data.query.currency_code=='CAD')"></i>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" id="repeatCurrency" is="dmx-repeat" dmx-bind:repeat="scCurrencyList.data.CurrencyList" key="currency_id">
                                     <li dmx-on:click="scUpLangCurrency.load({user_currency: currency_id})">
                                         <a class="dropdown-item" href="javascript:void(0);" data-language="en" dmx-class:active="(currency_code==scUserInfo.data.query.currency_code)">
-                                            <span class="align-middle"><i class="ti rounded-circle ti-sm" dmx-class:ti-currency-euro="(currency_code=='EUR')" dmx-class:ti-currency-pound="(currency_code=='POU')" dmx-class:ti-currency-dollar="(currency_code=='USD')" dmx-class:ti-currency-rupee="(currency_code=='INR')" dmx-class:ti-currency-dollar-canadian="(currency_code=='CAD')"></i>{{currency_code}}</span>
+                                            <span class="align-middle"><i class="ti rounded-circle ti-sm" dmx-class:ti-currency-euro="(currency_code=='EUR')" dmx-class:ti-currency-pound="(currency_code=='GBP')" dmx-class:ti-currency-dollar="(currency_code=='USD')" dmx-class:ti-currency-rupee="(currency_code=='INR')" dmx-class:ti-currency-dollar-canadian="(currency_code=='CAD')"></i>{{currency_code}}</span>
                                         </a>
                                     </li>
                                     <!-- <li>
