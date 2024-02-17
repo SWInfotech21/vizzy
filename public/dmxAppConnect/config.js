@@ -422,7 +422,28 @@ dmx.config({
         "type": "text",
         "name": "dir"
       }
-    ]
+    ],
+    "repeatCurrency": {
+      "meta": [
+        {
+          "type": "number",
+          "name": "currency_id"
+        },
+        {
+          "type": "text",
+          "name": "currency_name"
+        },
+        {
+          "type": "text",
+          "name": "currency_code"
+        },
+        {
+          "type": "text",
+          "name": "currency_symbol"
+        }
+      ],
+      "outputType": "array"
+    }
   },
   "notifications": {
     "query": [
@@ -729,6 +750,140 @@ dmx.config({
         {
           "type": "text",
           "name": "zip_code"
+        }
+      ],
+      "outputType": "array"
+    }
+  },
+  "news": {
+    "query": [
+      {
+        "type": "text",
+        "name": "offset"
+      },
+      {
+        "type": "text",
+        "name": "limit"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      },
+      {
+        "type": "text",
+        "name": "sort"
+      }
+    ],
+    "ddNewsList": {
+      "meta": [
+        {
+          "type": "number",
+          "name": "id"
+        },
+        {
+          "type": "text",
+          "name": "image1"
+        },
+        {
+          "type": "text",
+          "name": "image2"
+        },
+        {
+          "type": "text",
+          "name": "image3"
+        },
+        {
+          "type": "text",
+          "name": "heading"
+        },
+        {
+          "type": "text",
+          "name": "sub_heading"
+        },
+        {
+          "type": "text",
+          "name": "description1"
+        },
+        {
+          "type": "text",
+          "name": "description2"
+        },
+        {
+          "type": "text",
+          "name": "description3"
+        },
+        {
+          "type": "text",
+          "name": "source"
+        },
+        {
+          "type": "text",
+          "name": "source_link"
+        },
+        {
+          "type": "datetime",
+          "name": "created"
+        },
+        {
+          "type": "datetime",
+          "name": "modified_on"
+        }
+      ],
+      "outputType": "array"
+    },
+    "repeatNewsList": {
+      "meta": [
+        {
+          "type": "number",
+          "name": "id"
+        },
+        {
+          "type": "text",
+          "name": "image1"
+        },
+        {
+          "type": "text",
+          "name": "image2"
+        },
+        {
+          "type": "text",
+          "name": "image3"
+        },
+        {
+          "type": "text",
+          "name": "heading"
+        },
+        {
+          "type": "text",
+          "name": "sub_heading"
+        },
+        {
+          "type": "text",
+          "name": "description1"
+        },
+        {
+          "type": "text",
+          "name": "description2"
+        },
+        {
+          "type": "text",
+          "name": "description3"
+        },
+        {
+          "type": "text",
+          "name": "source"
+        },
+        {
+          "type": "text",
+          "name": "source_link"
+        },
+        {
+          "type": "datetime",
+          "name": "created"
+        },
+        {
+          "type": "datetime",
+          "name": "modified_on"
         }
       ],
       "outputType": "array"

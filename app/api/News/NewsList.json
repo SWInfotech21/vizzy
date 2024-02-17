@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "$_GET": [
+      {
+        "type": "text",
+        "name": "offset"
+      },
+      {
+        "type": "text",
+        "name": "limit"
+      },
+      {
+        "type": "text",
+        "name": "sort"
+      },
+      {
+        "type": "text",
+        "name": "dir"
+      }
+    ]
+  },
+  "exec": {
+    "steps": {
+      "name": "",
+      "module": "core",
+      "action": "trycatch",
+      "options": {
+        "try": {
+          "steps": {
+            "name": "query",
+            "module": "dbconnector",
+            "action": "paged",
+            "options": {
+              "connection": "VizzyDB",
+              "sql": {
+                "type": "SELECT",
+                "columns": [
+                  {
+                    "table": "news",
+                    "column": "id"
+                  },
+                  {
+                    "table": "news",
+                    "column": "image1"
+                  },
+                  {
+                    "table": "news",
+                    "column": "image2"
+                  },
+                  {
+                    "table": "news",
+                    "column": "image3"
+                  },
+                  {
+                    "table": "news",
+                    "column": "heading"
+                  },
+                  {
+                    "table": "news",
+                    "column": "sub_heading"
+                  },
+                  {
+                    "table": "news",
+                    "column": "description1"
+                  },
+                  {
+                    "table": "news",
+                    "column": "description2"
+                  },
+                  {
+                    "table": "news",
+                    "column": "description3"
+                  },
+                  {
+                    "table": "news",
+                    "column": "source"
+                  },
+                  {
+                    "table": "news",
+                    "column": "source_link"
+                  },
+                  {
+                    "table": "news",
+                    "column": "created"
+                  },
+                  {
+                    "table": "news",
+                    "column": "modified_on"
+                  }
+                ],
+                "table": {
+                  "name": "news"
+                },
+                "primary": "id",
+                "joins": [],
+                "orders": [
+                  {
+                    "table": "news",
+                    "column": "sequence_no",
+                    "direction": "ASC"
+                  }
+                ],
+                "query": "SELECT id, image1, image2, image3, heading, sub_heading, description1, description2, description3, source, source_link, created, modified_on\nFROM news\nORDER BY sequence_no ASC",
+                "params": []
+              }
+            },
+            "output": true,
+            "meta": [
+              {
+                "name": "offset",
+                "type": "number"
+              },
+              {
+                "name": "limit",
+                "type": "number"
+              },
+              {
+                "name": "total",
+                "type": "number"
+              },
+              {
+                "name": "page",
+                "type": "object",
+                "sub": [
+                  {
+                    "name": "offset",
+                    "type": "object",
+                    "sub": [
+                      {
+                        "name": "first",
+                        "type": "number"
+                      },
+                      {
+                        "name": "prev",
+                        "type": "number"
+                      },
+                      {
+                        "name": "next",
+                        "type": "number"
+                      },
+                      {
+                        "name": "last",
+                        "type": "number"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "current",
+                    "type": "number"
+                  },
+                  {
+                    "name": "total",
+                    "type": "number"
+                  }
+                ]
+              },
+              {
+                "name": "data",
+                "type": "array",
+                "sub": [
+                  {
+                    "type": "number",
+                    "name": "id"
+                  },
+                  {
+                    "type": "text",
+                    "name": "image1"
+                  },
+                  {
+                    "type": "text",
+                    "name": "image2"
+                  },
+                  {
+                    "type": "text",
+                    "name": "image3"
+                  },
+                  {
+                    "type": "text",
+                    "name": "heading"
+                  },
+                  {
+                    "type": "text",
+                    "name": "sub_heading"
+                  },
+                  {
+                    "type": "text",
+                    "name": "description1"
+                  },
+                  {
+                    "type": "text",
+                    "name": "description2"
+                  },
+                  {
+                    "type": "text",
+                    "name": "description3"
+                  },
+                  {
+                    "type": "text",
+                    "name": "source"
+                  },
+                  {
+                    "type": "text",
+                    "name": "source_link"
+                  },
+                  {
+                    "type": "datetime",
+                    "name": "created"
+                  },
+                  {
+                    "type": "datetime",
+                    "name": "modified_on"
+                  }
+                ]
+              }
+            ],
+            "outputType": "object"
+          }
+        },
+        "catch": {
+          "steps": {
+            "name": "Resp",
+            "module": "core",
+            "action": "response",
+            "options": {
+              "status": 401,
+              "data": "An error occurred"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -705,6 +705,14 @@
               "unique": false,
               "nullable": true
             }
+          },
+          "sequence_no": {
+            "db": {
+              "type": "integer",
+              "primary": false,
+              "unique": false,
+              "nullable": true
+            }
           }
         }
       },
@@ -1252,7 +1260,7 @@
           },
           "user_currency": {
             "db": {
-              "type": "string",
+              "type": "integer",
               "maxLength": -5,
               "primary": false,
               "unique": false,

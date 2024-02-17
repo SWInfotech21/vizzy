@@ -1,5 +1,8 @@
-<!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="news" appConnect="local" components="{dmxBootstrap5Modal:{}}" -->
+<!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="news" appConnect="local" components="{dmxBootstrap5Modal:{},dmxStateManagement:{},dmxDataTraversal:{},dmxFormatter:{},dmxBootstrap5Navigation:{},dmxBootstrap5PagingGenerator:{}}" -->
 <meta name="ac:route" content="/portal/news">
+<dmx-query-manager id="qm"></dmx-query-manager>
+<dmx-serverconnect id="scNewsList" url="/api/News/NewsList" dmx-param:offset="qm.data.offset" dmx-param:limit="4" dmx-param:sort="qm.data.sort" dmx-param:dir="qm.data.dir"></dmx-serverconnect>
+<dmx-data-detail id="ddNewsList" dmx-bind:data="content.scNewsList.data.query.data" key="id"></dmx-data-detail>
 
 <head>
     <title>Vizzy Dashboard</title>
@@ -45,188 +48,46 @@
     <!-- Content -->
 
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="py-3 mb-4">Visa News<span class="text-muted fw-light"></span> </h4>
-        <!-- Horizontal -->
-        <div class="row mb-5">
-            <div class="col-md-6">
-                <div class="card mb-3" data-bs-toggle="modal" data-bs-target="#NewsDetails">
-                    <div class="row g-0">
-                        <div class="col-md-5">
-                            <img class="card-img card-img-left" src="https://static.euronews.com/articles/stories/08/20/40/34/1920x1080_cmsv2_13d9b322-9f9f-5e43-ab1a-638978ccca42-8204034.jpg" alt="Card image" />
-                        </div>
-                        <div class="col-md-7">
-                            <div class="card-body">
-                                <h6 class="card-title">French court blocks plan to scrap 90-day visa rule for British expats</h6>
-                                <p class="card-text">
-                                    A new law which would have allowed British second-home owners an automatic long-stay visa has been rejected by a French court for being “unconstitutional”.
-                                </p>
-                                <p class="card-text"><small class="text-muted">Source: French embassy<br />Last updated 3 mins ago</small></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="row mx-0">
+            <div class="col-12 col-md-6">
+                <h4 class="py-3 mb-4">Visa News<span class="text-muted fw-light"></span> </h4>
             </div>
-            <div class="col-md-6">
-                <div class="card mb-3" data-bs-toggle="modal" data-bs-target="#NewsDetails">
-                    <div class="row g-0">
-                        <div class="col-md-5">
-                            <img class="card-img card-img-left" src="https://static.euronews.com/articles/stories/07/21/42/92/210x136_cmsv2_53b6c452-b831-51fa-ac59-2ca65a314ee3-7214292.jpg" alt="Card image" />
-                        </div>
-                        <div class="col-md-7">
-                            <div class="card-body">
-                                <h6 class="card-title">Everything you need to know about the EU's new EES and ETIAS visas</h6>
-                                <p class="card-text">
-                                    Entering the European Union will get more complicated for non-EU nationals from autumn this year.
+            <div class="col-12 col-md-6">
+                <ul class="pagination float-end" dmx-populate="scNewsList.data.query" dmx-state="qm" dmx-offset="offset" dmx-generator="bs5paging">
+                    <li class="page-item" dmx-class:disabled="scNewsList.data.query.page.current == 1" aria-label="First">
+                        <a href="javascript:void(0)" class="page-link" dmx-on:click="qm.set('offset',scNewsList.data.query.page.offset.first)"><span aria-hidden="true">&lsaquo;&lsaquo;</span></a>
+                    </li>
+                    <li class="page-item" dmx-class:disabled="scNewsList.data.query.page.current == 1" aria-label="Previous">
+                        <a href="javascript:void(0)" class="page-link" dmx-on:click="qm.set('offset',scNewsList.data.query.page.offset.prev)"><span aria-hidden="true">&lsaquo;</span></a>
+                    </li>
+                    <li class="page-item" dmx-class:active="title == scNewsList.data.query.page.current" dmx-class:disabled="!active" dmx-repeat="scNewsList.data.query.getServerConnectPagination(2,1,'...')">
+                        <a href="javascript:void(0)" class="page-link" dmx-on:click="qm.set('offset',(page-1)*scNewsList.data.query.limit)">{{title}}</a>
+                    </li>
+                    <li class="page-item" dmx-class:disabled="scNewsList.data.query.page.current ==  scNewsList.data.query.page.total" aria-label="Next">
+                        <a href="javascript:void(0)" class="page-link" dmx-on:click="qm.set('offset',scNewsList.data.query.page.offset.next)"><span aria-hidden="true">&rsaquo;</span></a>
+                    </li>
+                    <li class="page-item" dmx-class:disabled="scNewsList.data.query.page.current ==  scNewsList.data.query.page.total" aria-label="Last">
+                        <a href="javascript:void(0)" class="page-link" dmx-on:click="qm.set('offset',scNewsList.data.query.page.offset.last)"><span aria-hidden="true">&rsaquo;&rsaquo;</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-                                    A new Entry Exit System (EES) is set to come into effect in October 2024.
-                                </p>
-                                <p class="card-text"><small class="text-muted">Source: euroNews<br />Date: 11/02/2024</small></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Horizontal data-bs-toggle="modal" data-bs-target="#NewsDetails"-->
+        <div class="row mb-5" id="repeatNewsList" is="dmx-repeat" dmx-bind:repeat="scNewsList.data.query.data" key="id">
             <div class="col-md-6">
-                <div class="card mb-3" data-bs-toggle="modal" data-bs-target="#NewsDetails">
+                <div class="card mb-3" dmx-on:click="NewsDetails.show();ddNewsList.select(id)">
                     <div class="row g-0">
                         <div class="col-md-5">
-                            <img class="card-img card-img-left" src="https://static.euronews.com/articles/stories/08/18/84/94/210x136_cmsv2_fe0183eb-c029-5454-85ec-d20f0945ef82-8188494.jpg" alt="Card image" />
+                            <img class="card-img card-img-left" src="#" alt="Visa News" dmx-bind:src="image1" />
                         </div>
                         <div class="col-md-7">
                             <div class="card-body">
-                                <h6 class="card-title">Here’s how to apply for permanent residency across 5 EU states</h6>
+                                <h6 class="card-title">{{heading}}</h6>
                                 <p class="card-text">
-                                    After you’ve put down roots in a country, you may be thinking about making it more long-term by applying for a permanent residency permit.
+                                    {{description1}}
                                 </p>
-                                <p class="card-text"><small class="text-muted">Source: EU News<br />10/02/2024</small></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card mb-3" data-bs-toggle="modal" data-bs-target="#NewsDetails">
-                    <div class="row g-0">
-                        <div class="col-md-5">
-                            <img class="card-img card-img-left" src="https://static.euronews.com/articles/stories/08/12/88/74/320x180_cmsv2_b1062c1b-030d-5d6c-80dc-af186ce1cac8-8128874.jpg" alt="Card image" />
-                        </div>
-                        <div class="col-md-7">
-                            <div class="card-body">
-                                <h6 class="card-title">Controversial restrictions on UK family visa rules eased</h6>
-                                <p class="card-text">
-                                    The UK government's changes were blasted as an "effective ban" on most UK citizens marrying foreign nationals.
-                                </p>
-                                <p class="card-text"><small class="text-muted">Source: euronews<br />Date: 22/12/2023</small></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-6">
-                <div class="card mb-3" data-bs-toggle="modal" data-bs-target="#NewsDetails">
-                    <div class="row g-0">
-                        <div class="col-md-5">
-                            <img class="card-img card-img-left" src="https://static.euronews.com/articles/stories/08/07/30/04/320x180_cmsv2_0b973e91-5633-52a0-b289-30ce1f012902-8073004.jpg" alt="Card image" />
-                        </div>
-                        <div class="col-md-7">
-                            <div class="card-body">
-                                <h6 class="card-title">This European country has the world’s best digital nomad visa</h6>
-                                <p class="card-text">
-                                    Digital nomad visas can vary in terms of taxes, length and minimum income requirements.
-                                </p>
-                                <p class="card-text"><small class="text-muted">Source: euronews<br />Date: 28/11/2023</small></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card mb-3" data-bs-toggle="modal" data-bs-target="#NewsDetails">
-                    <div class="row g-0">
-                        <div class="col-md-5">
-                            <img class="card-img card-img-left" src="https://static.euronews.com/articles/stories/06/99/83/78/320x180_cmsv2_d2eb9879-a096-5ef2-a02e-a182865b3492-6998378.jpg" alt="Card image" />
-                        </div>
-                        <div class="col-md-7">
-                            <div class="card-body">
-                                <h6 class="card-title">Moving to Germany will be easier in 2024 under a new visa scheme</h6>
-                                <p class="card-text">
-                                    Germany's immigration law reforms will be introduced in three stages starting in November this year.
-                                </p>
-                                <p class="card-text"><small class="text-muted">Source: euronews<br />Date: 16/10/2023</small></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card mb-3" data-bs-toggle="modal" data-bs-target="#NewsDetails">
-                    <div class="row g-0">
-                        <div class="col-md-5">
-                            <img class="card-img card-img-left" src="https://static.euronews.com/articles/stories/07/90/38/54/320x180_cmsv2_ec3d0cf2-7d43-59f2-90fb-97da3e121d58-7903854.jpg" alt="Card image" />
-                        </div>
-                        <div class="col-md-7">
-                            <div class="card-body">
-                                <h6 class="card-title">UK visa fees are going up: Here’s what you need to know</h6>
-                                <p class="card-text">
-                                    The UK government has said how the profits will be spent.
-                                </p>
-                                <p class="card-text"><small class="text-muted">Source: Travel News<br />Date: 19/09/2023</small></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card mb-3" data-bs-toggle="modal" data-bs-target="#NewsDetails">
-                    <div class="row g-0">
-                        <div class="col-md-5">
-                            <img class="card-img card-img-left" src="https://static.euronews.com/articles/stories/07/84/72/98/320x180_cmsv2_0acf31f0-481e-52cb-bc88-9f06a19abe11-7847298.jpg" alt="Card image" />
-                        </div>
-                        <div class="col-md-7">
-                            <div class="card-body">
-                                <h6 class="card-title">The home of cheap beer and night trains is opening to digital nomads</h6>
-                                <p class="card-text">
-                                    Skilled remote workers from eight countries can apply for this new remote work visa in Europe.
-                                </p>
-                                <p class="card-text"><small class="text-muted">Source: euronews<br />Date: 25/08/2023</small></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card mb-3" data-bs-toggle="modal" data-bs-target="#NewsDetails">
-                    <div class="row g-0">
-                        <div class="col-md-5">
-                            <img class="card-img card-img-left" src="https://static.euronews.com/articles/stories/08/12/88/74/320x180_cmsv2_b1062c1b-030d-5d6c-80dc-af186ce1cac8-8128874.jpg" alt="Card image" />
-                        </div>
-                        <div class="col-md-7">
-                            <div class="card-body">
-                                <h6 class="card-title">Controversial restrictions on UK family visa rules eased</h6>
-                                <p class="card-text">
-                                    The UK government's changes were blasted as an "effective ban" on most UK citizens marrying foreign nationals.
-                                </p>
-                                <p class="card-text"><small class="text-muted">Source: euronews<br />Date: 22/12/2023</small></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card mb-3" data-bs-toggle="modal" data-bs-target="#NewsDetails">
-                    <div class="row g-0">
-                        <div class="col-md-5">
-                            <img class="card-img card-img-left" src="https://static.euronews.com/articles/stories/07/79/71/60/320x180_cmsv2_75041cf0-14fc-5b7d-96b2-e5028a390172-7797160.jpg" alt="Card image" />
-                        </div>
-                        <div class="col-md-7">
-                            <div class="card-body">
-                                <h6 class="card-title">Want to move to the US? Golden visas offer a way in for the wealthy</h6>
-                                <p class="card-text">
-                                    How to get a green card by investment and make your American dream a reality.
-                                </p>
-                                <p class="card-text"><small class="text-muted">Source: DESTINATIONS<br />Date: 02/08/2023</small></p>
+                                <p class="card-text"><small class="text-muted">Source: {{source}}<br />{{modified_on.formatDate('dd MMM yyyy')}}</small></p>
                             </div>
                         </div>
                     </div>
@@ -244,14 +105,13 @@
                 <div class="modal-body p-0">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="mb-4">
-                        <h3 class="mb-3">Want to move to the US? Golden visas offer a way in for the wealthy <span class="spinner-grow" role="status" dmx-show="state.executing"></span></h3>
+                        <p class="mb-1"><small>Published: {{content.ddNewsList.data.modified_on.formatDate('dd MMM yyyy')}}<br />Source: {{content.ddNewsList.data.source}}</small></p>
+                        <h3 class="mb-3">{{content.ddNewsList.data.heading}} <span class="spinner-grow" role="status" dmx-show="state.executing"></span></h3>
                         <div class="col-12">
-                            <img class="card-img card-img-left" src="https://static.euronews.com/articles/stories/07/79/71/60/320x180_cmsv2_75041cf0-14fc-5b7d-96b2-e5028a390172-7797160.jpg" alt="Card image" />
+                            <img class="card-img card-img-left" src="#" alt="Visa News" dmx-bind:src="content.ddNewsList.data.image1" />
                         </div>
-                        <p class="text-muted pt-4">How to get a green card by investment and make your American dream a reality. How to get a green card by investment and make your American dream a reality. How to get a green card by investment and make your American dream a reality. How to get a green card by investment and make your American dream a reality. How to get a green card by investment and make your American dream a reality. How to get a green card by investment and make your American dream a reality. How to get a green card by investment and make your American dream a reality. How to get a green card by investment and make your American dream a reality. How to get a green card by investment and make your American dream a reality. How to get a green card by investment and make your American dream a reality. How to get a green card by investment and make your American dream a reality. How to get a green card by investment and make your American dream a reality. How to get a green card by investment and make your American dream a reality. How to get a green card by investment and make your American dream a reality.</p>
+                        <p class="text-muted pt-4">{{content.ddNewsList.data.description1}}</p>
                     </div>
-
-
 
                 </div>
                 <div class="modal-footer p-0">

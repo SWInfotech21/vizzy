@@ -175,6 +175,10 @@
       {
         "type": "text",
         "name": "user_language"
+      },
+      {
+        "type": "text",
+        "name": "user_currency"
       }
     ],
     "$_SERVER": [
@@ -303,10 +307,16 @@
                               "column": "resident_country",
                               "type": "text",
                               "value": "{{$_POST.from_country}}"
+                            },
+                            {
+                              "table": "users",
+                              "column": "user_currency",
+                              "type": "text",
+                              "value": "{{1}}"
                             }
                           ],
                           "table": "users",
-                          "query": "INSERT INTO users\n(first_name, last_name, user_email, user_password, salt, created_on, active, ip_address, user_type, user_language, package, resident_country) VALUES (:P1 /* {{$_POST.first_name}} */, :P2 /* {{$_POST.last_name}} */, :P3 /* {{$_POST.user_email.lowercase()}} */, :P4 /* {{$_POST.user_password.sha256(NOW_UTC)}} */, :P5 /* {{NOW_UTC}} */, :P6 /* {{NOW_UTC}} */, :P7 /* {{1}} */, :P8 /* {{$_SERVER.REMOTE_ADDR}} */, :P9 /* {{'User'}} */, :P10 /* {{(($_POST.preffered_lang=='English')?'ENG':($_POST.preffered_lang=='German')?'DE':($_POST.preffered_lang=='French')?'FR':($_POST.preffered_lang=='Spanish')?'SPA':($_POST.preffered_lang=='Danish')?'DAN':($_POST.preffered_lang=='Russian')?'RUS':($_POST.preffered_lang=='Dutch')?'DUT':($_POST.preffered_lang=='Portuguese')?'POR':($_POST.preffered_lang=='Hindi')?'HIN':'ENG')}} */, :P11 /* {{$_POST.package}} */, :P12 /* {{$_POST.from_country}} */)",
+                          "query": "INSERT INTO users\n(first_name, last_name, user_email, user_password, salt, created_on, active, ip_address, user_type, user_language, package, resident_country, user_currency) VALUES (:P1 /* {{$_POST.first_name}} */, :P2 /* {{$_POST.last_name}} */, :P3 /* {{$_POST.user_email.lowercase()}} */, :P4 /* {{$_POST.user_password.sha256(NOW_UTC)}} */, :P5 /* {{NOW_UTC}} */, :P6 /* {{NOW_UTC}} */, :P7 /* {{1}} */, :P8 /* {{$_SERVER.REMOTE_ADDR}} */, :P9 /* {{'User'}} */, :P10 /* {{(($_POST.preffered_lang=='English')?'ENG':($_POST.preffered_lang=='German')?'DE':($_POST.preffered_lang=='French')?'FR':($_POST.preffered_lang=='Spanish')?'SPA':($_POST.preffered_lang=='Danish')?'DAN':($_POST.preffered_lang=='Russian')?'RUS':($_POST.preffered_lang=='Dutch')?'DUT':($_POST.preffered_lang=='Portuguese')?'POR':($_POST.preffered_lang=='Hindi')?'HIN':'ENG')}} */, :P11 /* {{$_POST.package}} */, :P12 /* {{$_POST.from_country}} */, :P13 /* {{1}} */)",
                           "params": [
                             {
                               "name": ":P1",
@@ -367,6 +377,11 @@
                               "name": ":P12",
                               "type": "expression",
                               "value": "{{$_POST.from_country}}"
+                            },
+                            {
+                              "name": ":P13",
+                              "type": "expression",
+                              "value": "{{1}}"
                             }
                           ]
                         }

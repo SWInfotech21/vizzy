@@ -85,10 +85,6 @@
               },
               {
                 "table": "users",
-                "column": "user_currency"
-              },
-              {
-                "table": "users",
                 "column": "phone_no"
               },
               {
@@ -102,13 +98,47 @@
               {
                 "table": "users",
                 "column": "two_factor"
+              },
+              {
+                "table": "currency",
+                "column": "currency_name"
+              },
+              {
+                "table": "currency",
+                "column": "currency_symbol"
+              },
+              {
+                "table": "currency",
+                "column": "currency_code"
               }
             ],
             "table": {
               "name": "users"
             },
-            "joins": [],
-            "query": "SELECT user_id, first_name, last_name, user_email, user_type, user_dob, profile_link, user_language, user_currency, phone_no, package, resident_country, two_factor\nFROM users\nWHERE user_id = :P1 /* {{$_SESSION.user_id}} */ AND active = :P2 /* {{1}} */",
+            "joins": [
+              {
+                "table": "currency_list",
+                "column": "*",
+                "alias": "currency",
+                "type": "LEFT",
+                "clauses": {
+                  "condition": "AND",
+                  "rules": [
+                    {
+                      "table": "currency",
+                      "column": "currency_id",
+                      "operator": "equal",
+                      "value": {
+                        "table": "users",
+                        "column": "user_currency"
+                      },
+                      "operation": "="
+                    }
+                  ]
+                }
+              }
+            ],
+            "query": "SELECT users.user_id, users.first_name, users.last_name, users.user_email, users.user_type, users.user_dob, users.profile_link, users.user_language, users.phone_no, users.package, users.resident_country, users.two_factor, currency.currency_name, currency.currency_symbol, currency.currency_code\nFROM users\nLEFT JOIN currency_list AS currency ON (currency.currency_id = users.user_currency)\nWHERE users.user_id = :P1 /* {{$_SESSION.user_id}} */ AND users.active = :P2 /* {{1}} */",
             "params": [
               {
                 "operator": "equal",
@@ -209,10 +239,6 @@
           },
           {
             "type": "text",
-            "name": "user_currency"
-          },
-          {
-            "type": "text",
             "name": "phone_no"
           },
           {
@@ -226,6 +252,18 @@
           {
             "type": "text",
             "name": "two_factor"
+          },
+          {
+            "type": "text",
+            "name": "currency_name"
+          },
+          {
+            "type": "text",
+            "name": "currency_symbol"
+          },
+          {
+            "type": "text",
+            "name": "currency_code"
           }
         ],
         "outputType": "object"

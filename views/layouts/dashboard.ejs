@@ -82,11 +82,12 @@
     <dmx-value id="varSubMenu"></dmx-value>
     <dmx-datetime id="varDateTime"></dmx-datetime>
     <dmx-serverconnect id="scLogOut" url="/api/User/LogOut" noload dmx-on:success="browser1.goto('/portal/login')"></dmx-serverconnect>
+    <dmx-serverconnect id="scCurrencyList" url="/api/Dashboard/CurrencyList"></dmx-serverconnect>
     <dmx-serverconnect id="scUserInfo" url="/api/User/UserInfo" dmx-on:success="varSubMenu.setValue('Profile')"></dmx-serverconnect>
     <dmx-serverconnect id="scUpLangCurrency" url="/api/User/UpdateLangCurrency" noload dmx-on:success="scUserInfo.load({})"></dmx-serverconnect>
     <dmx-query-manager id="qm"></dmx-query-manager>
-    <dmx-serverconnect id="scNotif" url="/api/Notifications/NotificationList" dmx-param:offset="qm.data.offset" dmx-param:limit="5" dmx-param:sort="qm.data.sort" dmx-param:dir="qm.data.dir"></dmx-serverconnect>
-    <dmx-data-view id="dvNavNotif" dmx-bind:data="scNotif.data.queryNav.data" page="1" pageSize="4"></dmx-data-view>
+    <dmx-serverconnect id="scNotif" url="/api/Notifications/NotificationList" dmx-param:offset="qm.data.offset" dmx-param:limit="25" dmx-param:sort="qm.data.sort" dmx-param:dir="qm.data.dir"></dmx-serverconnect>
+    <dmx-data-view id="dvNavNotif" dmx-bind:data="scNotif.data.queryNav.data"></dmx-data-view>
     <dmx-serverconnect id="scUpdateNotif" url="/api/Notifications/UpdateNotificationCount" noload dmx-on:success="scUserInfo.load({})"></dmx-serverconnect>
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
@@ -281,13 +282,13 @@
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                                     <i class="ti ti-currency-euro rounded-circle ti-sm"></i>
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0);" data-language="en">
-                                            <span class="align-middle"><i class="ti ti-currency-euro rounded-circle ti-sm"></i> EURO</span>
+                                <ul class="dropdown-menu dropdown-menu-end" id="repeatCurrency" is="dmx-repeat" dmx-bind:repeat="scCurrencyList.data.CurrencyList" key="currency_id">
+                                    <li dmx-on:click="scUpLangCurrency.load({user_currency: currency_id})">
+                                        <a class="dropdown-item" href="javascript:void(0);" data-language="en" dmx-class:active="(currency_code==scUserInfo.data.query.currency_code)">
+                                            <span class="align-middle"><i class="ti rounded-circle ti-sm" dmx-class:ti-currency-euro="(currency_code=='EUR')" dmx-class:ti-currency-pound="(currency_code=='POU')" dmx-class:ti-currency-dollar="(currency_code=='USD')" dmx-class:ti-currency-rupee="(currency_code=='INR')" dmx-class:ti-currency-dollar-canadian="(currency_code=='CAD')"></i>{{currency_code}}</span>
                                         </a>
                                     </li>
-                                    <li>
+                                    <!-- <li>
                                         <a class="dropdown-item" href="javascript:void(0);" data-language="fr">
                                             <span class="align-middle"><i class="ti ti-currency-pound rounded-circle ti-sm"></i> POUND</span>
                                         </a>
@@ -306,7 +307,7 @@
                                         <a class="dropdown-item" href="javascript:void(0);" data-language="pt">
                                             <span class="align-middle"><i class="ti ti-currency-rupee rounded-circle ti-sm"></i> RUPEE</span>
                                         </a>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </li>
                             <!--/ Currency -->
@@ -391,13 +392,13 @@
                                         <div class="dropdown-divider"></div>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="/portal/my-profile">
+                                        <a class="dropdown-item" href="/portal/my-profile" dmx-class:active="(varPageName.value=='Profile')" dmx-on:click="varPageName.setValue('Profile')">
                                             <i class="ti ti-user-check me-2 ti-sm"></i>
                                             <span class="align-middle">My Profile</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="/portal/my-profile">
+                                        <a class="dropdown-item" href="/portal/security" dmx-class:active="(varPageName.value=='Settings')" dmx-on:click="varPageName.setValue('Settings')">
                                             <i class="ti ti-settings me-2 ti-sm"></i>
                                             <span class="align-middle">Settings</span>
                                         </a>
