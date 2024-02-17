@@ -1,7 +1,7 @@
 <!-- Wappler include head-page="layouts/dashboard" fontawesome_5="cdn" bootstrap5="local" is="dmx-app" id="news" appConnect="local" components="{dmxBootstrap5Modal:{},dmxStateManagement:{},dmxDataTraversal:{},dmxFormatter:{},dmxBootstrap5Navigation:{},dmxBootstrap5PagingGenerator:{}}" -->
 <meta name="ac:route" content="/portal/news">
 <dmx-query-manager id="qm"></dmx-query-manager>
-<dmx-serverconnect id="scNewsList" url="/api/News/NewsList" dmx-param:offset="qm.data.offset" dmx-param:limit="10" dmx-param:sort="qm.data.sort" dmx-param:dir="qm.data.dir"></dmx-serverconnect>
+<dmx-serverconnect id="scNewsList" url="/api/News/NewsList" dmx-param:offset="qm.data.offset" dmx-param:limit="10" dmx-param:sort="qm.data.sort" dmx-param:dir="qm.data.dir" dmx-on:success="varPageName.setValue('News')"></dmx-serverconnect>
 <dmx-data-detail id="ddNewsList" dmx-bind:data="content.scNewsList.data.query.data" key="id"></dmx-data-detail>
 
 <head>
